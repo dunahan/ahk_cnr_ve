@@ -2,10 +2,10 @@
 ;  CNR - Recipe-Script Editor
 ;  Author: Tobias Wirth (dunahan@schwerterkueste.de)
 ;================================================================================
-; v0.8
-; aktuell ein kleiner viewer (comments in german)
+; v0.8      aktuell nur ein kleiner viewer
+; v0.8.0.1  weitere anzeigefunktionen hinzugefuegt
 ;================================================================================
-VERSION := "0.8"
+VERSION := "0.8.0.1"
 ;================================================================================
 
 #NoTrayIcon
@@ -17,9 +17,9 @@ VERSION := "0.8"
 ;==================================================================================
 ; Erinnerung:
 ; Der Array besteht ueblicherweise aus:
-;  =>  M enues  (M|sMenuLevel5Scrolls)
-;  =>  N ame der Workbench  (N|cnrScribeAverage)
-;  =>  R ezept  (R|sMenuLevel5Scrolls|oO-No Item found-Oo|X1_IT_SPARSCR502|1)
+;  =>  Menues  (M|sMenuLevel5Scrolls)
+;  =>  Name der Workbench  (N|cnrScribeAverage)
+;  =>  Rezept  (R|sMenuLevel5Scrolls|oO-No Item found-Oo|X1_IT_SPARSCR502|1)
 ;  =>  Kom P onenten (1|Blank Scroll|x2_it_cfm_bscrl|1)  mehrfache moegliche
 ;  =>  a B fallprodukten (B1|hw_glassphio|1|1) mehrfache moeglich
 ;  =>  L evel  L|6)
@@ -80,7 +80,6 @@ Main:                                                                         ; 
   
   Gui, 1: Submit, NoHide
   
-  hGui1 := WinExist()
   Gui, 1: Font, c000000 9, MS Sans SerIf
   Gui, 1: +E0x80000000
   
@@ -91,8 +90,16 @@ Main:                                                                         ; 
   OnMessage(0x200, "WM_MOUSEMOVE")
   
   WinGet, MainWin
-  WinGetPos, WinGui1X, WinGui1Y, WinGui1W, WinGui1H, %NAME%                 ; Position Mainwindow speichern, nuetzlich fuer mehrere Bildschirme
-
+  WinGetPos, WinGui1X, WinGui1Y, WinGui1W, WinGui1H, %NAME%                   ; Position Mainwindow speichern, nuetzlich fuer mehrere Bildschirme
+  
+  RecipeSpacerX = 
+  RecipeSpacerY = 
+  MaxRecipesPerRow = 
+  CountedRecipes = 
+  
+  RecipeSpacerXAdd = 
+  RecipeSpacerYAdd = 
+  
   If (MOVE_WIN = 1)
   {
     Loop                                                                      ; Wurde das Fenster bewegt, bewege das zweite Fenster auch
@@ -117,7 +124,7 @@ RecipeShow:                                                                   ; 
   {
     If (EditWin != "")
     {
-      MsgBox, %EditWin%`nEs wird bereits ein Rezept bearbeitet
+      MsgBox, Es wird bereits ein Rezept bearbeitet
       Return
     }
     
@@ -132,7 +139,7 @@ RecipeShow:                                                                   ; 
     
     If (RecipeScript = )                                                    ; okay hier lief was schief beim oeffnen des Skripts
     {
-      MsgBox, Something went wrong
+      MsgBox, Etwas ging schief
       Return                                                                ; gibt bescheid und brich hier ab.
     }
     
@@ -187,28 +194,7 @@ RecipeShow:                                                                   ; 
         
         ; skript beispiel einfuegen?!
         Gui, 2: Font, , Courier new
-        SCRIPTVAR = sKeyToRecipe = CnrRecipeCreateRecipe("%PrintActRecipeProduct%", "%PrintActRecipeProductTag%", %PrintActRecipeProductNbr%);`n
-        
-        SCRIPTVAR = %SCRIPTVAR%               CnrRecipeAddComponent(sKeyToRecipe, "hw_resiron", 2, 1);`n                                                      ;loop notwendig
-        
-        SCRIPTVAR = %SCRIPTVAR%               CnrRecipeSetRecipeLevel(sKeyToRecipe, 2);`n                                                                                    ;muss ich noch einbauen
-        
-          ;Bi-Product Loop einfuegen?!
-        
-        SCRIPTVAR = %SCRIPTVAR%               CnrRecipeSetRecipeXP(sKeyToRecipe, 30, 30);`n                                                                                ;einfach reicht
-        SCRIPTVAR = %SCRIPTVAR%               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 70, 30, 0, 0, 0, 0);`n                        ;
-          ;sKeyToRecipe = CnrRecipeCreateRecipe(sMenuHelme, GetObjectName("hw_arhe001"), "hw_arhe001", 1);
-          ;               CnrRecipeAddComponent(sKeyToRecipe, "hw_resiron", 2, 1);
-          ;               CnrRecipeAddComponent(sKeyToRecipe, "NW_ARHE001", 1, 1);
-          ;               CnrRecipeSetRecipeLevel(sKeyToRecipe, 2);
-          ;               CnrRecipeSetRecipeXP(sKeyToRecipe, 30, 30);
-          ;               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 70, 30, 0, 0, 0, 0);
-          
-          ; R|sMenuHelme|GetObjectName(hw_arhe001)|hw_arhe001|1  
-          ; P1|hw_arhe001|hw_resiron|2|1
-          ; P2|hw_arhe001|NW_ARHE001|1|1
-          ; X|hw_arhe001|30|30
-          ; A|hw_arhe001|70|30|0|0|0|0
+        SCRIPTVAR := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
         
         Gui, 2: Add, Edit, x15  y190 w535 h140 vEditRecipeScript -Wrap ReadOnly, %SCRIPTVAR%
         
@@ -231,6 +217,15 @@ RecipeShow:                                                                   ; 
     WinSet, exstyle, -0x80000, Edit Recipes
     WinGet, EditWin
     Winset, Redraw
+    
+    PrintWorkbenchName = 
+    PrintWorkbenchMenu = 
+    PrintRecipesWithinWorkbench = 
+    PrintActRecipeProduct = 
+    PrintActRecipeProductTag = 
+    PrintActRecipeWorkbenchName = 
+    PrintActRecipeProductNbr = 
+    SCRIPTVAR = 
   }
 }
 Return                                                                        ; <<<===  RecipeShow endet
@@ -241,6 +236,7 @@ RecipesWithinWorkbench:                                                       ; 
   PrintActRecipeProductTag := TrimToGetTag(ActRecipeProduct)
   PrintActRecipeProductNbr := GetCreatedProductNbr(PrintActRecipeProductTag)
   NewRecipeWorkbench := GetWorkbenchName(PrintActRecipeProductTag)
+  SCRIPTVAR := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
   
   If (DEBUG = 1)
     MsgBox, RecipesWithinWorkbench: %NewRecipeWorkbench%
@@ -248,16 +244,24 @@ RecipesWithinWorkbench:                                                       ; 
   GuiControl,, EditRecipeProduct, %PrintActRecipeProduct%                     ; Aktualisiere die notwendigen Anzeigen
   GuiControl,, EditRecipeProductTag, %PrintActRecipeProductTag%
   GuiControl,, EditRecipeProductNbr, %PrintActRecipeProductNbr%
+  GuiControl,, EditRecipeScript, %SCRIPTVAR%
   
   GuiControl, ChooseString, EditWorkbenchMenu, %NewRecipeWorkbench%
+  
+  PrintActRecipeProduct = 
+  PrintActRecipeProductTag = 
+  PrintActRecipeProductNbr = 
+  NewRecipeWorkbench = 
+  SCRIPTVAR = 
 Return                                                                        ; <<<===  RecipesWithinWorkbench beginnt
 
 Options:
-  MsgBox, Nothing here; Options
+  MsgBox, Unter "Optionen" gibt es momentan nichts
 Return
 
 ShowAbout:
-  MsgBox, Nothing here; ShowAbout
+  ListVars
+  ;MsgBox, Unter "Ueber" gibt es momentan nichts
 Return
 
 ;==================================================================================
