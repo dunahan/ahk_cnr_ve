@@ -1,46 +1,105 @@
+/*;================================================================================
+;   Error Messages:
+;   ERROR001: from GetObjectName(RecipientTag)  =>  it was nothing recognized from temporary array
+;   ERROR011: from GetObjectName(RecipientTag)  =>  it was nothing recognized from csv => really nothing!
+;   ERROR002: from GetWorkbenchName(ProductTagToLookFor)
+;   ERROR021: from GetWorkbenchName(ProductTagToLookFor), later Message
+;   ERROR003: from GetCreatedProductNbr(ProductTagToLookFor)
+;   ERROR012: from GetSpellName(SpellConstant)  =>  spell wasn't found, must be a custom spell. add it to csv?!
+*/;================================================================================
+
 ;================================================================================
 ; GetObjectName(RecipientTag)
 ;================================================================================
 GetObjectName(RecipientTag)
 {
-  Result = oO-No Item found-Oo
-  Loop, Read, %A_WorkingDir%\items.csv
+  Result = ERROR001
+  StringLower, RecipientTag, RecipientTag
+  
+  Loop, Read, %A_WorkingDir%\tmp\array.tmp                                      ; search in array-file at first
   {
-    itmarray := StrSplit(A_LoopReadLine, ",")
-    resarray := % itmarray[2]
-    tagarray := % itmarray[3]
-    
-    If (RecipientTag = resarray)
+    itmarray := StrSplit(A_LoopReadLine, "|")
+    resarray := itmarray[1]
+;       wenn "R"
+    If (resarray = "R")                                                         ; the recipe has the right names?!
     {
-      Result := % itmarray[1]
-      StringReplace, Result, Result, (, (, UseErrorLevel
-      Counted := ErrorLevel
+      tagme := % itmarray[4]
+      tagyou := % itmarray[3]
+      StringLower, tagme, tagme
       
-      If (Counted > 0)
+      If (RecipientTag = tagme)
       {
-        StringReplace, Result, Result, %A_Space%(, `,%A_Space%
-        StringReplace, Result, Result, ), 
+        Result := % tagyou
+        break
+      }
+    }
+  }
+  
+  If (Result = "ERROR001")
+  { 
+    Result = ERROR011
+    Loop, Read, %A_WorkingDir%\items.csv                                          ; search from csv-file then
+    {
+      itmarray := StrSplit(A_LoopReadLine, ",")
+      resarray := % itmarray[2]
+      tagarray := % itmarray[3]
+      
+      StringLower, resarray, resarray
+      StringLower, tagarray, tagarray
+      
+      If (RecipientTag = resarray)
+      {
+        Result := % itmarray[1]
+        StringReplace, Result, Result, (, (, UseErrorLevel
+        Counted := ErrorLevel
+        
+        If (Counted > 0)
+        {
+          StringReplace, Result, Result, %A_Space%(, `,%A_Space%
+          StringReplace, Result, Result, ), 
+        }
+        
+        break
       }
       
-      break
-    }
-    
-    Else If (RecipientTag = tagarray)
-    {
-      Result := % itmarray[1]
-      break
-    }
+      Else If (RecipientTag = tagarray)
+      {
+        Result := % itmarray[1]
+        break
+      }
+    } 
   }
   
   itmarray = 
   resarray = 
   tagarray = 
+  tagme = 
+  tagyou = 
   Counted = 
   
   return Result
 }
 ;================================================================================
 ;
+;================================================================================
+; GetSpellName(SpellConstant)
+;================================================================================
+GetSpellName(SpellConstant)
+{
+  Result = ERROR012
+  
+  Loop, Read, %A_WorkingDir%\spells.csv                                          ; search from csv-file only
+  {
+    spellarray := StrSplit(A_LoopReadLine, ",")
+    spellsearch := % spellarray[1]
+    spellname := % spellarray[2]
+    
+    If (SpellConstant = spellsearch)
+      Result = %spellname%
+  }
+  
+  return Result
+}
 ;================================================================================
 ; CreateArrayTempFile(FileToParse, FileForArray)
 ;================================================================================
@@ -110,37 +169,71 @@ CreateArrayTempFile(FileToParse, FileForArray)
     IfInString, A_LoopReadLine, CnrRecipeCreateRecipe
     {
       ; Ausgelesene Zeile besser verarbeitbar machen
-      RecipeResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)      ; loesche alle "                >  sKeyToRecipe = CnrRecipeCreateRecipe(cnrWaterTub, Filled Water Bucket, cnrBucketWater, 1);<
+      RecipeResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)          ; loesche alle "                >  sKeyToRecipe = CnrRecipeCreateRecipe(cnrWaterTub, Filled Water Bucket, cnrBucketWater, 1);<
       
       StringGetPos, Count, RecipeResult, ( 
-      StringTrimLeft, RecipeResult, RecipeResult, Count+1               ; loesche                        >  sKeyToRecipe = CnrRecipeCreateRecipe(<
-      RecipeResult := StrReplace(RecipeResult, ", ", "|", ALL)          ; ersetze , & space mit |  >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1);<
-      RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)          ; loesche );                     >cnrWaterTub,Filled Water Bucket,cnrBucketWater,1
+      StringTrimLeft, RecipeResult, RecipeResult, Count+1                   ; loesche                        >  sKeyToRecipe = CnrRecipeCreateRecipe(<
       
-      IfInString, RecipeResult, */
-        RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)         ; loesche ggf. */
-      
-      IfInString, RecipeResult, //                                      ; entferne ggf. kommentare
+      StringReplace, Temp, RecipeResult, ), ), UseErrorLevel                ; zaehle nach, wieviel ) sind im string fuer >  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain (20)", "cnrArwHeadPlain", 1);  <
+      If (ErrorLevel > 1)                                                   ; > sKeyToRecipe = CnrRecipeCreateRecipe(
       {
-        StringGetPos, Count, RecipeResult, //
-        StringLeft, RecipeResult, RecipeResult, Count
-      }
-      
-      IfInString, RecipeResult, GetObjectName                           ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
-      {
-        TempArray := StrSplit(RecipeResult, "|")                        ; array anlegen
-        Replace := TempArray[2]                                         ; GetObjectName(NW_MAARCL037) ausgelesen
-        StringTrimLeft, ReplaceText, Replace, 14
-        StringTrimRight, ReplaceText, ReplaceText, 1
+        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)            ; loesche );                     >sMenuTinkerArrowheads, Arrowheads, Plain (20), cnrArwHeadPlain, 1
+        RecipeResult := StrReplace(RecipeResult, ", " , "|", , 1)           ; ersetze ein , & space    >sMenuTinkerArrowheads|Arrowheads, Plain (20), cnrArwHeadPlain, 1
+        RecipeResult := StrReplace(RecipeResult, "), " , ")|", , 1)         ; ersetze ein ), & space   >sMenuTinkerArrowheads|Arrowheads, Plain (20|cnrArwHeadPlain, 1
+        StringGetPos, Count, RecipeResult, `,                               ; zaehle bis ,   => 32      >sMenuTinkerArrowheads|Arrowheads>,< Plain (20|cnrArwHeadPlain, 1
+        RecipeResult := RegExReplace(RecipeResult, ", ", "|", , , Count+2)  ; nun ersetze , & space danach?
         
-        ReplaceText := GetObjectName(ReplaceText)                       ; lese korrekten Namen aus
-        RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)  ; und ersetze diesen
+        IfInString, RecipeResult, */
+          RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)           ; loesche ggf. */
+        
+        IfInString, RecipeResult, //                                        ; entferne ggf. kommentare
+        {
+          StringGetPos, Count, RecipeResult, //
+          StringLeft, RecipeResult, RecipeResult, Count
+        }
+        
+        IfInString, RecipeResult, GetObjectName                             ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
+        {
+          TempArray := StrSplit(RecipeResult, "|")                          ; array anlegen
+          Replace := TempArray[2]                                           ; GetObjectName(NW_MAARCL037) ausgelesen
+          StringTrimLeft, ReplaceText, Replace, 14
+          StringTrimRight, ReplaceText, ReplaceText, 1
+          
+          ReplaceText := GetObjectName(ReplaceText)                         ; lese korrekten Namen aus
+          RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)    ; und ersetze diesen
+        }
       }
       
-      RecipeResult = R|%RecipeResult%`n
+      Else                                                                  ; > sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain", "cnrArwHeadPlain", 1);
+      {
+        RecipeResult := StrReplace(RecipeResult, ", ", "|", ALL)            ; ersetze , & space mit |  >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1);<
+        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)            ; loesche );                     >cnrWaterTub,Filled Water Bucket,cnrBucketWater,1
+        
+        IfInString, RecipeResult, */
+          RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)           ; loesche ggf. */
+        
+        IfInString, RecipeResult, //                                        ; entferne ggf. kommentare
+        {
+          StringGetPos, Count, RecipeResult, //
+          StringLeft, RecipeResult, RecipeResult, Count
+        }
+        
+        IfInString, RecipeResult, GetObjectName                             ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
+        {
+          TempArray := StrSplit(RecipeResult, "|")                          ; array anlegen
+          Replace := TempArray[2]                                           ; GetObjectName(NW_MAARCL037) ausgelesen
+          StringTrimLeft, ReplaceText, Replace, 14
+          StringTrimRight, ReplaceText, ReplaceText, 1
+          
+          ReplaceText := GetObjectName(ReplaceText)                         ; lese korrekten Namen aus
+          RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)    ; und ersetze diesen
+        }
+      }
+      
+      RecipeResult = R|%RecipeResult%`n                                     ; solte das  >R|sMenuLevel5Scrolls|Dismissal|X1_IT_SPARSCR502|1<  produzieren
       If (RecipeResult != "")
         ArrayTmp.Write(RecipeResult)
-      CountedPs := 0                                                    ; ein neues rezept beginnt, setze komponenten auf null
+      CountedPs := 0                                                        ; ein neues rezept beginnt, setze komponenten auf null
       CountedBs := 0
     }
     
@@ -173,7 +266,16 @@ CreateArrayTempFile(FileToParse, FileForArray)
       StringTrimLeft, ProductResult, ComponentResult, 1                 ; loesche erstes |             >NW_MAARCL078|1|1
       StringTrimRight, ProductResult, ProductResult, Count              ; loesche nach letztem |   >NW_MAARCL078
       
-      RecipeProduct := GetObjectName(ProductResult)
+                                                                        ; P4|ERROR011|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
+      IfInString, ComponentResult, CNR_RECIPE_SPELL                     ; |CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
+      {
+        TempArray := StrSplit(ComponentResult, "|")                     ; array anlegen
+        Replace := TempArray[4]                                         ; SPELL_RAY_OF_FROST ausgelesen
+        
+        RecipeProduct := GetSpellName(Replace)                          ; lese korrekten Namen aus
+      }
+      Else
+        RecipeProduct := GetObjectName(ProductResult)
       
       CountedPs := CountedPs+1
       ComponentResult = P%CountedPs%|%RecipeProduct%%ComponentResult%`n
@@ -276,6 +378,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
     }
     
     ; speicher leeren!
+    Temp = 
+    TempArray = 
+    Replace = 
+    ReplaceText = 
     SubMenuResult = 
     RecipeResult = 
     Replace = 
@@ -479,8 +585,17 @@ TrimToGetTag(LookAndTrim)
 {
   Count := InStr(LookAndTrim, " (")-1                       ; GetObjectName> (<bf_ioun_lightred ) (bf_ioun_lightred) [1]
   StringTrimLeft, LookAndTrim, LookAndTrim, Count           ;  (hw_it_mpotion024) [1]
+  
+  StringReplace, Count, LookAndTrim, ), ), UseErrorLevel    ; zaehle nach, wieviel ) sind im string fuer >  (20) (cnrArwHeadBlunt) [1]  <
+  If (ErrorLevel > 1)
+  {
+    Count := InStr(LookAndTrim, ") ")+2                     ; suche die position des ersten ) & space +2
+    StringTrimLeft, LookAndTrim, LookAndTrim, Count         ; reduziere bis dahin
+  }
+  
   LookAndTrim := StrReplace(LookAndTrim, " (", "", ALL)     ; hw_it_mpotion024) [1]
   LookAndTrim := StrReplace(LookAndTrim, ")", "", ALL)      ; hw_it_mpotion024 [1]
+  
   Count := InStr(LookAndTrim, " [")-1                       ; bf_ioun_lightred [1]
   Count := StrLen(LookAndTrim) - Count                      ; bf_ioun_lightred<[1]>
   StringTrimRight, LookAndTrim, LookAndTrim, Count          ; bf_ioun_lightred
@@ -496,7 +611,7 @@ TrimToGetTag(LookAndTrim)
 ;================================================================================
 TrimToGetProduct(LookAndTrim)
 {
-  IfInString, LookAndTrim, GetObjectName                    ; Findet sich die Funktion GetObjectName im Produktnamen?
+  IfInString, LookAndTrim, GetObjectName                      ; Findet sich die Funktion GetObjectName im Produktnamen?
   {
     LookAndTrim := TrimToGetTag(LookAndTrim)
     LookAndTrim := GetObjectName(LookAndTrim)
@@ -504,7 +619,12 @@ TrimToGetProduct(LookAndTrim)
   
   Else
   {
-    Count := InStr(LookAndTrim, " (", R)                    ; Filled Water Bucket (cnrBucketWater)  > TrimToGetProduct: 20 |36 | Filled Water Bucket (cnrBucketWater)
+    StringReplace, Count, LookAndTrim, ), ), UseErrorLevel    ; zaehle nach, wieviel ) sind im string fuer >  Arrowheads, Blunt (20) (cnrArwHeadBlunt) [1]  <
+    If (ErrorLevel > 1)                                       ; Arrowheads, Blunt (20) (cnrArwHeadBlunt) [1]
+      Count := InStr(LookAndTrim, ") ", R)                    ; nimm das letzte ) & space als ausgangspunkt
+    Else
+      Count := InStr(LookAndTrim, " (", R)                    ; Filled Water Bucket (cnrBucketWater)  > TrimToGetProduct: 20 |36 | Filled Water Bucket (cnrBucketWater)
+    
     Length := StrLen(LookAndTrim)
     Count := Length - Count
     StringTrimRight, LookAndTrim, LookAndTrim, Count
@@ -523,7 +643,7 @@ TrimToGetProduct(LookAndTrim)
 GetWorkbenchName(ProductTagToLookFor)
 {
   AllTheArrays := A_WorkingDir . "\tmp\array.tmp"
-  Result = "None, from first?"
+  Result = ERROR002
   
   Loop, Read, %AllTheArrays%                                ; lese nun die Array-Datei aus
   {
@@ -539,7 +659,7 @@ GetWorkbenchName(ProductTagToLookFor)
         Result := RecipeArray[2]
         
         If (Result = ProductTagToLookFor)
-          Result = "None, from everything"
+          Result = ERROR021
       }
     }
   }
@@ -559,7 +679,7 @@ GetWorkbenchName(ProductTagToLookFor)
 GetCreatedProductNbr(ProductTagToLookFor)
 {
   AllTheArrays := A_WorkingDir . "\tmp\array.tmp"
-  Result = "None, from the first?"
+  Result = ERROR003
   
   Loop, Read, %AllTheArrays%                                ; lese nun die Array-Datei aus
   {
@@ -589,6 +709,7 @@ GetCreatedProductNbr(ProductTagToLookFor)
 ;================================================================================
 GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 {
+  Result = 0
   ; zaehle alle tokens im array
   StringReplace, Temp, WorkbenchMenuToLookAt, |, |, UseErrorLevel     ; sMenuAltarSceptre|sMenuAltarStaves|sMenuAltarRods|sMenuAltarGreIou|sMenuAltarLesIou|sMenuAltarLight|sMenuAltarEnchMat|sMenuAltarBags|
   CountedTokens := ErrorLevel                                         ; => 8
@@ -602,6 +723,43 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
   Temp = 
   CountedTokens = 
   NewCountedTokens = 
+  
+  return Result
+}
+;================================================================================
+;
+;================================================================================
+; ReturnScriptSnippetForRecipe(ProductToShow)
+/*
+  referents to PrintActRecipeProduct
+  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
+  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
+  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
+  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+*/
+;================================================================================
+ReturnScriptSnippetForRecipe(ProductToShow)
+{
+  WB := GetWorkbenchName(ProductToShow)
+  PD := GetObjectName(ProductToShow)
+  TG := (ProductToShow)
+  NB := GetCreatedProductNbr(ProductToShow)
+  
+  Result = KeyToRecipe = CnrRecipeCreateRecipe(%WB%, "%PD%", "%TG%", %NB%);`n
+  
+  Result = %Result%              CnrRecipeAddComponent(sKeyToRecipe, "hw_resiron", 2, 1);`n                                                      ;loop notwendig
+  
+  
+  
+  Result = %Result%              CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);`n                                      ;loop notwendig
+  Result = %Result%              CnrRecipeSetRecipeLevel(sKeyToRecipe, 2);`n                                                                                    ;muss ich insg. noch einbauen
+  Result = %Result%              CnrRecipeSetRecipeXP(sKeyToRecipe, 30, 30);`n                                                                                ;einfach reicht ab hier wieder
+  Result = %Result%              CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 70, 30, 0, 0, 0, 0);`n                        ;
   
   return Result
 }
