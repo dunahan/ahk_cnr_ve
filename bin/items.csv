@@ -1,4 +1,3 @@
-ItemName,Tag,ResRef
 Acid Flask,cnrAcidFlask,cnracidflask
 Tanning Acid,cnrAcidTanning,cnracidtanning
 Alchemist's Fire,cnrAlchemFire,cnralchemfire
@@ -62,20 +61,20 @@ Studded White Stag Leather Armor,cnrArmorStdStag,cnrarmorstdstag
 Studded Dire Tiger Leather Armor,cnrArmorStdTige,cnrarmorstdtige
 Studded Worg Leather Armor,cnrArmorStdWorg,cnrarmorstdworg
 Studded Leather Armor,cnrArmorStudded,cnrarmorstudded
-Arrow, Acid,cnrArrowAcid,cnrarrowacid
-Arrow, Crushing,cnrArrowCrushing,cnrarrowcrushing
-Arrow, Fire,cnrArrowFire,cnrarrowfire
-Arrow, Holy,cnrArrowHoly,cnrarrowholy
-Arrow, Ice,cnrArrowIce,cnrarrowice
-Arrow, Lightning,cnrArrowLightng,cnrarrowlightng
-Arrow, Piercing,cnrArrowPiercing,cnrarrowpiercing
-Arrow, Plain,cnrArrowPlain,cnrarrowplain
-Arrow, Poison,cnrArrowPoison,cnrarrowpoison
-Arrow, Thunder,cnrArrowThunder,cnrarrowthunder
-Arrowheads, Blunt (20),cnrArwHeadBlunt,cnrarwheadblunt
-Arrowheads, Hooked (20),cnrArwHeadHooked,cnrarwheadhooked
-Arrowheads, Plain (20),cnrArwHeadPlain,cnrarwheadplain
-Arrowheads, Silver (20),cnrArwHeadSilver,cnrarwheadsilver
+Arrow Acid,cnrArrowAcid,cnrarrowacid
+Arrow Crushing,cnrArrowCrushing,cnrarrowcrushing
+Arrow Fire,cnrArrowFire,cnrarrowfire
+Arrow Holy,cnrArrowHoly,cnrarrowholy
+Arrow Ice,cnrArrowIce,cnrarrowice
+Arrow Lightning,cnrArrowLightng,cnrarrowlightng
+Arrow Piercing,cnrArrowPiercing,cnrarrowpiercing
+Arrow Plain,cnrArrowPlain,cnrarrowplain
+Arrow Poison,cnrArrowPoison,cnrarrowpoison
+Arrow Thunder,cnrArrowThunder,cnrarrowthunder
+Arrowheads Blunt (20),cnrArwHeadBlunt,cnrarwheadblunt
+Arrowheads Hooked (20),cnrArwHeadHooked,cnrarwheadhooked
+Arrowheads Plain (20),cnrArwHeadPlain,cnrarwheadplain
+Arrowheads Silver (20),cnrArwHeadSilver,cnrarwheadsilver
 Cougar Bag,cnrBag20,cnrbag20
 Crag Cat Bag,cnrBag40,cnrbag40
 Lion Bag,cnrBag60,cnrbag60
@@ -145,16 +144,16 @@ Black Cohosh Root,cnrBlkCohoshRoot,cnrblkcohoshroot
 Blueberry,cnrBluberryFruit,cnrbluberryfruit
 Blueberry Juice,cnrBluberryJuice,cnrbluberryjuice
 Blueberry Pie,cnrBluberryPie,cnrbluberrypie
-Bolt, Acid,cnrBoltAcid,cnrboltacid
-Bolt, Crushing,cnrBoltCrushing,cnrboltcrushing
-Bolt, Fire,cnrBoltFire,cnrboltfire
-Bolt, Holy,cnrBoltHoly,cnrboltholy
-Bolt, Ice,cnrBoltIce,cnrboltice
-Bolt, Lightning,cnrBoltLightng,cnrboltlightng
-Bolt, Piercing,cnrBoltPiercing,cnrboltpiercing
-Bolt, Plain,cnrBoltPlain,cnrboltplain
-Bolt, Poison,cnrBoltPoison,cnrboltpoison
-Bolt, Thunder,cnrBoltThunder,cnrboltthunder
+Bolt Acid,cnrBoltAcid,cnrboltacid
+Bolt Crushing,cnrBoltCrushing,cnrboltcrushing
+Bolt Fire,cnrBoltFire,cnrboltfire
+Bolt Holy,cnrBoltHoly,cnrboltholy
+Bolt Ice,cnrBoltIce,cnrboltice
+Bolt Lightning,cnrBoltLightng,cnrboltlightng
+Bolt Piercing,cnrBoltPiercing,cnrboltpiercing
+Bolt Plain,cnrBoltPlain,cnrboltplain
+Bolt Poison,cnrBoltPoison,cnrboltpoison
+Bolt Thunder,cnrBoltThunder,cnrboltthunder
 Basics of Armor Crafting,cnrBookArmor,cnrbookarmor
 Basics of Mining,cnrBookMining,cnrbookmining
 Book of Patterns,cnrBookPatterns,cnrbookpatterns
