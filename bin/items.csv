@@ -1,0 +1,1043 @@
+ItemName,Tag,ResRef
+Acid Flask,cnrAcidFlask,cnracidflask
+Tanning Acid,cnrAcidTanning,cnracidtanning
+Alchemist's Fire,cnrAlchemFire,cnralchemfire
+Almond,cnrAlmondFruit,cnralmondfruit
+Almond Oil,cnrAlmondOil,cnralmondoil
+Aloe Leaf,cnrAloeLeaf,cnraloeleaf
+Angelica leaf,cnrAngelicaLeaf,cnrangelicaleaf
+Animal Meat,cnrAnimalMeat,cnranimalmeat
+Apple,cnrAppleFruit,cnrapplefruit
+Apple Juice,cnrAppleJuice,cnrapplejuice
+Apple Pie,cnrApplePie,cnrapplepie
+Armor of Fury,cnrArmorFury,cnrarmorfury
+Hide Armor,cnrArmorHide,cnrarmorhide
+Black Hide Armor,cnrArmorHideBlac,cnrarmorhideblac
+Brown Hide Armor,cnrArmorHideBrow,cnrarmorhidebrow
+Cougar Hide Armor,cnrArmorHideCoug,cnrarmorhidecoug
+Crag Hide Armor,cnrArmorHideCrag,cnrarmorhidecrag
+Dire Bear Hide Armor,cnrArmorHideDB,cnrarmorhidedb
+Grizzly Hide Armor,cnrArmorHideGriz,cnrarmorhidegriz
+Jaguar Hide Armor,cnrArmorHideJagu,cnrarmorhidejagu
+Leopard Hide Armor,cnrArmorHideLeop,cnrarmorhideleop
+Malar Hide Armor,cnrArmorHideMala,cnrarmorhidemala
+Panther Hide Armor,cnrArmorHidePant,cnrarmorhidepant
+Polar Hide Armor,cnrArmorHidePola,cnrarmorhidepola
+White Stag Hide Armor,cnrArmorHideStag,cnrarmorhidestag
+Dire Tiger Hide Armor,cnrArmorHideTige,cnrarmorhidetige
+Worg Hide Armor,cnrArmorHideWorg,cnrarmorhideworg
+Lion Hide Armor,cnrArmorHidLion,cnrarmorhidlion
+Leather Armor,cnrArmorLeather,cnrarmorleather
+Black Leather Armor,cnrArmorLthBlac,cnrarmorlthblac
+Brown Leather Armor,cnrArmorLthBrow,cnrarmorlthbrow
+Cougar Leather Armor,cnrArmorLthCoug,cnrarmorlthcoug
+Crag Leather Armor,cnrArmorLthCrag,cnrarmorlthcrag
+Dire Bear Leather Armor,cnrArmorLthDB,cnrarmorlthdb
+Grizzly Leather Armor,cnrArmorLthGriz,cnrarmorlthgriz
+Jaguar Leather Armor,cnrArmorLthJagu,cnrarmorlthjagu
+Leopard Leather Armor,cnrArmorLthLeop,cnrarmorlthleop
+Lion Leather Armor,cnrArmorLthLion,cnrarmorlthlion
+Malar Leather Armor,cnrArmorLthMala,cnrarmorlthmala
+Panther Leather Armor,cnrArmorLthPant,cnrarmorlthpant
+Polar Leather Armor,cnrArmorLthPola,cnrarmorlthpola
+White Stag Leather Armor,cnrArmorLthStag,cnrarmorlthstag
+Dire Tiger Leather Armor,cnrArmorLthTige,cnrarmorlthtige
+Worg Leather Armor,cnrArmorLthWorg,cnrarmorlthworg
+Mage's Armor,cnrArmorMages,cnrarmormages
+Armor of the North,cnrArmorNorth,cnrarmornorth
+Padded Armor,cnrArmorPadded,cnrarmorpadded
+Studded Black Leather Armor,cnrArmorStdBlac,cnrarmorstdblac
+Studded Brown Leather Armor,cnrArmorStdBrow,cnrarmorstdbrow
+Studded Cougar Leather Armor,cnrArmorStdCoug,cnrarmorstdcoug
+Studded Crag Leather Armor,cnrArmorStdCrag,cnrarmorstdcrag
+Studded Dire Bear Leather Armor,cnrArmorStdDB,cnrarmorstddb
+Studded Grizzly Leather Armor,cnrArmorStdGriz,cnrarmorstdgriz
+Studded Jaguar Leather Armor,cnrArmorStdJagu,cnrarmorstdjagu
+Studded Leopard Leather Armor,cnrArmorStdLeop,cnrarmorstdleop
+Studded Lion Leather Armor,cnrArmorStdLion,cnrarmorstdlion
+Studded Malar Leather Armor,cnrArmorStdMala,cnrarmorstdmala
+Studded Panther Leather Armor,cnrArmorStdPant,cnrarmorstdpant
+Studded Polar Leather Armor,cnrArmorStdPola,cnrarmorstdpola
+Studded White Stag Leather Armor,cnrArmorStdStag,cnrarmorstdstag
+Studded Dire Tiger Leather Armor,cnrArmorStdTige,cnrarmorstdtige
+Studded Worg Leather Armor,cnrArmorStdWorg,cnrarmorstdworg
+Studded Leather Armor,cnrArmorStudded,cnrarmorstudded
+Arrow, Acid,cnrArrowAcid,cnrarrowacid
+Arrow, Crushing,cnrArrowCrushing,cnrarrowcrushing
+Arrow, Fire,cnrArrowFire,cnrarrowfire
+Arrow, Holy,cnrArrowHoly,cnrarrowholy
+Arrow, Ice,cnrArrowIce,cnrarrowice
+Arrow, Lightning,cnrArrowLightng,cnrarrowlightng
+Arrow, Piercing,cnrArrowPiercing,cnrarrowpiercing
+Arrow, Plain,cnrArrowPlain,cnrarrowplain
+Arrow, Poison,cnrArrowPoison,cnrarrowpoison
+Arrow, Thunder,cnrArrowThunder,cnrarrowthunder
+Arrowheads, Blunt (20),cnrArwHeadBlunt,cnrarwheadblunt
+Arrowheads, Hooked (20),cnrArwHeadHooked,cnrarwheadhooked
+Arrowheads, Plain (20),cnrArwHeadPlain,cnrarwheadplain
+Arrowheads, Silver (20),cnrArwHeadSilver,cnrarwheadsilver
+Cougar Bag,cnrBag20,cnrbag20
+Crag Cat Bag,cnrBag40,cnrbag40
+Lion Bag,cnrBag60,cnrbag60
+Malar Bag,cnrBag80,cnrbag80
+Bag of Acid,cnrBagAcid,cnrbagacid
+Bag of Fire,cnrBagFire,cnrbagfire
+Bag of Frost,cnrBagFrost,cnrbagfrost
+Bag of Lightning,cnrBagLightning,cnrbaglightning
+Bag of Sand,cnrBagOfSand,cnrbagofsand
+Bag of Saw Dust,cnrBagOfSawDust,cnrbagofsawdust
+Bag of Poison,cnrBagPoison,cnrbagpoison
+Bag of Sparks,cnrBagSparks,cnrbagsparks
+Bag of Thunder,cnrBagThunder,cnrbagthunder
+Adamantium Banded Mail,cnrBandedMailAda,cnrbandedmailada
+Adorned Banded Mail,cnrBandedMailAdo,cnrbandedmailado
+Bronze Banded Mail,cnrBandedMailBro,cnrbandedmailbro
+Cobalt Banded Mail,cnrBandedMailCob,cnrbandedmailcob
+Iron Banded Mail,cnrBandedMailIro,cnrbandedmailiro
+Mithril Banded Mail,cnrBandedMailMit,cnrbandedmailmit
+Platinum Banded Mail,cnrBandedMailPla,cnrbandedmailpla
+Barley Flakes,cnrBarleyFlakes,cnrbarleyflakes
+Barley Flour,cnrBarleyFlour,cnrbarleyflour
+Malted Barley,cnrBarleyMalt,cnrbarleymalt
+Barley Meal,cnrBarleyMeal,cnrbarleymeal
+Barley Grains,cnrBarleyRaw,cnrbarleyraw
+Roasted Barley,cnrBarleyRoasted,cnrbarleyroasted
+Barley Wort,cnrBarleyWort,cnrbarleywort
+Bastard Sword of Acid,cnrBaSwordAcid,cnrbaswordacid
+Bronze Bastard Sword,cnrBaSwordBron,cnrbaswordbron
+Copper Bastard Sword,cnrBaSwordCopp,cnrbaswordcopp
+Bastard Sword of Fire,cnrBaSwordFire,cnrbaswordfire
+Iron Bastard Sword,cnrBaSwordIron,cnrbaswordiron
+Bastard Sword of Lightning,cnrBaSwordLtng,cnrbaswordltng
+Silver-Coated Bastard Sword,cnrBaSwordSilv,cnrbaswordsilv
+Titanium-Tipped Bastard Sword,cnrBaSwordTita,cnrbaswordtita
+Battleaxe of Acid,cnrBattleAxeAcid,cnrbattleaxeacid
+Bronze Battleaxe,cnrBattleAxeBron,cnrbattleaxebron
+Copper Battleaxe,cnrBattleAxeCopp,cnrbattleaxecopp
+Battleaxe of Fire,cnrBattleAxeFire,cnrbattleaxefire
+Iron Battleaxe,cnrBattleAxeIron,cnrbattleaxeiron
+Battleaxe of Lightning,cnrBattleAxeLtng,cnrbattleaxeltng
+Silver-Coated Battleaxe,cnrBattleAxeSilv,cnrbattleaxesilv
+Titanium-Tipped Battleaxe,cnrBattleAxeTita,cnrbattleaxetita
+Axe Head Amber,cnrbAxeHead,cnrbaxehead
+Big Rock Bock,cnrbBigRock,cnrbbigrock
+Black Horse Ale,cnrbBlackHorse,cnrbblackhorse
+Black Knight Malt,cnrbBlackKnight,cnrbblackknight
+Blue Sword Swill,cnrbBlueSword,cnrbbluesword
+Broken Knuckle Beer,cnrbBrokenKnuckle,cnrbbrokenknuckl
+Cherry River Lambic,cnrbCherryRiver,cnrbcherryriver
+Cracked Skull Cream Ale,cnrbCrackedSkull,cnrbcrackedskull
+Dark Dragon Pilsener,cnrbDarkDragon,cnrbdarkdragon
+Dead Orc Porter,cnrbDeadOrc,cnrbdeadorc
+Dwarf's Sledge Draft,cnrbDwarfsSledge,cnrbdwarfssledge
+Bombardier Beetle's Belly,cnrBellBomb,cnrbellbomb
+Belt of Cunning,cnrBeltCunning,cnrbeltcunning
+Leather Belt,cnrBeltLeather,cnrbeltleather
+Fire Wood Lager,cnrbFireWood,cnrbfirewood
+Green Forest Draft,cnrbGreenForest,cnrbgreenforest
+Birch Bark,cnrBirchBark,cnrbirchbark
+Iron Hammer Bock,cnrbIronHammer,cnrbironhammer
+Jumpin' Juniper Brau,cnrbJumpinJuniper,cnrbjumpinjunipe
+Blackberry,cnrBlkberryFruit,cnrblkberryfruit
+Blackberry Juice,cnrBlkberryJuice,cnrblkberryjuice
+Blackberry Pie,cnrBlkberryPie,cnrblkberrypie
+Black Cohosh Root,cnrBlkCohoshRoot,cnrblkcohoshroot
+Blueberry,cnrBluberryFruit,cnrbluberryfruit
+Blueberry Juice,cnrBluberryJuice,cnrbluberryjuice
+Blueberry Pie,cnrBluberryPie,cnrbluberrypie
+Bolt, Acid,cnrBoltAcid,cnrboltacid
+Bolt, Crushing,cnrBoltCrushing,cnrboltcrushing
+Bolt, Fire,cnrBoltFire,cnrboltfire
+Bolt, Holy,cnrBoltHoly,cnrboltholy
+Bolt, Ice,cnrBoltIce,cnrboltice
+Bolt, Lightning,cnrBoltLightng,cnrboltlightng
+Bolt, Piercing,cnrBoltPiercing,cnrboltpiercing
+Bolt, Plain,cnrBoltPlain,cnrboltplain
+Bolt, Poison,cnrBoltPoison,cnrboltpoison
+Bolt, Thunder,cnrBoltThunder,cnrboltthunder
+Basics of Armor Crafting,cnrBookArmor,cnrbookarmor
+Basics of Mining,cnrBookMining,cnrbookmining
+Book of Patterns,cnrBookPatterns,cnrbookpatterns
+Basics of Smelting,cnrBookSmelting,cnrbooksmelting
+Basics of Weapon Crafting,cnrBookWeapons,cnrbookweapons
+Leather Boots,cnrBootsLeather,cnrbootsleather
+Boots of the North,cnrBootsNorth,cnrbootsnorth
+Compound Bow Cam,cnrBowCam,cnrbowcam
+Bow String,cnrBowString,cnrbowstring
+Pigs Ear Pilsener,cnrbPigsEar,cnrbpigsear
+Branch of Hickory,cnrBranchHic,cnrbranchhic
+Branch of Mahogany,cnrBranchMah,cnrbranchmah
+Branch of Oak,cnrBranchOak,cnrbranchoak
+Red Crow Cream Ale,cnrbRedCrow,cnrbredcrow
+Empty Brewing Bottle,cnrBrewingBottle,cnrbrewingbottle
+Bronze Adventurine Scarab,cnrBroAdvScarab,cnrbroadvscarab
+Bronze Amethyst Ring,cnrBroAmRing,cnrbroamring
+Bronze Feldspar Necklace,cnrBroFeldNeck,cnrbrofeldneck
+Bronze Fire Agate Scarab,cnrBroFireAgScarab,cnrbrofireagscar
+Bronze Garnet Necklace,cnrBroGarNeck,cnrbrogarneck
+Bronze Greenstone Scarab,cnrBroGreenScarab,cnrbrogreenscara
+Bronze Malachite Scarab,cnrBroMalScarab,cnrbromalscarab
+Bronze Phenalope Ring,cnrBroPhenRing,cnrbrophenring
+Silver Buckle Gin,cnrbSilverBuckle,cnrbsilverbuckle
+Tower Malt Liquor,cnrbTowerMalt,cnrbtowermalt
+Empty Water Bucket,cnrBucketEmpty,cnrbucketempty
+Filled Water Bucket,cnrBucketWater,cnrbucketwater
+Acid Bullet,cnrBulletAcid,cnrbulletacid
+Bronze Bullet,cnrBulletBron,cnrbulletbron
+Copper Bullet,cnrBulletCopp,cnrbulletcopp
+Fire Bullet,cnrBulletFire,cnrbulletfire
+Iron Bullet,cnrBulletIron,cnrbulletiron
+Lightning Bullet,cnrBulletLigh,cnrbulletligh
+Silver-Coated Bullet,cnrBulletSilv,cnrbulletsilv
+Titanium-Coated Bullet,cnrBulletTita,cnrbullettita
+Will-o-Whiskey,cnrbWilloWhiskey,cnrbwillowhiskey
+Wizard's Wheat Ale,cnrbWizardsWheat,cnrbwizardswheat
+Calendula Flower,cnrCalendulaFwr,cnrcalendulafwr
+Caltrops,cnrCaltrops,cnrcaltrops
+Cape of the North,cnrCapeNorth,cnrcapenorth
+Recipe Cards: Alchemy,cnrCardsAlchemy,cnrcardsalchemy
+Recipe Cards: Armor Crafting,cnrCardsArmor,cnrcardsarmor
+Recipe Cards: Baker's Oven,cnrCardsBakeOven,cnrcardsbakeoven
+Recipe Cards: Brewer's Keg,cnrCardsBrewKeg,cnrcardsbrewkeg
+Recipe Cards: Enchanting Altar,cnrCardsEnchAlt,cnrcardsenchalt
+Recipe Cards: Enchanting Pool,cnrCardsEnchPool,cnrcardsenchpool
+Recipe Cards: Enchanting Statue,cnrCardsEnchStat,cnrcardsenchstat
+Recipe Cards: Jewelry,cnrCardsJewelry,cnrcardsjewelry
+Recipe Cards: Tinker's Device,cnrCardsTinkDevi,cnrcardstinkdevi
+Recipe Cards: Tinker's Toolbox,cnrCardsTinkTbox,cnrcardstinktbox
+Recipe Cards: Weapons,cnrCardsWeapons,cnrcardsweapons
+Recipe Cards: Wood Crafting,cnrCardsWood,cnrcardswood
+Recipe Cards: Making Wort,cnrCardsWort,cnrcardswort
+Set of Carpenter's Tools,cnrCarpsTools,cnrcarpstools
+Catnip Leaf,cnrCatnipLeaf,cnrcatnipleaf
+Adamantium Chain Mail,cnrChainMailAda,cnrchainmailada
+Adorned Chain Mail,cnrChainMailAdo,cnrchainmailado
+Bronze Chain Mail,cnrChainMailBro,cnrchainmailbro
+Cobalt Chain Mail,cnrChainMailCob,cnrchainmailcob
+Iron Chain Mail,cnrChainMailIro,cnrchainmailiro
+Mithril Chain Mail,cnrChainMailMit,cnrchainmailmit
+Platinum Chain Mail,cnrChainMailPla,cnrchainmailpla
+Adamantium Chain Shirt,cnrChainShirtAda,cnrchainshirtada
+Adorned Chain Shirt,cnrChainShirtAdo,cnrchainshirtado
+Bronze Chain Shirt,cnrChainShirtBro,cnrchainshirtbro
+Cobalt Chain Shirt,cnrChainShirtCob,cnrchainshirtcob
+Iron Chain Shirt,cnrChainShirtIro,cnrchainshirtiro
+Mithril Chain Shirt,cnrChainShirtMit,cnrchainshirtmit
+Platinum Chain Shirt,cnrChainShirtPla,cnrchainshirtpla
+Chamomile Flower,cnrChamomileFwr,cnrchamomilefwr
+Cherry,cnrCherryFruit,cnrcherryfruit
+Cherry Juice,cnrCherryJuice,cnrcherryjuice
+Cherry Pie,cnrCherryPie,cnrcherrypie
+Chestnut,cnrChestnutFruit,cnrchestnutfruit
+Chestnut Oil,cnrChestnutOil,cnrchestnutoil
+Chicken Egg,cnrChickenEgg,cnrchickenegg
+Choking Powder,cnrChokPowder,cnrchokpowder
+Cloak,cnrCloak,cnrcloak
+Cloth,cnrCloth,cnrcloth
+Clover Leaf,cnrCloverLeaf,cnrcloverleaf
+Club of Acid,cnrClubAcid,cnrclubacid
+Bronze Shod Club,cnrClubBron,cnrclubbron
+Club of Fire,cnrClubFire,cnrclubfire
+Iron Shod Club,cnrClubIron,cnrclubiron
+Club of Lightning,cnrClubLigt,cnrclubligt
+Silver-Coated Club,cnrClubSilv,cnrclubsilv
+Titanium-Tipped Club,cnrClubTita,cnrclubtita
+Wood Club,cnrClubWood,cnrclubwood
+Compound Hickory Longbow,cnrCoLongBowHic,cnrcolongbowhic
+Compound Mahogany Longbow,cnrCoLongBowMah,cnrcolongbowmah
+Compound Oak Longbow,cnrCoLongBowOak,cnrcolongbowoak
+Comfry Root,cnrComfryRoot,cnrcomfryroot
+Copper Adventurine Ring,cnrCopAdvRing,cnrcopadvring
+Copper Fire Agate Ring,cnrCopFireAgRing,cnrcopfireagring
+Copper Greenstone Ring,cnrCopGreenRing,cnrcopgreenring
+Copper Malachite Ring,cnrCopMalRing,cnrcopmalring
+Corn Bread,cnrCornBread,cnrcornbread
+Corn Flakes,cnrCornFlakes,cnrcornflakes
+Corn Flour,cnrCornFlour,cnrcornflour
+Malted Corn,cnrCornMalt,cnrcornmalt
+Corn Meal,cnrCornMeal,cnrcornmeal
+Corn Oil,cnrCornOil,cnrcornoil
+Corn Grains,cnrCornRaw,cnrcornraw
+Roasted Corn,cnrCornRoasted,cnrcornroasted
+Corn Wort,cnrCornWort,cnrcornwort
+Compound Hickory Shortbow,cnrCoShortBowHic,cnrcoshortbowhic
+Compound Mahogany Shortbow,cnrCoShortBowMah,cnrcoshortbowmah
+Compound Oak Shortbow,cnrCoShortBowOak,cnrcoshortbowoak
+Cotton,cnrCotton,cnrcotton
+Cow's Milk,cnrCowsMilk,cnrcowsmilk
+Cranberry,cnrCrnberryFruit,cnrcrnberryfruit
+Cranberry Juice,cnrCrnberryJuice,cnrcrnberryjuice
+Dagger of Acid,cnrDaggerAcid,cnrdaggeracid
+Bronze Dagger,cnrDaggerBron,cnrdaggerbron
+Copper Dagger,cnrDaggerCopp,cnrdaggercopp
+Dagger of Fire,cnrDaggerFire,cnrdaggerfire
+Iron Dagger,cnrDaggerIron,cnrdaggeriron
+Dagger of Lightning,cnrDaggerLtng,cnrdaggerltng
+Silver-Coated Dagger,cnrDaggerSilv,cnrdaggersilv
+Titanium-Tipped Dagger,cnrDaggerTita,cnrdaggertita
+Acid Dart,cnrDartAcid,cnrdartacid
+Bronze Dart,cnrDartBron,cnrdartbron
+Copper Dart,cnrDartCopp,cnrdartcopp
+Fire Dart,cnrDartFire,cnrdartfire
+Iron Dart,cnrDartIron,cnrdartiron
+Lightning Dart,cnrDartLigh,cnrdartligh
+Silver-Coated Dart,cnrDartSilv,cnrdartsilv
+Titanium-Tipped Dart,cnrDartTita,cnrdarttita
+Dire Mace of Acid,cnrDireMaceAcid,cnrdiremaceacid
+Bronze Dire Mace,cnrDireMaceBron,cnrdiremacebron
+Copper Dire Mace,cnrDireMaceCopp,cnrdiremacecopp
+Dire Mace of Fire,cnrDireMaceFire,cnrdiremacefire
+Iron Dire Mace,cnrDireMaceIron,cnrdiremaceiron
+Dire Mace of Lightning,cnrDireMaceLigh,cnrdiremaceligh
+Silver-Coated Dire Mace,cnrDireMaceSilv,cnrdiremacesilv
+Titanium-Tipped Dire Mace,cnrDireMaceTita,cnrdiremacetita
+Double Axe of Acid,cnrDoubleAxeAcid,cnrdoubleaxeacid
+Bronze Double Axe,cnrDoubleAxeBron,cnrdoubleaxebron
+Copper Double Axe,cnrDoubleAxeCopp,cnrdoubleaxecopp
+Double Axe of Fire,cnrDoubleAxeFire,cnrdoubleaxefire
+Iron Double Axe,cnrDoubleAxeIron,cnrdoubleaxeiron
+Double Axe of Lightning,cnrDoubleAxeLigh,cnrdoubleaxeligh
+Silver-Coated Double Axe,cnrDoubleAxeSilv,cnrdoubleaxesilv
+Titanium-Tipped Double Axe,cnrDoubleAxeTita,cnrdoubleaxetita
+Two-Bladed Sword of Acid,cnrDSwordAcid,cnrdswordacid
+Bronze Two-Bladed Sword,cnrDSwordBron,cnrdswordbron
+Copper Two-Bladed Sword,cnrDSwordCopp,cnrdswordcopp
+Two-Bladed Sword of Fire,cnrDSwordFire,cnrdswordfire
+Iron Two-Bladed Sword,cnrDSwordIron,cnrdswordiron
+Two-Bladed Sword of Lightning,cnrDSwordLigh,cnrdswordligh
+Silver-Coated Two-Bladed Sword,cnrDSwordSilv,cnrdswordsilv
+Titanium-Tipped Two-Bladed Sword,cnrDSwordTita,cnrdswordtita
+Echinacea Root,cnrEchinaceaRoot,cnrechinacearoot
+Elderberry,cnrEldberryFruit,cnreldberryfruit
+Elderberry Juice,cnrEldberryJuice,cnreldberryjuice
+Empty Flask,cnrEmptyFlask,cnremptyflask
+Empty Juice Bottle,cnrEmptyJuice,cnremptyjuice
+Enchanted Ingot of Bronze,cnrEnchIngotBron,cnrenchingotbron
+Enchanted Ingot of Copper,cnrEnchIngotCopp,cnrenchingotcopp
+Enchanted Ingot of Gold,cnrEnchIngotGold,cnrenchingotgold
+Enchanted Ingot of Platinum,cnrEnchIngotPlat,cnrenchingotplat
+Enchanted Ingot of Silver,cnrEnchIngotSilv,cnrenchingotsilv
+Enchanted Ingot of Titanium,cnrEnchIngotTita,cnrenchingottita
+Essense of Bark,cnrEssBark,cnressbark
+Essense of Bless,cnrEssBless,cnressbless
+Essense of Charm,cnrEssCharm,cnresscharm
+Essense of Cunning,cnrEssCunning,cnresscunning
+Essense of Cure,cnrEssCure,cnresscure
+Essense of Grace,cnrEssGrace,cnressgrace
+Essense of Healing,cnrEssHealing,cnresshealing
+Essense of Knowledge,cnrEssKnowledge,cnressknowledge
+Essense of Power,cnrEssPower,cnresspower
+Essense of Restore,cnrEssRestore,cnressrestore
+Essense of Sight,cnrEssSight,cnresssight
+Essense of Speed,cnrEssSpeed,cnressspeed
+Essense of Vanishing,cnrEssVanishing,cnressvanishing
+Essense of Wisdom,cnrEssWisdom,cnresswisdom
+Feather from a Falcon,cnrFeatherFalcon,cnrfeatherfalcon
+Feather from an Owl,cnrFeatherOwl,cnrfeatherowl
+Feather from a Raven,cnrFeatherRaven,cnrfeatherraven
+Adamantium Full Plate,cnrFullPlateAda,cnrfullplateada
+Adorned Full Plate,cnrFullPlateAdo,cnrfullplateado
+Bronze Full Plate,cnrFullPlateBro,cnrfullplatebro
+Cobalt Full Plate,cnrFullPlateCob,cnrfullplatecob
+Iron Full Plate,cnrFullPlateIro,cnrfullplateiro
+Mithril Full Plate,cnrFullPlateMit,cnrfullplatemit
+Platinum Full Plate,cnrFullPlatePla,cnrfullplatepla
+Garlic Clove,cnrGarlicClove,cnrgarlicclove
+Copper Gears & Springs,cnrGearsCopp,cnrgearscopp
+Iron Gears & Springs,cnrGearsIron,cnrgearsiron
+Platinum Gears & Springs,cnrGearsPlat,cnrgearsplat
+Tin Gears & Springs,cnrGearsTin,cnrgearstin
+Gem Crafter's Chisel,cnrGemChisel,cnrgemchisel
+Cut Greenstone,cnrGemCut001,cnrgemcut001
+Cut Fire Agate,cnrGemCut002,cnrgemcut002
+Cut Amethyst,cnrGemCut003,cnrgemcut003
+Cut Phenalope,cnrGemCut004,cnrgemcut004
+Cut Diamond,cnrGemCut005,cnrgemcut005
+Cut Ruby,cnrGemCut006,cnrgemcut006
+Cut Malachite,cnrGemCut007,cnrgemcut007
+Cut Sapphire,cnrGemCut008,cnrgemcut008
+Cut Fire Opal,cnrGemCut009,cnrgemcut009
+Cut Topaz,cnrGemCut010,cnrgemcut010
+Cut Garnet,cnrGemCut011,cnrgemcut011
+Cut Emerald,cnrGemCut012,cnrgemcut012
+Cut Alexandrite,cnrGemCut013,cnrgemcut013
+Cut Aventurine,cnrGemCut014,cnrgemcut014
+Cut Feldspar,cnrGemCut015,cnrgemcut015
+Dust of Greenstone,cnrGemDust001,cnrgemdust001
+Dust of Fire Agate,cnrGemDust002,cnrgemdust002
+Dust of Amethyst,cnrGemDust003,cnrgemdust003
+Dust of Phenalope,cnrGemDust004,cnrgemdust004
+Dust of Diamond,cnrGemDust005,cnrgemdust005
+Dust of Ruby,cnrGemDust006,cnrgemdust006
+Dust of Malachite,cnrGemDust007,cnrgemdust007
+Dust of Sapphire,cnrGemDust008,cnrgemdust008
+Dust of Fire Opal,cnrGemDust009,cnrgemdust009
+Dust of Topaz,cnrGemDust010,cnrgemdust010
+Dust of Garnet,cnrGemDust011,cnrgemdust011
+Dust of Emerald,cnrGemDust012,cnrgemdust012
+Dust of Alexandrite,cnrGemDust013,cnrgemdust013
+Dust of Aventurine,cnrGemDust014,cnrgemdust014
+Dust of Feldspar,cnrGemDust015,cnrgemdust015
+Enchanted Greenstone,cnrGemEnchant001,cnrgemenchant001
+Enchanted Fire Agate,cnrGemEnchant002,cnrgemenchant002
+Enchanted Amethyst,cnrGemEnchant003,cnrgemenchant003
+Enchanted Phenalope,cnrGemEnchant004,cnrgemenchant004
+Enchanted Diamond,cnrGemEnchant005,cnrgemenchant005
+Enchanted Ruby,cnrGemEnchant006,cnrgemenchant006
+Enchanted Malachite,cnrGemEnchant007,cnrgemenchant007
+Enchanted Sapphire,cnrGemEnchant008,cnrgemenchant008
+Enchanted Fire Opal,cnrGemEnchant009,cnrgemenchant009
+Enchanted Topaz,cnrGemEnchant010,cnrgemenchant010
+Enchanted Garnet,cnrGemEnchant011,cnrgemenchant011
+Enchanted Emerald,cnrGemEnchant012,cnrgemenchant012
+Enchanted Alexandrite,cnrGemEnchant013,cnrgemenchant013
+Enchanted Aventurine,cnrGemEnchant014,cnrgemenchant014
+Enchanted Feldspar,cnrGemEnchant015,cnrgemenchant015
+Fine Greenstone,cnrGemFine001,cnrgemfine001
+Fine Fire Agate,cnrGemFine002,cnrgemfine002
+Fine Amethyst,cnrGemFine003,cnrgemfine003
+Fine Phenalope,cnrGemFine004,cnrgemfine004
+Fine Diamond,cnrGemFine005,cnrgemfine005
+Fine Ruby,cnrGemFine006,cnrgemfine006
+Fine Malachite,cnrGemFine007,cnrgemfine007
+Fine Sapphire,cnrGemFine008,cnrgemfine008
+Fine Fire Opal,cnrGemFine009,cnrgemfine009
+Fine Topaz,cnrGemFine010,cnrgemfine010
+Fine Garnet,cnrGemFine011,cnrgemfine011
+Fine Emerald,cnrGemFine012,cnrgemfine012
+Fine Alexandrite,cnrGemFine013,cnrgemfine013
+Fine Aventurine,cnrGemFine014,cnrgemfine014
+Fine Feldspar,cnrGemFine015,cnrgemfine015
+Flawed Greenstone,cnrGemFlawed001,cnrgemflawed001
+Flawed Fire Agate,cnrGemFlawed002,cnrgemflawed002
+Flawed Amethyst,cnrGemFlawed003,cnrgemflawed003
+Flawed Phenalope,cnrGemFlawed004,cnrgemflawed004
+Flawed Diamond,cnrGemFlawed005,cnrgemflawed005
+Flawed Ruby,cnrGemFlawed006,cnrgemflawed006
+Flawed Malachite,cnrGemFlawed007,cnrgemflawed007
+Flawed Sapphire,cnrGemFlawed008,cnrgemflawed008
+Flawed Fire Opal,cnrGemFlawed009,cnrgemflawed009
+Flawed Topaz,cnrGemFlawed010,cnrgemflawed010
+Flawed Garnet,cnrGemFlawed011,cnrgemflawed011
+Flawed Emerald,cnrGemFlawed012,cnrgemflawed012
+Flawed Alexandrite,cnrGemFlawed013,cnrgemflawed013
+Flawed Aventurine,cnrGemFlawed014,cnrgemflawed014
+Flawed Feldspar,cnrGemFlawed015,cnrgemflawed015
+Mystery Mineral,cnrGemMineral000,cnrgemmineral000
+Mineral Greenstone,cnrGemMineral001,cnrgemmineral001
+Mineral Fire Agate,cnrGemMineral002,cnrgemmineral002
+Mineral Amethyst,cnrGemMineral003,cnrgemmineral003
+Mineral Phenalope,cnrGemMineral004,cnrgemmineral004
+Mineral Diamond,cnrGemMineral005,cnrgemmineral005
+Mineral Ruby,cnrGemMineral006,cnrgemmineral006
+Mineral Malachite,cnrGemMineral007,cnrgemmineral007
+Mineral Sapphire,cnrGemMineral008,cnrgemmineral008
+Mineral Fire Opal,cnrGemMineral009,cnrgemmineral009
+Mineral Topaz,cnrGemMineral010,cnrgemmineral010
+Mineral Garnet,cnrGemMineral011,cnrgemmineral011
+Mineral Emerald,cnrGemMineral012,cnrgemmineral012
+Mineral Alexandrite,cnrGemMineral013,cnrgemmineral013
+Mineral Aventurine,cnrGemMineral014,cnrgemmineral014
+Mineral Feldspar,cnrGemMineral015,cnrgemmineral015
+Set of Gem Crafter's Tools,cnrGemTools,cnrgemtools
+Ginger Root,cnrGingerRoot,cnrgingerroot
+Ginseng Root,cnrGinsengRoot,cnrginsengroot
+Glass Vial,cnrGlassVial,cnrglassvial
+Gloves of Fury,cnrGlovesFury,cnrglovesfury
+Leather Gloves,cnrGlovesLeather,cnrglovesleather
+Gold Alexandrite Necklace,cnrGoldAlexNeck,cnrgoldalexneck
+Gold Amethyst Scarab,cnrGoldAmScarab,cnrgoldamscarab
+Gold Feldspar Amulet,cnrGoldFeldAmulet,cnrgoldfeldamule
+Gold Fire Opal Necklace,cnrGoldFireOpNeck,cnrgoldfireopnec
+Gold Garnet Amulet,cnrGoldGarAmulet,cnrgoldgaramulet
+Gold Phenalope Scarab,cnrGoldPhenScarab,cnrgoldphenscara
+Gold Sapphire Necklace,cnrGoldSapNeck,cnrgoldsapneck
+Gold Topaz Necklace,cnrGoldTopNeck,cnrgoldtopneck
+Grape,cnrGrapeFruit,cnrgrapefruit
+Grape Juice,cnrGrapeJuice,cnrgrapejuice
+Graveyard Dirt,cnrGraveyardDirt,cnrgraveyarddirt
+Greataxe of Acid,cnrGreatAxeAcid,cnrgreataxeacid
+Bronze Greataxe,cnrGreatAxeBron,cnrgreataxebron
+Copper Greataxe,cnrGreatAxeCopp,cnrgreataxecopp
+Greataxe of Fire,cnrGreatAxeFire,cnrgreataxefire
+Iron Greataxe,cnrGreatAxeIron,cnrgreataxeiron
+Greataxe of Lightning,cnrGreatAxeLtng,cnrgreataxeltng
+Silver-Coated Greataxe,cnrGreatAxeSilv,cnrgreataxesilv
+Titanium-Tipped Greataxe,cnrGreatAxeTita,cnrgreataxetita
+Great Sword of Acid,cnrGrSwordAcid,cnrgrswordacid
+Bronze Great Sword,cnrGrSwordBron,cnrgrswordbron
+Copper Great Sword,cnrGrSwordCopp,cnrgrswordcopp
+Great Sword of Fire,cnrGrSwordFire,cnrgrswordfire
+Iron Great Sword,cnrGrSwordIron,cnrgrswordiron
+Great Sword of Lightning,cnrGrSwordLtng,cnrgrswordltng
+Silver-Coated Great Sword,cnrGrSwordSilv,cnrgrswordsilv
+Titanium-Tipped Great Sword,cnrGrSwordTita,cnrgrswordtita
+Halberd of Acid,cnrHalberdAcid,cnrhalberdacid
+Bronze Halberd,cnrHalberdBron,cnrhalberdbron
+Copper Halberd,cnrHalberdCopp,cnrhalberdcopp
+Halberd of Fire,cnrHalberdFire,cnrhalberdfire
+Iron Halberd,cnrHalberdIron,cnrhalberdiron
+Halberd of Lightning,cnrHalberdLtng,cnrhalberdltng
+Silver-Coated Halberd,cnrHalberdSilv,cnrhalberdsilv
+Titanium-Tipped Halberd,cnrHalberdTita,cnrhalberdtita
+Adamantium Half Plate,cnrHalfPlateAda,cnrhalfplateada
+Adorned Half Plate,cnrHalfPlateAdo,cnrhalfplateado
+Bronze Half Plate,cnrHalfPlateBro,cnrhalfplatebro
+Cobalt Half Plate,cnrHalfPlateCob,cnrhalfplatecob
+Iron Half Plate,cnrHalfPlateIro,cnrhalfplateiro
+Mithril Half Plate,cnrHalfPlateMit,cnrhalfplatemit
+Platinum Half Plate,cnrHalfPlatePla,cnrhalfplatepla
+Handaxe of Acid,cnrHandAxeAcid,cnrhandaxeacid
+Bronze Handaxe,cnrHandAxeBron,cnrhandaxebron
+Copper Handaxe,cnrHandAxeCopp,cnrhandaxecopp
+Handaxe of Fire,cnrHandAxeFire,cnrhandaxefire
+Iron Handaxe,cnrHandAxeIron,cnrhandaxeiron
+Handaxe of Lightning,cnrHandAxeLtng,cnrhandaxeltng
+Silver-Coated Handaxe,cnrHandAxeSilv,cnrhandaxesilv
+Titanium-Tipped Handaxe,cnrHandAxeTita,cnrhandaxetita
+Hawthorn Flower,cnrHawthornFwr,cnrhawthornfwr
+Witch Hazel Leaf,cnrHazelLeaf,cnrhazelleaf
+Hazelnut,cnrHazelnutFruit,cnrhazelnutfruit
+Hazelnut Oil,cnrHazelnutOil,cnrhazelnutoil
+Heavy Hickory Crossbow,cnrHeavyBowHic,cnrheavybowhic
+Heavy Mahogany Crossbow,cnrHeavyBowMah,cnrheavybowmah
+Heavy Oak Crossbow,cnrHeavyBowOak,cnrheavybowoak
+Adamantium Bascinet,cnrHelmBasAda,cnrhelmbasada
+Bronze Bascinet,cnrHelmBasBro,cnrhelmbasbro
+Cobalt Bascinet,cnrHelmBasCob,cnrhelmbascob
+Iron Bascinet,cnrHelmBasIro,cnrhelmbasiro
+Mithril Bascinet,cnrHelmBasMit,cnrhelmbasmit
+Platinum Bascinet,cnrHelmBasPla,cnrhelmbaspla
+Adamantium Executioner's Helm,cnrHelmExeAda,cnrhelmexeada
+Bronze Executioner's Helm,cnrHelmExeBro,cnrhelmexebro
+Cobalt Executioner's Helm,cnrHelmExeCob,cnrhelmexecob
+Iron Executioner's Helm,cnrHelmExeIro,cnrhelmexeiro
+Mithril Executioner's Helm,cnrHelmExeMit,cnrhelmexemit
+Platinum Executioner's Helm,cnrHelmExePla,cnrhelmexepla
+Adamantium Jutter Helmet,cnrHelmJutAda,cnrhelmjutada
+Bronze Jutter Helmet,cnrHelmJutBro,cnrhelmjutbro
+Cobalt Jutter Helmet,cnrHelmJutCob,cnrhelmjutcob
+Iron Jutter Helmet,cnrHelmJutIro,cnrhelmjutiro
+Mithril Jutter Helmet,cnrHelmJutMit,cnrhelmjutmit
+Platinum Jutter Helmet,cnrHelmJutPla,cnrhelmjutpla
+Adamantium Pot Helmet,cnrHelmPotAda,cnrhelmpotada
+Bronze Pot Helmet,cnrHelmPotBro,cnrhelmpotbro
+Cobalt Pot Helmet,cnrHelmPotCob,cnrhelmpotcob
+Iron Pot Helmet,cnrHelmPotIro,cnrhelmpotiro
+Mithril Pot Helmet,cnrHelmPotMit,cnrhelmpotmit
+Platinum Pot Helmet,cnrHelmPotPla,cnrhelmpotpla
+Adamantium Spike Helmet,cnrHelmSpikeAda,cnrhelmspikeada
+Bronze Spike Helmet,cnrHelmSpikeBro,cnrhelmspikebro
+Cobalt Spike Helmet,cnrHelmSpikeCob,cnrhelmspikecob
+Iron Spike Helmet,cnrHelmSpikeIro,cnrhelmspikeiro
+Mithril Spike Helmet,cnrHelmSpikeMit,cnrhelmspikemit
+Platinum Spike Helmet,cnrHelmSpikePla,cnrhelmspikepla
+Adamantium Visor Helmet,cnrHelmVisAda,cnrhelmvisada
+Bronze Visor Helmet,cnrHelmVisBro,cnrhelmvisbro
+Cobalt Visor Helmet,cnrHelmVisCob,cnrhelmviscob
+Iron Visor Helmet,cnrHelmVisIro,cnrhelmvisiro
+Mithril Visor Helmet,cnrHelmVisMit,cnrhelmvismit
+Platinum Visor Helmet,cnrHelmVisPla,cnrhelmvispla
+Cured Badger Hide,cnrHideCureBadg,cnrhidecurebadg
+Cured Bat Hide,cnrHideCureBat,cnrhidecurebat
+Cured Black Bear Hide,cnrHideCureBlac,cnrhidecureblac
+Cured Boar Hide,cnrHideCureBoar,cnrhidecureboar
+Cured Brown Bear Hide,cnrHideCureBrow,cnrhidecurebrow
+Cured Cougar Hide,cnrHideCureCoug,cnrhidecurecoug
+Cured Crag Cat Hide,cnrHideCureCrag,cnrhidecurecrag
+Cured Dire Bear Hide,cnrHideCureDB,cnrhidecuredb
+Cured Deer Hide,cnrHideCureDeer,cnrhidecuredeer
+Large Cured Hide,cnrHideCuredLg,cnrhidecuredlg
+Medium Cured Hide,cnrHideCuredMed,cnrhidecuredmed
+Small Cured Hide,cnrHideCuredSm,cnrhidecuredsm
+Cured Grizzly Bear Hide,cnrHideCureGriz,cnrhidecuregriz
+Cured Jaguar Hide,cnrHideCureJagu,cnrhidecurejagu
+Cured Leopard Hide,cnrHideCureLeop,cnrhidecureleop
+Cured Lion Hide,cnrHideCureLion,cnrhidecurelion
+Cured Malar Panther Hide,cnrHideCureMala,cnrhidecuremala
+Cured Panther Hide,cnrHideCurePant,cnrhidecurepant
+Cured Polar Bear Hide,cnrHideCurePola,cnrhidecurepola
+Cured Rat Hide,cnrHideCureRat,cnrhidecurerat
+Cured White Stag Hide,cnrHideCureStag,cnrhidecurestag
+Cured Dire Tiger Hide,cnrHideCureTige,cnrhidecuretige
+Cured Winter Wolf Hide,cnrHideCureWint,cnrhidecurewint
+Cured Wolf Hide,cnrHideCureWolf,cnrhidecurewolf
+Cured Worg Hide,cnrHideCureWorg,cnrhidecureworg
+Iron Hinge,cnrHingeIron,cnrhingeiron
+Holy Water,cnrHolyWater,cnrholywater
+Honey,cnrHoney,cnrhoney
+Hops Flower,cnrHopsFlower,cnrhopsflower
+Heavy Flail of Acid,cnrHyFlailAcid,cnrhyflailacid
+Heavy Bronze Flail,cnrHyFlailBron,cnrhyflailbron
+Heavy Copper Flail,cnrHyFlailCopp,cnrhyflailcopp
+Heavy Flail of Fire,cnrHyFlailFire,cnrhyflailfire
+Heavy Iron Flail,cnrHyFlailIron,cnrhyflailiron
+Heavy Flail of Lightning,cnrHyFlailLtng,cnrhyflailltng
+Heavy Silver-Coated Flail,cnrHyFlailSilv,cnrhyflailsilv
+Heavy Titanium-Tipped Flail,cnrHyFlailTita,cnrhyflailtita
+Ingot of Adamantium,cnrIngotAdam,cnringotadam
+Ingot of Bronze,cnrIngotBron,cnringotbron
+Ingot of Cobalt,cnrIngotCoba,cnringotcoba
+Ingot of Copper,cnrIngotCopp,cnringotcopp
+Ingot of Glass,cnrIngotGlass,cnringotglass
+Ingot of Gold,cnrIngotGold,cnringotgold
+Ingot of Iron,cnrIngotIron,cnringotiron
+Ingot of Mithril,cnrIngotMith,cnringotmith
+Ingot of Platinum,cnrIngotPlat,cnringotplat
+Ingot of Silver,cnrIngotSilv,cnringotsilv
+Ingot of Tin,cnrIngotTin,cnringottin
+Ingot of Titanium,cnrIngotTita,cnringottita
+Ink of Abjuration,cnrInkAbjur,cnrinkabjur
+Ink of Conjuration,cnrInkConj,cnrinkconj
+Ink of Divination,cnrInkDiv,cnrinkdiv
+Ink of Enchantment,cnrInkEnch,cnrinkench
+Ink of Evocation,cnrInkEvoc,cnrinkevoc
+Ink of Greater Abjuration,cnrInkGAbjur,cnrinkgabjur
+Ink of Greater Conjuration,cnrInkGConj,cnrinkgconj
+Ink of Greater Divination,cnrInkGDiv,cnrinkgdiv
+Ink of Greater Enchantment,cnrInkGEnch,cnrinkgench
+Ink of Greater Evocation,cnrInkGEvoc,cnrinkgevoc
+Ink of Greater Illusion,cnrInkGIllus,cnrinkgillus
+Ink of Greater Necromancy,cnrInkGNecro,cnrinkgnecro
+Ink of Greater Transmutation,cnrInkGTrans,cnrinkgtrans
+Ink of Illusion,cnrInkIllus,cnrinkillus
+Ink of Lesser Abjuration,cnrInkLAbjur,cnrinklabjur
+Ink of Lesser Conjuration,cnrInkLConj,cnrinklconj
+Ink of Lesser Divination,cnrInkLDiv,cnrinkldiv
+Ink of Lesser Enchantment,cnrInkLEnch,cnrinklench
+Ink of Lesser Evocation,cnrInkLEvoc,cnrinklevoc
+Ink of Lesser Illusion,cnrInkLIllus,cnrinklillus
+Ink of Lesser Necromancy,cnrInkLNecro,cnrinklnecro
+Ink of Lesser Transmutation,cnrInkLTrans,cnrinkltrans
+Ink of Necromancy,cnrInkNecro,cnrinknecro
+Ink of Transmutation,cnrInkTrans,cnrinktrans
+Iron Spikes,cnrIronSpikes,cnrironspikes
+Juniper Berry,cnrJuniperFruit,cnrjuniperfruit
+Juniper Berry Juice,cnrJuniperJuice,cnrjuniperjuice
+Kama of Acid,cnrKamaAcid,cnrkamaacid
+Bronze Kama,cnrKamaBron,cnrkamabron
+Copper Kama,cnrKamaCopp,cnrkamacopp
+Kama of Fire,cnrKamaFire,cnrkamafire
+Iron Kama,cnrKamaIron,cnrkamairon
+Kama of Ligntning,cnrKamaLtng,cnrkamaltng
+Silver-Coated Kama,cnrKamaSilv,cnrkamasilv
+Titanium-Tipped Kama,cnrKamaTita,cnrkamatita
+Katana of Acid,cnrKatanaAcid,cnrkatanaacid
+Bronze Katana,cnrKatanaBron,cnrkatanabron
+Copper Katana,cnrKatanaCopp,cnrkatanacopp
+Katana of Fire,cnrKatanaFire,cnrkatanafire
+Iron Katana,cnrKatanaIron,cnrkatanairon
+Katana of Lightning,cnrKatanaLtng,cnrkatanaltng
+Silver-Coated Katana,cnrKatanaSilv,cnrkatanasilv
+Titanium-Tipped Katana,cnrKatanaTita,cnrkatanatita
+Kukri of Acid,cnrKukriAcid,cnrkukriacid
+Bronze Kukri,cnrKukriBron,cnrkukribron
+Copper Kukri,cnrKukriCopp,cnrkukricopp
+Kukri of Fire,cnrKukriFire,cnrkukrifire
+Iron Kukri,cnrKukriIron,cnrkukriiron
+Kukri of Lightning,cnrKukriLigh,cnrkukriligh
+Silver-Coated Kukri,cnrKukriSilv,cnrkukrisilv
+Titanium-Tipped Kukri,cnrKukriTita,cnrkukritita
+Badger Leather,cnrLeathBadg,cnrleathbadg
+Bat Leather,cnrLeathBat,cnrleathbat
+Black Bear Leather,cnrLeathBlac,cnrleathblac
+Boar Leather,cnrLeathBoar,cnrleathboar
+Brown Bear Leather,cnrLeathBrow,cnrleathbrow
+Cougar Leather,cnrLeathCoug,cnrleathcoug
+Crag Leather,cnrLeathCrag,cnrleathcrag
+Deer Leather,cnrLeathDeer,cnrleathdeer
+Large Piece of Leather,cnrLeatherLg,cnrleatherlg
+Medium Piece of Leather,cnrLeatherMed,cnrleathermed
+Leather Pouch,cnrLeatherPouch,cnrleatherpouch
+Small Piece of Leather,cnrLeatherSm,cnrleathersm
+Grizzly Bear Leather,cnrLeathGriz,cnrleathgriz
+Jaguar Leather,cnrLeathJagu,cnrleathjagu
+Leopard Leather,cnrLeathLeop,cnrleathleop
+Lion Leather,cnrLeathLion,cnrleathlion
+Malar Leather,cnrLeathMala,cnrleathmala
+Panther Leather,cnrLeathPant,cnrleathpant
+Polar Bear Leather,cnrLeathPola,cnrleathpola
+Rat Leather,cnrLeathRat,cnrleathrat
+White Stag Leather,cnrLeathStag,cnrleathstag
+Dire Tiger Leather,cnrLeathTige,cnrleathtige
+Winter Wolf Leather,cnrLeathWint,cnrleathwint
+Wolf Leather,cnrLeathWolf,cnrleathwolf
+Worg Leather,cnrLeathWorg,cnrleathworg
+Longsword of Acid,cnrLgSwordAcid,cnrlgswordacid
+Bronze Longsword,cnrLgSwordBron,cnrlgswordbron
+Copper Longsword,cnrLgSwordCopp,cnrlgswordcopp
+Longsword of Fire,cnrLgSwordFire,cnrlgswordfire
+Iron Longsword,cnrLgSwordIron,cnrlgswordiron
+Longsword of Lightning,cnrLgSwordLtng,cnrlgswordltng
+Silver-Coated Longsword,cnrLgSwordSilv,cnrlgswordsilv
+Titanium-Tipped Longsword,cnrLgSwordTita,cnrlgswordtita
+Light Hickory Crossbow,cnrLightBowHic,cnrlightbowhic
+Light Mahogany Crossbow,cnrLightBowMah,cnrlightbowmah
+Light Oak Crossbow,cnrLightBowOak,cnrlightbowoak
+Iron Lock,cnrLockIron,cnrlockiron
+Hickory Longbow,cnrLongBowHic,cnrlongbowhic
+Mahogany Longbow,cnrLongBowMah,cnrlongbowmah
+Oak Longbow,cnrLongBowOak,cnrlongbowoak
+Light Flail of Acid,cnrLtFlailAcid,cnrltflailacid
+Light Bronze Flail,cnrLtFlailBron,cnrltflailbron
+Light Copper Flail,cnrLtFlailCopp,cnrltflailcopp
+Light Flail of Fire,cnrLtFlailFire,cnrltflailfire
+Light Iron Flail,cnrLtFlailIron,cnrltflailiron
+Light Flail of Lightning,cnrLtFlailLtng,cnrltflailltng
+Light Silver-Coated Flail,cnrLtFlailSilv,cnrltflailsilv
+Light Titanium-Tipped Flail,cnrLtFlailTita,cnrltflailtita
+Light Hammer of Acid,cnrLtHammerAcid,cnrlthammeracid
+Light Bronze Hammer,cnrLtHammerBron,cnrlthammerbron
+Light Copper Hammer,cnrLtHammerCopp,cnrlthammercopp
+Light Hammer of Fire,cnrLtHammerFire,cnrlthammerfire
+Light Iron Hammer,cnrLtHammerIron,cnrlthammeriron
+Light Hammer of Lightning,cnrLtHammerLtng,cnrlthammerltng
+Light Silver-Coated Hammer,cnrLtHammerSilv,cnrlthammersilv
+Light Titanium-Tipped Hammer,cnrLtHammerTita,cnrlthammertita
+Lump of Clay,cnrLumpOfClay,cnrlumpofclay
+Mace of Acid,cnrMaceAcid,cnrmaceacid
+Bronze Mace,cnrMaceBron,cnrmacebron
+Copper Mace,cnrMaceCopp,cnrmacecopp
+Mace of Fire,cnrMaceFire,cnrmacefire
+Iron Mace,cnrMaceIron,cnrmaceiron
+Mace of Lightning,cnrMaceLtng,cnrmaceltng
+Silver-Coated Mace,cnrMaceSilv,cnrmacesilv
+Titanium-Tipped Mace,cnrMaceTita,cnrmacetita
+Mangled Adamantium,cnrMangledAdam,cnrmangledadam
+Mangled Bronze,cnrMangledBron,cnrmangledbron
+Mangled Cobalt,cnrMangledCoba,cnrmangledcoba
+Mangled Copper,cnrMangledCopp,cnrmangledcopp
+Mangled Gold,cnrMangledGold,cnrmangledgold
+Mangled Iron,cnrMangledIron,cnrmanglediron
+Mangled Mithril,cnrMangledMith,cnrmangledmith
+Mangled Platinum,cnrMangledPlat,cnrmangledplat
+Mangled Tin,cnrMangledTin,cnrmangledtin
+Maple Syrup,cnrMapleSyrup,cnrmaplesyrup
+Miner's Pack,cnrMinersPack,cnrminerspack
+Miner's Pickaxe,cnrMinersPickaxe,cnrminerspickaxe
+Amulet Mold,cnrMoldAmulet,cnrmoldamulet
+Helm Mold,cnrMoldHelm,cnrmoldhelm
+Large Casting Mold,cnrMoldLarge,cnrmoldlarge
+Medium Casting Mold,cnrMoldMedium,cnrmoldmedium
+Necklace Mold,cnrMoldNecklace,cnrmoldnecklace
+Ring Mold,cnrMoldRing,cnrmoldring
+Scarab Mold,cnrMoldScarab,cnrmoldscarab
+Small Casting Mold,cnrMoldSmall,cnrmoldsmall
+Iron Spike Mold,cnrMoldSpike,cnrmoldspike
+Bronze Stud Mold,cnrMoldStud,cnrmoldstud
+Morningstar of Acid,cnrMstarAcid,cnrmstaracid
+Bronze Morningstar,cnrMstarBron,cnrmstarbron
+Copper Morningstar,cnrMstarCopp,cnrmstarcopp
+Morningstar of Fire,cnrMstarFire,cnrmstarfire
+Iron Morningstar,cnrMstarIron,cnrmstariron
+Morningstar of Lightning,cnrMstarLtng,cnrmstarltng
+Silver-Coated Morningstar,cnrMstarSilv,cnrmstarsilv
+Titanium-Tipped Morningstar,cnrMstarTita,cnrmstartita
+Black Mushroom,cnrMushroomBlk,cnrmushroomblk
+Purple Mushroom,cnrMushroomPurp,cnrmushroompurp
+Red Mushroom,cnrMushroomRed,cnrmushroomred
+Spotted Mushroom,cnrMushroomSpot,cnrmushroomspot
+White Mushroom,cnrMushroomWht,cnrmushroomwht
+Yellow Mushroom,cnrMushroomYel,cnrmushroomyel
+Nettle Leaf,cnrNettleLeaf,cnrnettleleaf
+Nugget of Adamantium,cnrNuggetAdam,cnrnuggetadam
+Nugget of Cobalt,cnrNuggetCoba,cnrnuggetcoba
+Nugget of Copper,cnrNuggetCopp,cnrnuggetcopp
+Nugget of Gold,cnrNuggetGold,cnrnuggetgold
+Nugget of Iron,cnrNuggetIron,cnrnuggetiron
+Nugget of Mithril,cnrNuggetMith,cnrnuggetmith
+Nugget of Platinum,cnrNuggetPlat,cnrnuggetplat
+Nugget of Silver,cnrNuggetSilv,cnrnuggetsilv
+Nugget of Tin,cnrNuggetTin,cnrnuggettin
+Nugget of Titanium,cnrNuggetTita,cnrnuggettita
+Oat Bread,cnrOatsBread,cnroatsbread
+Oat Flakes,cnrOatsFlakes,cnroatsflakes
+Oat Flour,cnrOatsFlour,cnroatsflour
+Malted Oats,cnrOatsMalt,cnroatsmalt
+Oat Meal,cnrOatsMeal,cnroatsmeal
+Oat Grains,cnrOatsRaw,cnroatsraw
+Roasted Oats,cnrOatsRoasted,cnroatsroasted
+Oat Wort,cnrOatsWort,cnroatswort
+Flask of Oil,cnrOil,cnroil
+Enchanting Oil,cnrOilEnchanting,cnroilenchanting
+Gem Polishing Oil,cnrOilPolishing,cnroilpolishing
+Tanning Oil,cnrOilTanning,cnroiltanning
+Cloth Padding,cnrPadding,cnrpadding
+Pattern for Banded Mail,cnrPatBandedMail,cnrpatbandedmail
+Pattern for Chain Mail,cnrPatChainMail,cnrpatchainmail
+Pattern for Chain Shirt,cnrPatChainShirt,cnrpatchainshirt
+Pattern for Full Plate,cnrPatFullPlate,cnrpatfullplate
+Pattern for Half Plate,cnrPatHalfPlate,cnrpathalfplate
+Pattern for Scale Mail,cnrPatScaleMail,cnrpatscalemail
+Pattern for Splint Mail,cnrPatSplintMail,cnrpatsplintmail
+Cloth Pattern,cnrPattern,cnrpattern
+Pear,cnrPearFruit,cnrpearfruit
+Pear Juice,cnrPearJuice,cnrpearjuice
+Pecan,cnrPecanFruit,cnrpecanfruit
+Pecan Oil,cnrPecanOil,cnrpecanoil
+Pecan Pie,cnrPecanPie,cnrpecanpie
+Peppermint Leaf,cnrPepmintLeaf,cnrpepmintleaf
+Plank of Hickory,cnrPlankHic,cnrplankhic
+Plank of Mahogany,cnrPlankMah,cnrplankmah
+Plank of Oak,cnrPlankOak,cnrplankoak
+Platinum Alexandrite Amulet,cnrPlatAlexAmulet,cnrplatalexamule
+Platinum Diamond Necklace,cnrPlatDiaNeck,cnrplatdianeck
+Platinum Emerald Necklace,cnrPlatEmNeck,cnrplatemneck
+Platinum Fire Opal Amulet,cnrPlatFireOpAmulet,cnrplatfireopamu
+Platinum Ruby Necklace,cnrPlatRubyNeck,cnrplatrubyneck
+Platinum Sapphire Amulet,cnrPlatSapAmulet,cnrplatsapamulet
+Platinum Topaz Amulet,cnrPlatTopAmulet,cnrplattopamulet
+Poison Gas,cnrPoisonGas,cnrpoisongas
+Quarterstaff of Acid,cnrQStaffAcid,cnrqstaffacid
+Bronze-Shod Quarterstaff,cnrQStaffBron,cnrqstaffbron
+Quarterstaff of Fire,cnrQStaffFire,cnrqstafffire
+Iron-Shod Quarterstaff,cnrQStaffIron,cnrqstaffiron
+Quarterstaff of Lightning,cnrQStaffLigh,cnrqstaffligh
+Silver-Shod Quarterstaff,cnrQStaffSilv,cnrqstaffsilv
+Titanium-Shod Quarterstaff,cnrQStaffTita,cnrqstafftita
+Wooden Quarterstaff,cnrQStaffWood,cnrqstaffwood
+Rapier of Acid,cnrRapierAcid,cnrrapieracid
+Bronze Rapier,cnrRapierBron,cnrrapierbron
+Copper Rapier,cnrRapierCopp,cnrrapiercopp
+Rapier of Fire,cnrRapierFire,cnrrapierfire
+Iron Rapier,cnrRapierIron,cnrrapieriron
+Rapier of Lightning,cnrRapierLtng,cnrrapierltng
+Silver-Coated Rapier,cnrRapierSilv,cnrrapiersilv
+Titanium-Tipped Rapier,cnrRapierTita,cnrrapiertita
+Raw Parchment,cnrRawParchment,cnrrawparchment
+Rice Bread,cnrRiceBread,cnrricebread
+Rice Flakes,cnrRiceFlakes,cnrriceflakes
+Rice Flour,cnrRiceFlour,cnrriceflour
+Malted Rice,cnrRiceMalt,cnrricemalt
+Rice Meal,cnrRiceMeal,cnrricemeal
+Rice Oil,cnrRiceOil,cnrriceoil
+Rice Grains,cnrRiceRaw,cnrriceraw
+Roasted Rice,cnrRiceRoasted,cnrriceroasted
+Rice Wort,cnrRiceWort,cnrricewort
+cnrRod,cnrRod,cnrrod
+Copper Rod,cnrRodCopp,cnrrodcopp
+Rope,cnrRope,cnrrope
+Raspberry,cnrRspberryFruit,cnrrspberryfruit
+Raspberry Juice,cnrRspberryJuice,cnrrspberryjuice
+Rye Bread,cnrRyeBread,cnrryebread
+Rye Flakes,cnrRyeFlakes,cnrryeflakes
+Rye Flour,cnrRyeFlour,cnrryeflour
+Malted Rye,cnrRyeMalt,cnrryemalt
+Rye Meal,cnrRyeMeal,cnrryemeal
+Rye Grains,cnrRyeRaw,cnrryeraw
+Roasted Rye,cnrRyeRoasted,cnrryeroasted
+Rye Wort,cnrRyeWort,cnrryewort
+Sage Leaf,cnrSageLeaf,cnrsageleaf
+Salt,cnrSalt,cnrsalt
+Adamantium Scale Mail,cnrScaleMailAda,cnrscalemailada
+Adorned Scale Mail,cnrScaleMailAdo,cnrscalemailado
+Bronze Scale Mail,cnrScaleMailBro,cnrscalemailbro
+Cobalt Scale Mail,cnrScaleMailCob,cnrscalemailcob
+Iron Scale Mail,cnrScaleMailIro,cnrscalemailiro
+Mithril Scale Mail,cnrScaleMailMit,cnrscalemailmit
+Platinum Scale Mail,cnrScaleMailPla,cnrscalemailpla
+Scimitar of Acid,cnrScimitarAcid,cnrscimitaracid
+Bronze Scimitar,cnrScimitarBron,cnrscimitarbron
+Copper Scimitar,cnrScimitarCopp,cnrscimitarcopp
+Scimitar of Fire,cnrScimitarFire,cnrscimitarfire
+Iron Scimitar,cnrScimitarIron,cnrscimitariron
+Scimitar of Lightning,cnrScimitarLtng,cnrscimitarltng
+Silver-Coated Scimitar,cnrScimitarSilv,cnrscimitarsilv
+Titanium-Tipped Scimitar,cnrScimitarTita,cnrscimitartita
+Blank Scroll,cnrScrollBlank,cnrscrollblank
+Scythe of Acid,cnrScytheAcid,cnrscytheacid
+Bronze Scythe,cnrScytheBron,cnrscythebron
+Copper Scythe,cnrScytheCopp,cnrscythecopp
+Scythe of Fire,cnrScytheFire,cnrscythefire
+Iron Scythe,cnrScytheIron,cnrscytheiron
+Scythe of Lightning,cnrScytheLtng,cnrscytheltng
+Silver-Coated Scythe,cnrScytheSilv,cnrscythesilv
+Titanium-Tipped Scythe,cnrScytheTita,cnrscythetita
+Sewing Kit,cnrSewingKit,cnrsewingkit
+Shaft of Hickory,cnrShaftHick,cnrshafthick
+Shaft of Mahogany,cnrShaftMahog,cnrshaftmahog
+Shaft of Oak,cnrShaftOak,cnrshaftoak
+Shafts for Arrows (20),cnrShaftsArrow,cnrshaftsarrow
+Shafts for Bolts (20),cnrShaftsBolt,cnrshaftsbolt
+Buckler of Acid,cnrShldBuckAcid,cnrshldbuckacid
+Bronze Buckler,cnrShldBuckBron,cnrshldbuckbron
+Copper Buckler,cnrShldBuckCopp,cnrshldbuckcopp
+Buckler of Fire,cnrShldBuckFire,cnrshldbuckfire
+Iron Buckler,cnrShldBuckIron,cnrshldbuckiron
+Buckler of Lightning,cnrShldBuckLtng,cnrshldbuckltng
+Heater Shield of Acid,cnrShldHeatAcid,cnrshldheatacid
+Bronze Heater Shield,cnrShldHeatBron,cnrshldheatbron
+Copper Heater Shield,cnrShldHeatCopp,cnrshldheatcopp
+Heater Shield of Fire,cnrShldHeatFire,cnrshldheatfire
+Iron Heater Shield,cnrShldHeatIron,cnrshldheatiron
+Heater Shield of Lightning,cnrShldHeatLtng,cnrshldheatltng
+Kite Shield of Acid,cnrShldKiteAcid,cnrshldkiteacid
+Bronze Kite Shield,cnrShldKiteBron,cnrshldkitebron
+Copper Kite Shield,cnrShldKiteCopp,cnrshldkitecopp
+Kite Shield of Fire,cnrShldKiteFire,cnrshldkitefire
+Iron Kite Shield,cnrShldKiteIron,cnrshldkiteiron
+Kite Shield of Lightning,cnrShldKiteLtng,cnrshldkiteltng
+Large Shield of Acid,cnrShldLargAcid,cnrshldlargacid
+Large Bronze Shield,cnrShldLargBron,cnrshldlargbron
+Large Copper Shield,cnrShldLargCopp,cnrshldlargcopp
+Large Shield of Fire,cnrShldLargFire,cnrshldlargfire
+Large Iron Shield,cnrShldLargIron,cnrshldlargiron
+Large Shield of Lightning,cnrShldLargLtng,cnrshldlargltng
+Small Shield of Acid,cnrShldSmalAcid,cnrshldsmalacid
+Small Bronze Shield,cnrShldSmalBron,cnrshldsmalbron
+Small Copper Shield,cnrShldSmalCopp,cnrshldsmalcopp
+Small Shield of Fire,cnrShldSmalFire,cnrshldsmalfire
+Small Iron Shield,cnrShldSmalIron,cnrshldsmaliron
+Small Shield of Lightning,cnrShldSmalLtng,cnrshldsmalltng
+Star Shield of Acid,cnrShldStarAcid,cnrshldstaracid
+Bronze Star Shield,cnrShldStarBron,cnrshldstarbron
+Copper Star Shield,cnrShldStarCopp,cnrshldstarcopp
+Star Shield of Fire,cnrShldStarFire,cnrshldstarfire
+Iron Star Shield,cnrShldStarIron,cnrshldstariron
+Star Shield of Lightning,cnrShldStarLtng,cnrshldstarltng
+Tower Shield of Acid,cnrShldTowrAcid,cnrshldtowracid
+Bronze Tower Shield,cnrShldTowrBron,cnrshldtowrbron
+Copper Tower Shield,cnrShldTowrCopp,cnrshldtowrcopp
+Tower Shield of Fire,cnrShldTowrFire,cnrshldtowrfire
+Iron Tower Shield,cnrShldTowrIron,cnrshldtowriron
+Tower Shield of Lightning,cnrShldTowrLtng,cnrshldtowrltng
+Hickory Shortbow,cnrShortBowHic,cnrshortbowhic
+Mahogany Shortbow,cnrShortBowMah,cnrshortbowmah
+Oak Shortbow,cnrShortBowOak,cnrshortbowoak
+Shovel,cnrShovel,cnrshovel
+Shortsword of Acid,cnrShSwordAcid,cnrshswordacid
+Bronze Shortsword,cnrShSwordBron,cnrshswordbron
+Copper Shortsword,cnrShSwordCopp,cnrshswordcopp
+Shortsword of Fire,cnrShSwordFire,cnrshswordfire
+Iron Shortsword,cnrShSwordIron,cnrshswordiron
+Shortsword of Lightning,cnrShSwordLtng,cnrshswordltng
+Silver-Coated Shortsword,cnrShSwordSilv,cnrshswordsilv
+Titanium-Tipped Shortsword,cnrShSwordTita,cnrshswordtita
+Acid Shuriken,cnrShurikenAcid,cnrshurikenacid
+Bronze Shuriken,cnrShurikenBron,cnrshurikenbron
+Copper Shuriken,cnrShurikenCopp,cnrshurikencopp
+Fire Shuriken,cnrShurikenFire,cnrshurikenfire
+Iron Shuriken,cnrShurikenIron,cnrshurikeniron
+Lightning Shuriken,cnrShurikenLigh,cnrshurikenligh
+Silver-Coated Shuriken,cnrShurikenSilv,cnrshurikensilv
+Titanium-Tipped Shuriken,cnrShurikenTita,cnrshurikentita
+Sickle of Acid,cnrSickleAcid,cnrsickleacid
+Bronze Sickle,cnrSickleBron,cnrsicklebron
+Copper Sickle,cnrSickleCopp,cnrsicklecopp
+Sickle of Fire,cnrSickleFire,cnrsicklefire
+Iron Sickle,cnrSickleIron,cnrsickleiron
+Sickle of Lightning,cnrSickleLigh,cnrsickleligh
+Silver-Coated Sickle,cnrSickleSilv,cnrsicklesilv
+Titanium-Tipped Sickle,cnrSickleTita,cnrsickletita
+Silver Diamond Amulet,cnrSilvDiaAmulet,cnrsilvdiaamulet
+Silver Emerald Amulet,cnrSilvEmAmulet,cnrsilvemamulet
+Silver Ruby Amulet,cnrSilvRubyAmulet,cnrsilvrubyamule
+Skin of a Badger,cnrSkinBadger,cnrskinbadger
+Skin of a Bat,cnrSkinBat,cnrskinbat
+Skin of a Black Bear,cnrSkinBlkBear,cnrskinblkbear
+Skin of a Boar,cnrSkinBoar,cnrskinboar
+Skin of a Brown Bear,cnrSkinBrnBear,cnrskinbrnbear
+Skin of a Cougar,cnrSkinCougar,cnrskincougar
+Skin of a Crag Cat,cnrSkinCragCat,cnrskincragcat
+Skin of a Dire Bear,cnrSkinDB,cnrskindb
+Skin of a Deer,cnrSkinDeer,cnrskindeer
+Skin of a Grizzly Bear,cnrSkinGrizBear,cnrskingrizbear
+Skin of a Jaguar,cnrSkinJaguar,cnrskinjaguar
+Skin of a Leapard,cnrSkinLeopard,cnrskinleopard
+Skin of a Lion,cnrSkinLion,cnrskinlion
+Skin of a Malar Panther,cnrSkinMalar,cnrskinmalar
+Skinning Knife,cnrSkinningKnife,cnrskinningknife
+Skin of a Ox,cnrSkinOx,cnrskinox
+Skin of a Panther,cnrSkinPanther,cnrskinpanther
+Skin of a Polar Bear,cnrSkinPolarBear,cnrskinpolarbear
+Skin of a Rat,cnrSkinRat,cnrskinrat
+Skin of a Dire Tiger,cnrSkinTiger,cnrskintiger
+Skin of a White Stag,cnrSkinWhiteStag,cnrskinwhitestag
+Skin of a Winter Wolf,cnrSkinWinWolf,cnrskinwinwolf
+Skin of a Wolf,cnrSkinWolf,cnrskinwolf
+Skin of a Worg,cnrSkinWorg,cnrskinworg
+Skullcap Leaf,cnrSkullcapLeaf,cnrskullcapleaf
+Cloth Sling,cnrSlingCloth,cnrslingcloth
+Leather Sling,cnrSlingLeat,cnrslingleat
+Silk Sling,cnrSlingSilk,cnrslingsilk
+Smith's Hammer,cnrSmithsHammer,cnrsmithshammer
+Tanning Solution,cnrSolutionTan,cnrsolutiontan
+Spear of Acid,cnrSpearAcid,cnrspearacid
+Bronze Spear,cnrSpearBron,cnrspearbron
+Copper Spear,cnrSpearCopp,cnrspearcopp
+Spear of Fire,cnrSpearFire,cnrspearfire
+Iron Spear,cnrSpearIron,cnrspeariron
+Spear of Lightning,cnrSpearLtng,cnrspearltng
+Silver-Coated Spear,cnrSpearSilv,cnrspearsilv
+Titanium-Tipped Spear,cnrSpearTita,cnrspeartita
+Wooden Spear,cnrSpearWood,cnrspearwood
+Spider Silk,cnrSpiderSilk,cnrspidersilk
+Adamantium Splint Mail,cnrSplitMailAda,cnrsplintmailada
+Adorned Splint Mail,cnrSplitMailAdo,cnrsplintmailado
+Bronze Splint Mail,cnrSplitMailBro,cnrsplintmailbro
+Cobalt Splint Mail,cnrSplitMailCob,cnrsplintmailcob
+Iron Splint Mail,cnrSplitMailIro,cnrsplintmailiro
+Mithril Splint Mail,cnrSplitMailMit,cnrsplintmailmit
+Platinum Splint Mail,cnrSplitMailPla,cnrsplintmailpla
+Copper Staff,cnrStaffCopp,cnrstaffcopp
+Long Stave of Hickory,cnrStaveLongHic,cnrstavelonghic
+Long Stave of Mahogany,cnrStaveLongMah,cnrstavelongmah
+Long Stave of Oak,cnrStaveLongOak,cnrstavelongoak
+Short Stave of Hickory,cnrStaveShortHic,cnrstaveshorthic
+Short Stave of Mahogany,cnrStaveShortMah,cnrstaveshortmah
+Short Stave of Oak,cnrStaveShortOak,cnrstaveshortoak
+Stink Beetle Glands,cnrStinkGland,cnrstinkgland
+Studs,cnrStuds,cnrstuds
+Sugar,cnrSugar,cnrsugar
+Tanglefoot Bag,cnrTangleBag,cnrtanglebag
+Acid Throwing Axe,cnrTAxeAcid,cnrtaxeacid
+Bronze Throwing Axe,cnrTAxeBron,cnrtaxebron
+Copper Throwing Axe,cnrTAxeCopp,cnrtaxecopp
+Fire Throwing Axe,cnrTAxeFire,cnrtaxefire
+Iron Throwing Axe,cnrTAxeIron,cnrtaxeiron
+Titanium-Tipped Throwing Axe,cnrTAxeTita,cnrtaxeitita
+Lightning Throwing Axe,cnrTAxeLigh,cnrtaxeligh
+Silver-Coated Throwing Axe,cnrTAxeSilv,cnrtaxesilv
+Recipe Scroll: Knuckle Potion,cnrTestScroll,cnrtestscroll
+Thistle Leaf,cnrThistleLeaf,cnrthistleleaf
+Thunderstone,cnrThunderstone,cnrthunderstone
+Set of Tinker's Tools,cnrTinkersTools,cnrtinkerstools
+Torch,cnrTorch,cnrtorch
+Tradeskill Journal,cnrTradeJournal,cnrtradejournal
+Walnut,cnrWalnutFruit,cnrwalnutfruit
+Walnut Oil,cnrWalnutOil,cnrwalnutoil
+Warhammer of Acid,cnrWarHammerAcid,cnrwarhammeracid
+Bronze Warhammer,cnrWarHammerBron,cnrwarhammerbron
+Copper Warhammer,cnrWarHammerCopp,cnrwarhammercopp
+Warhammer of Fire,cnrWarHammerFire,cnrwarhammerfire
+Iron Warhammer,cnrWarHammerIron,cnrwarhammeriron
+Warhammer of Lightning,cnrWarHammerLtng,cnrwarhammerltng
+Silver-Coated Warhammer,cnrWarHammerSilv,cnrwarhammersilv
+Titanium-Tipped Warhammer,cnrWarHammerTita,cnrwarhammertita
+Wheat Bread,cnrWheatBread,cnrwheatbread
+Wheat Flakes,cnrWheatFlakes,cnrwheatflakes
+Wheat Flour,cnrWheatFlour,cnrwheatflour
+Malted Wheat,cnrWheatMalt,cnrwheatmalt
+Wheat Meal,cnrWheatMeal,cnrwheatmeal
+Wheat Grains,cnrWheatRaw,cnrwheatraw
+Roasted Wheat,cnrWheatRoasted,cnrwheatroasted
+Wheat Wort,cnrWheatWort,cnrwheatwort
+Copper Wire,cnrWireCopp,cnrwirecopp
+Iron Wire,cnrWireIron,cnrwireiron
+Platinum Wire,cnrWirePlat,cnrwireplat
+Tin Wire,cnrWireTin,cnrwiretin
+Woodcutter's Axe,cnrWoodCutterAxe,cnrwoodcutteraxe
+CNR XP Adjustment Rod,cnrXpAdjRod,cnrxpadjrod
+Baker's Yeast,cnrYeastBakers,cnryeastbakers
+Brewer's Yeast,cnrYeastBrewers,cnryeastbrewers
+Basics of Alchemy,mc_basalchem,mc_basalchem
+Basics of Baking,mc_basbaking,mc_basbaking
+Basics of Brewing,mc_basbrew,mc_basbrew
+Basics of Enchanting,mc_basenchant,mc_basenchant
+The Initiate's Guide to Tailored Base Items,mc_basetailor,mc_basetailor
+Basics of Gem Crafting,mc_basgemcraft,mc_basgemcraft
+Basics of Scribing,mc_basscrib,mc_basscrib
+Basics of Tailoring,mc_bastailoring,mc_bastailoring
+Basics of Tinkering,mc_bastink,mc_bastink
+Basics of Wood Crafting,mc_baswood,mc_baswood
+Lump of Coal,cnrLumpOfCoal,cnrlumpofcoal
