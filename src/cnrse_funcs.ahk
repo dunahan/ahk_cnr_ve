@@ -1,20 +1,20 @@
 /*;================================================================================
 ;   Error Messages:
-;   ERROR100: from GetObjectName(RecipientTag)                        =>  it was nothing recognized from temporary array
-;   ERROR101: from GetObjectName(RecipientTag)                        =>  it was nothing recognized from csv => really nothing!
-;   ERROR102: from GetSpellName(SpellConstant)                          =>  spell wasn't found, must be a custom spell. add it to csv?!
+;   ERROR100: from GetObjectName(RecipientTag)                =>  it was nothing recognized from temporary array
+;   ERROR101: from GetObjectName(RecipientTag)                =>  it was nothing recognized from csv => really nothing!
+;   ERROR102: from GetSpellName(SpellConstant)                =>  spell wasn't found, must be a custom spell. add it to csv?!
 ;   
-;   ERROR200: from GetWorkbenchName(ProductTagToLookFor)   =>  nothing was found, error from the beginning
-;   ERROR201: from GetWorkbenchName(ProductTagToLookFor)    =>  it was the same product tag found that we were looking for?!
+;   ERROR200: from GetWorkbenchName(ProductTagToLookFor)      =>  nothing was found, error from the beginning
+;   ERROR201: from GetWorkbenchName(ProductTagToLookFor)      =>  it was the same product tag found that we were looking for?!
 ;   
 ;   ERROR300: from GetCreatedProductNbr(ProductTagToLookFor)  =>  nothing was found, error from the beginning
 ;   
-;   ERROR400: from ReturnLevelFromRecipe(ProductToLookFor)      =>  nothing was found, error from the beginning
-;   ERROR401: from ReturnLevelFromRecipe(ProductToLookFor)      =>  no matching product, so nothing was found?!
-;   ERROR402: from ReturnXPFromRecipe(ProductToLookFor)         =>  nothing was found, error from the beginning
-;   ERROR403: from ReturnXPFromRecipe(ProductToLookFor)         =>  no matching product, so nothing was found?!
-;   ERROR404: from ReturnAbilitysFromRecipe(ProductToLookFor)   =>  nothing was found, error from the beginning
-;   ERROR405: from ReturnAbilitysFromRecipe(ProductToLookFor)   =>  no matching product, so nothing was found?!
+;   ERROR400: from ReturnLevelFromRecipe(ProductToLookFor)    =>  nothing was found, error from the beginning
+;   ERROR401: from ReturnLevelFromRecipe(ProductToLookFor)    =>  no matching product, so nothing was found?!
+;   ERROR402: from ReturnXPFromRecipe(ProductToLookFor)       =>  nothing was found, error from the beginning
+;   ERROR403: from ReturnXPFromRecipe(ProductToLookFor)       =>  no matching product, so nothing was found?!
+;   ERROR404: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  nothing was found, error from the beginning
+;   ERROR405: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  no matching product, so nothing was found?!
 ;   ERROR406: from 
 ;   ERROR407: from 
 ;   ERROR408: from 
@@ -22,18 +22,18 @@
 ;   
 ;   
 ;   As a reminder, the array-file holds of the following:
-;   =>  M enues  (M|sMenuLevel5Scrolls)                                                                     => more than one possible
-;   =>  N ame of the workbench (N|cnrScribeAverage)                                                  => sometimes there isn't one existent (as for cnrWaterTub.nss)
-;   =>  R ecipes  (R|sMenuLevel5Scrolls|See Invisibility|NW_IT_SPARSCR205|1)           => as many recipes are provided in the recipe scripts
+;   =>  M enues  (M|sMenuLevel5Scrolls)                       => more than one possible
+;   =>  N ame of the workbench (N|cnrScribeAverage)           => sometimes there isn't one existent (as for cnrWaterTub.nss)
+;   =>  R ecipes  (R|sMenuLevel5Scrolls|See Invisibility|NW_IT_SPARSCR205|1) => as many recipes are provided in the recipe scripts
 ;   =>  another reminder, the function prints the product-tag from every recipe at the end of the following strings
-;   =>  Com P onents (P1|Blank Scroll|x2_it_cfm_bscrl|1)                                             => more than one possible, number of components are at P<#>
-;   =>  B iproducts (B1|hw_glassphio|1|1)                                                                     => if a recipe produces a leftover, these are biproducts (numbering same as products)
-;   =>  L evel  (L|6)                                                                                                     => the creation level required
-;   =>  e X perience points (X|60|60)                                                                            => how many XP the PC gets (XP | CNR-XP)
-;   =>  A ttributes  (A|0|0|0|50|50|0)                                                                              => which attributes are needed and at what percentage, MUST be in sum 100(%)!
+;   =>  Com P onents (P1|Blank Scroll|x2_it_cfm_bscrl|1)      => more than one possible, number of components are at P<#>
+;   =>  B iproducts (B1|hw_glassphio|1|1)                     => if a recipe produces a leftover, these are biproducts (numbering same as products)
+;   =>  L evel  (L|6)                                         => the creation level required
+;   =>  e X perience points (X|60|60)                         => how many XP the PC gets (XP | CNR-XP)
+;   =>  A ttributes  (A|0|0|0|50|50|0)                        => which attributes are needed and at what percentage, MUST be in sum 100(%)!
 ;
 */;================================================================================
-;
+
 ;================================================================================
 ; GetObjectName(RecipientTag)
 ;================================================================================
@@ -106,7 +106,7 @@ GetObjectName(RecipientTag)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; GetSpellName(SpellConstant)
 ;================================================================================
@@ -416,7 +416,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
   ArrayTmp.Close()                                          ; Array were saved, so close file
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnWorkbenchFromRecipe(ArrayTmpPath)
 ; from  >  N|cnrBakersOven <
@@ -463,7 +463,7 @@ ReturnWorkbenchFromRecipe(ArrayTmpPath)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
 ; from  >  M|sMenuBakeBreads  <
@@ -503,7 +503,7 @@ ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnRecipeListFromRecipe(ArrayTmpPath)
 ; from  >   R|sMenuBakeBreads|Roggenbrot|cnrRyeBread|1  <
@@ -538,7 +538,7 @@ ReturnRecipeListFromRecipe(ArrayTmpPath)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnComponentsFromRecipe(ProductToLookFor)                          ;time to do some loops!
 ; from  >  P1|Blank Scroll|cnrScrollBlank|1|ProductToLookFor  <
@@ -611,7 +611,7 @@ ReturnComponentsFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnBiproductsFromRecipe(ProductToLookFor)                          ;time to do some loops!
 ; from  >  B1|cnrGlassVial|1|1|ProductToLookFor  <
@@ -686,7 +686,7 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnLevelFromRecipe(ProductToLookFor)
 ; from  >  L|1|ProductToLookFor  <
@@ -725,7 +725,7 @@ ReturnLevelFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnXPFromRecipe(ProductToLookFor)
 ; from  >  X|10|10|ProductToLookFor  <
@@ -766,7 +766,7 @@ ReturnXPFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnAbilitysFromRecipe(ProductToLookFor)
 ; A|0|50|50|0|0|0|ProductToLookFor
@@ -815,7 +815,7 @@ ReturnAbilitysFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; TrimToGetTag(LookAndTrim)
 ;================================================================================
@@ -843,7 +843,7 @@ TrimToGetTag(LookAndTrim)
   return LookAndTrim
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; TrimToGetProduct(LookAndTrim)
 ;================================================================================
@@ -874,7 +874,7 @@ TrimToGetProduct(LookAndTrim)
   return LookAndTrim
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; GetWorkbenchName(ProductTagToLookFor)
 ;================================================================================
@@ -911,7 +911,7 @@ GetWorkbenchName(ProductTagToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; GetCreatedProductNbr(ProductTagToLookFor)
 ;================================================================================
@@ -942,7 +942,7 @@ GetCreatedProductNbr(ProductTagToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 ;================================================================================
@@ -966,7 +966,7 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
   return Result
 }
 ;================================================================================
-;
+
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
 /*
