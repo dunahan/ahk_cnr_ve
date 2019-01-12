@@ -1,0 +1,126 @@
+Alchemist's Table,cnrAlchemyTable,cnralchemytable
+Almond Tree,cnrAlmondPlant,cnralmondplant
+Aloe Plant,cnrAloePlant,cnraloeplant
+Angelica Plant,cnrAngelicaPlant,cnrangelicaplant
+Armor Crafting Anvil,cnrAnvilArmor,cnranvilarmor
+Weapon Crafting Anvil,cnrAnvilPublic,cnranvilpublic
+Apple Tree,cnrApplePlant,cnrappleplant
+Baker's Oven,cnrBakersOven,cnrbakersoven
+Barley Plant,cnrBarleyPlant,cnrbarleyplant
+Beehive,cnrBeehive,cnrbeehive
+Bee Nest,cnrBeeNest,cnrbeenest
+Birch Tree,cnrBirchPlant,cnrbirchplant
+Black Cohosh Plant,cnrBkCohoshPlant,cnrbkcohoshplant
+Blackberry Bush,cnrBlkberryPlant,cnrblkberryplant
+Blueberry Bush,cnrBluberryPlant,cnrbluberryplant
+Brazier for Silver-Coating,cnrBrazierSilv,cnrbraziersilv
+Brazier for Titanium-Tipping,cnrBrazierTita,cnrbraziertita
+Brewer's Keg,cnrBrewersKeg,cnrbrewerskeg
+Brewer's Kettle,cnrBrewersKettle,cnrbrewerskettle
+Brewer's Oven,cnrBrewersOven,cnrbrewersoven
+Calendula Plant,cnrCalendulaPlant,cnrcalendulaplan
+Carpenter's Bench,cnrCarpsBench,cnrcarpsbench
+Catnip Plant,cnrCatnipPlant,cnrcatnipplant
+Chamomile Plant,cnrChamomilePlant,cnrchamomileplan
+Cherry Tree,cnrCherryPlant,cnrcherryplant
+Chestnut Tree,cnrChestnutPlant,cnrchestnutplant
+Spider Cocoon,cnrSpiderCocoon,cnrcocoon
+Comfrey Plant,cnrComfreyPlant,cnrcomfreyplant
+Corn Plant,cnrCornPlant,cnrcornplant
+Corpse Bones,cnrCorpseBones,cnrcorpsebones
+Skinnable Corpse,cnrCorpseSkin,cnrcorpseskin
+Cotton plant,cnrCottonPlant,cnrcottonplant
+Clover Plant,cnrCoverPlant,cnrcoverplant
+Cranberry Bush,cnrCrnberryPlant,cnrcrnberryplant
+Curing Tub,cnrCuringTub,cnrcuringtub
+Deposit of Clay,cnrDepositClay,cnrdepositclay
+Deposit of Sand,cnrDepositSand,cnrdepositsand
+Echinacea Plant,cnrEchinaceaPlant,cnrechinaceaplan
+Elderberry Bush,cnrEldberryPlant,cnreldberryplant
+Enchanting Altar,cnrEnchantAltar,cnrenchantaltar
+Enchanting Pool,cnrEnchantPool,cnrenchantpool
+Enchanting Statue,cnrEnchantStatue,cnrenchantstatue
+Farmer's Mill,cnrFarmersMill,cnrfarmersmill
+Farmer's Press,cnrFarmersPress,cnrfarmerspress
+Public Forge,cnrForgePublic,cnrforgepublic
+Garlic Plant,cnrGarlicPlant,cnrgarlicplant
+Mineral Deposit - Greenstone,cnrGemDeposit001,cnrgemdeposit001
+Mineral Deposit - Fire Agate,cnrGemDeposit002,cnrgemdeposit002
+Mineral Deposit - Amethyst,cnrGemDeposit003,cnrgemdeposit003
+Mineral Deposit - Phenalope,cnrGemDeposit004,cnrgemdeposit004
+Mineral Deposit - Diamond,cnrGemDeposit005,cnrgemdeposit005
+Mineral Deposit - Ruby,cnrGemDeposit006,cnrgemdeposit006
+Mineral Deposit - Malachite,cnrGemDeposit007,cnrgemdeposit007
+Mineral Deposit - Sapphire,cnrGemDeposit008,cnrgemdeposit008
+Mineral Deposit - Fire Opal,cnrGemDeposit009,cnrgemdeposit009
+Mineral Deposit - Topaz,cnrGemDeposit010,cnrgemdeposit010
+Mineral Deposit - Garnet,cnrGemDeposit011,cnrgemdeposit011
+Mineral Deposit - Emerald,cnrGemDeposit012,cnrgemdeposit012
+Mineral Deposit - Alexandrite,cnrGemDeposit013,cnrgemdeposit013
+Mineral Deposit - Aventurine,cnrGemDeposit014,cnrgemdeposit014
+Mineral Deposit - Feldspar,cnrGemDeposit015,cnrgemdeposit015
+Gem Cutting Stone,cnrGemStone,cnrgemstone
+Gem Detailing Table,cnrGemTable,cnrgemtable
+Ginger Plant,cnrGingerPlant,cnrgingerplant
+Ginseng Plant,cnrGinsengPlant,cnrginsengplant
+Grape Vine,cnrGrapePlant,cnrgrapeplant
+Hawthorn Tree,cnrHawthornPlant,cnrhawthornplant
+Hazelnut Tree,cnrHazelnutPlant,cnrhazelnutplant
+Witch Hazel Plant,cnrHazelPlant,cnrhazelplant
+Hide Rack,cnrHideRack,cnrhiderack
+Hops plant,cnrHopsPlant,cnrhopsplant
+Ingot Recycler,cnrIngotRecycler,cnringotrecycler
+Jeweler's Bench,cnrJewelersBench,cnrjewelersbench
+Juniper Bush,cnrJuniperPlant,cnrjuniperplant
+Maple Tree,cnrMaplePlant,cnrmapleplant
+Mineral Bath,cnrMineralBath,cnrmineralbath
+Nettle Plant,cnrNettlePlant,cnrnettleplant
+Oat Plant,cnrOatsPlant,cnroatsplant
+CNR Object Spawner,cnrObjectSpawner,cnrobjectspawner
+Patch of Black Mushrooms,cnrPatchMushBlk,cnrpatchmushblk
+Patch of Purple Mushrooms,cnrPatchMushPurp,cnrpatchmushpurp
+Patch of Red Mushrooms,cnrPatchMushRed,cnrpatchmushred
+Patch of Spotted Mushrooms,cnrPatchMushSpot,cnrpatchmushspot
+Patch of White Mushrooms,cnrPatchMushWht,cnrpatchmushwht
+Patch of Yellow Mushrooms,cnrPatchMushYel,cnrpatchmushyel
+Pear Tree,cnrPearPlant,cnrpearplant
+Pecan Tree,cnrPecanPlant,cnrpecanplant
+Peppermint Plant,cnrPepmintPlant,cnrpepmintplant
+Pile of Dirt,cnrPileOfDirt,cnrpileofdirt
+Pile of Salt,cnrPileOfSalt,cnrpileofsalt
+Holy Pool ,cnrPoolBless,cnrpoolbless
+Rice Plant,cnrRicePlant,cnrriceplant
+Minable Rock - Adamantium,cnrRockAdam,cnrrockadam
+Minable Rock - Cobalt,cnrRockCoba,cnrrockcoba
+Minable Rock - Copper,cnrRockCopp,cnrrockcopp
+Minable Rock - Gold,cnrRockGold,cnrrockgold
+Minable Rock - Iron,cnrRockIron,cnrrockiron
+Minable Rock - Mithril,cnrRockMith,cnrrockmith
+Minable Rock - Platinum,cnrRockPlat,cnrrockplat
+Minable Rock - Silver,cnrRockSilv,cnrrocksilv
+Minable Rock - Tin,cnrRockTin,cnrrocktin
+Minable Rock - Titanium,cnrRockTita,cnrrocktita
+Raspberry Bush,cnrRspberryPlant,cnrrspberryplant
+Rye Plant,cnrRyePlant,cnrryeplant
+Sacks of Salt,cnrSacksOfSalt,cnrsacksofsalt
+Sacks of Sugar,cnrSacksOfSugar,cnrsacksofsugar
+Sage Plant,cnrSagePlant,cnrsageplant
+Scribing Station - Average,cnrScribeAverage,cnrscribeaverage
+Scribing Station - Greater,cnrScribeGreater,cnrscribegreater
+Scribing Ink Desk,cnrScribeInkDesk,cnrscribeinkdesk
+Scribing Station - Lesser,cnrScribeLesser,cnrscribelesser
+Skullcap Plant,cnrSkullcapPlant,cnrskullcapplant
+Tailor's Table,cnrTailorsTable,cnrtailorstable
+Thistle Plant,cnrThistlePlant,cnrthistleplant
+Tinker's Furnace,cnrTinkerFurnace,cnrtinkerfurnace
+Tinker's Device,cnrTinkersDevice,cnrtinkersdevice
+Tinker's Toolbox,cnrTinkerToolbox,cnrtinkertoolbox
+Trade Lever,cnrTradeLever,cnrtradelever
+Trash Barrel,cnrTrashBarrel,cnrtrashbarrel
+Choppable Tree - Hickory,cnrTreeHickory,cnrtreehickory
+Choppable Tree - Mahogany,cnrTreeMahogany,cnrtreemahogany
+Choppable Tree - Oak,cnrTreeOak,cnrtreeoak
+Walnut Tree,cnrWalnutPlant,cnrwalnutplant
+Water Tub,cnrWaterTub,cnrwatertub
+Wheat Plant,cnrWheatPlant,cnrwheatplant
+Deposit of Coal,cnrDepositCoal,cnrdepositcoal
