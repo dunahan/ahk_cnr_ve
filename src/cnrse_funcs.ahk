@@ -1,4 +1,4 @@
-/*;================================================================================
+/*;==============================================================================
 ;   Error Messages:
 ;   ERROR100: from GetObjectName(RecipientTag)                =>  it was nothing recognized from temporary array
 ;   ERROR101: from GetObjectName(RecipientTag)                =>  it was nothing recognized from csv => really nothing!
@@ -32,7 +32,7 @@
 ;   =>  e X perience points (X|60|60)                         => how many XP the PC gets (XP | CNR-XP)
 ;   =>  A ttributes  (A|0|0|0|50|50|0)                        => which attributes are needed and at what percentage, MUST be in sum 100(%)!
 ;
-*/;================================================================================
+*/;==============================================================================
 
 ;================================================================================
 ; GetObjectName(RecipientTag)
@@ -64,7 +64,7 @@ GetObjectName(RecipientTag)
   If (Result = "ERROR100")
   { 
     Result = ERROR101
-    Loop, Read, %A_WorkingDir%\items.csv                                          ; search from csv-file then
+    Loop, Read, %A_WorkingDir%\items.csv                                        ; search from csv-file then
     {
       itmarray := StrSplit(A_LoopReadLine, ",")
       resarray := % itmarray[2]
@@ -151,7 +151,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
       Count := Length-Count                                              ; 69 - 22 = 47
       
       StringTrimRight, SubMenuResult, SubMenuResult, Count               ; reduce from rigth        >stringsMenuForgeMetal
-      StringTrimLeft, SubMenuResult, SubMenuResult, 6                    ; reduce from left          >sMenuForgeMetal
+      StringTrimLeft, SubMenuResult, SubMenuResult, 6                    ; reduce from left         >sMenuForgeMetal
       
       SubMenuResult = M|%SubMenuResult%`n
       
@@ -165,12 +165,12 @@ CreateArrayTempFile(FileToParse, FileForArray)
       If (RecipeWorkbench = "")                                          ; verhindert das die zeile mehrmals addiert wird
       {
         ; Ausgelesene Zeile besser verarbeitbar machen
-        RecipeWorkbench := StrReplace(A_LoopReadLine, Chr(34), "", ALL)  ; loesche alle "                >  CnrRecipeSetDeviceTradeskillType   (cnrCarpsBench, CNR_TRADESKILL_WOOD_CRAFTING);<
+        RecipeWorkbench := StrReplace(A_LoopReadLine, Chr(34), "", ALL)  ; loesche alle "           >  CnrRecipeSetDeviceTradeskillType   (cnrCarpsBench, CNR_TRADESKILL_WOOD_CRAFTING);<
         
         StringGetPos, Count, RecipeWorkbench, ( 
-        StringTrimLeft, RecipeWorkbench, RecipeWorkbench, Count+1        ; loesche                        >  CnrRecipeSetDeviceTradeskillType   (<
+        StringTrimLeft, RecipeWorkbench, RecipeWorkbench, Count+1        ; loesche                  >  CnrRecipeSetDeviceTradeskillType   (<
         RecipeWorkbench := StrReplace(RecipeWorkbench, ", ", "|", ALL)   ; ersetze , & space mit |  >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING);<
-        RecipeWorkbench := StrReplace(RecipeWorkbench, ");" , "", ALL)   ; loesche );                     >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING<
+        RecipeWorkbench := StrReplace(RecipeWorkbench, ");" , "", ALL)   ; loesche );               >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING<
         
         IfInString, RecipeWorkbench, */
           RecipeWorkbench := StrReplace(RecipeWorkbench, "*/", "", ALL)  ; loesche ggf. */ 
@@ -562,8 +562,8 @@ ReturnComponentsFromRecipe(ProductToLookFor)
     Else
       Temp := RecipeArray[6]
     
-;       if "P"
-    IfInString, WhatKindOf, P                                      ; how many loops?
+;   if "P"
+    IfInString, WhatKindOf, P                                      ; build up array for second looü
     {
       IfInString, A_LoopReadLine, %ProductToLookFor%
         SecLoop = %A_LoopReadLine%,%SecLoop%
@@ -582,17 +582,27 @@ ReturnComponentsFromRecipe(ProductToLookFor)
       AddMe = 
       RecipeArray := StrSplit(A_LoopField, "|")                     ; P1|Blank Scroll|cnrScrollBlank|1|NW_IT_SPARSCR002
       
-      If (Tokens <= 4)
+      If (Tokens <= 4)                                              ; component in smallest version
       {
         Tag := RecipeArray[3]
-        Nbr := RecipeArray[4]
-        AddMe = "%Tag%", %Nbr%
+        NbrA := RecipeArray[4]
+        AddMe = "%Tag%", %NbrA%
       }
       Else
       {
-        Tag := RecipeArray[4]
-        Nbr := RecipeArray[5]
-        AddMe = "CNR_RECIPE_SPELL", %Tag%, %Nbr%
+        IfInString, RecipeArray, CNR_RECIPE_SPELL
+        {
+          Tag := RecipeArray[4]
+          NbrA := RecipeArray[5]
+          AddMe = "CNR_RECIPE_SPELL", %Tag%, %NbrA%
+        }
+        ELse                                                        ; it something like this >P1|Empty Flask|cnrEmptyFlask|1|1|cnrAcidFlask< (if something goes wrong at creating product ingame
+        {
+          Tag := RecipeArray[3]
+          NbrA := RecipeArray[4]
+          NbrB := RecipeArray[5]
+          AddMe = %Tag%, %NbrA%, %NbrB%
+        }
       }
       Result = %Result%CnrRecipeAddComponent(sKeyToRecipe, %AddMe%);`n
     }
@@ -605,7 +615,8 @@ ReturnComponentsFromRecipe(ProductToLookFor)
   WhatKindOf = 
   SecLoop = 
   Tag = 
-  Nbr = 
+  NbrA = 
+  NbrB = 
   AddMe = 
   
   return Result
@@ -634,7 +645,7 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
     Else
       Temp := RecipeArray[6]
     
-;       if "B"
+;   if "B"
     IfInString, WhatKindOf, B                                      ; how many loops?
     {
       IfInString, A_LoopReadLine, %ProductToLookFor%
@@ -1011,20 +1022,20 @@ ReturnScriptSnippetForRecipe(ProductToShow)
   
   LV := ReturnLevelFromRecipe(ProductToShow)
   If (LV != "")
-    Result = %Result%CnrRecipeSetRecipeLevel(sKeyToRecipe, %LV%);`n                                                                              ;muss ich insg. noch einbauen
+    Result = %Result%CnrRecipeSetRecipeLevel(sKeyToRecipe, %LV%);`n
   
   XP := ReturnXPFromRecipe(ProductToShow)
   If (XP != "")
   {
     XP := StrReplace(XP, "|", ", ", ALL)
-    Result = %Result%CnrRecipeSetRecipeXP(sKeyToRecipe, %XP%);`n                                                                                ;einfach reicht ab hier wieder
+    Result = %Result%CnrRecipeSetRecipeXP(sKeyToRecipe, %XP%);`n
   }
   
   AB := ReturnAbilitysFromRecipe(ProductToShow)
   If (AB != "")
   {
     AB := StrReplace(AB, "|", ", ", ALL)
-    Result = %Result%CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, %AB%);`n                        ;
+    Result = %Result%CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, %AB%);`n
   }
   
   return Result
