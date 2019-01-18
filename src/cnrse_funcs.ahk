@@ -47,12 +47,12 @@ GetObjectName(RecipientTag)
   Result = ERROR100
   StringLower, RecipientTag, RecipientTag
   
-  Loop, Read, %A_WorkingDir%\tmp\array.tmp                                      ; search in array-file at first
+  Loop, Read, %A_WorkingDir%\tmp\array.tmp                                    ; search in array-file at first
   {
     itmarray := StrSplit(A_LoopReadLine, "|")
     resarray := itmarray[1]
 ;       wenn "R"
-    If (resarray = "R")                                                         ; the recipe has the right names?!
+    If (resarray = "R")                                                       ; the recipe has the right names?!
     {
       tagme := % itmarray[4]
       tagyou := % itmarray[3]
@@ -69,7 +69,7 @@ GetObjectName(RecipientTag)
   If (Result = "ERROR100")
   { 
     Result = ERROR101
-    Loop, Read, %A_WorkingDir%\items.csv                                        ; search from csv-file then
+    Loop, Read, %A_WorkingDir%\items.csv                                      ; search from csv-file then
     {
       itmarray := StrSplit(A_LoopReadLine, ",")
       resarray := % itmarray[2]
@@ -120,7 +120,7 @@ GetSpellName(SpellConstant)
 {
   Result = ERROR102
   
-  Loop, Read, %A_WorkingDir%\spells.csv                                          ; search from csv-file only
+  Loop, Read, %A_WorkingDir%\spells.csv                                       ; search from csv-file only
   {
     spellarray := StrSplit(A_LoopReadLine, ",")
     spellsearch := % spellarray[1]
@@ -150,14 +150,14 @@ CreateArrayTempFile(FileToParse, FileForArray)
     ; add all SubMenues from "CnrRecipeAddSubMenu"  to   >M|<
     IfInString, A_LoopReadLine, CnrRecipeAddSubMenu
     {
-      StringReplace, SubMenuResult, A_LoopReadLine, %A_SPACE%, , All     ; delete all spaces        >stringsMenuForgeMetal=CnrRecipeAddSubMenu("cnrForgePublic","Metall");
+      StringReplace, SubMenuResult, A_LoopReadLine, %A_SPACE%, , All          ; delete all spaces        >stringsMenuForgeMetal=CnrRecipeAddSubMenu("cnrForgePublic","Metall");
       
-      StringGetPos, Count, SubMenuResult, =                              ; should be 22
-      Length := StrLen(SubMenuResult)                                    ; should be 69
-      Count := Length-Count                                              ; 69 - 22 = 47
+      StringGetPos, Count, SubMenuResult, =                                   ; should be 22
+      Length := StrLen(SubMenuResult)                                         ; should be 69
+      Count := Length-Count                                                   ; 69 - 22 = 47
       
-      StringTrimRight, SubMenuResult, SubMenuResult, Count               ; reduce from rigth        >stringsMenuForgeMetal
-      StringTrimLeft, SubMenuResult, SubMenuResult, 6                    ; reduce from left         >sMenuForgeMetal
+      StringTrimRight, SubMenuResult, SubMenuResult, Count                    ; reduce from rigth        >stringsMenuForgeMetal
+      StringTrimLeft, SubMenuResult, SubMenuResult, 6                         ; reduce from left         >sMenuForgeMetal
       
       SubMenuResult = M|%SubMenuResult%`n
       
@@ -168,23 +168,23 @@ CreateArrayTempFile(FileToParse, FileForArray)
     ; add Workbench from "CnrRecipeSetDeviceTradeskillType"  to >N|<
     IfInString, A_LoopReadLine, CnrRecipeSetDeviceTradeskillType
     {
-      If (RecipeWorkbench = "")                                          ; verhindert das die zeile mehrmals addiert wird
+      If (RecipeWorkbench = "")                                               ; verhindert das die zeile mehrmals addiert wird
       {
         ; Ausgelesene Zeile besser verarbeitbar machen
-        RecipeWorkbench := StrReplace(A_LoopReadLine, Chr(34), "", ALL)  ; loesche alle "           >  CnrRecipeSetDeviceTradeskillType   (cnrCarpsBench, CNR_TRADESKILL_WOOD_CRAFTING);<
+        RecipeWorkbench := StrReplace(A_LoopReadLine, Chr(34), "", ALL)       ; delete alle "           >  CnrRecipeSetDeviceTradeskillType   (cnrCarpsBench, CNR_TRADESKILL_WOOD_CRAFTING);<
         
         StringGetPos, Count, RecipeWorkbench, ( 
-        StringTrimLeft, RecipeWorkbench, RecipeWorkbench, Count+1        ; loesche                  >  CnrRecipeSetDeviceTradeskillType   (<
-        RecipeWorkbench := StrReplace(RecipeWorkbench, ", ", "|", ALL)   ; ersetze , & space mit |  >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING);<
-        RecipeWorkbench := StrReplace(RecipeWorkbench, ");" , "", ALL)   ; loesche );               >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING<
+        StringTrimLeft, RecipeWorkbench, RecipeWorkbench, Count+1             ; delete                  >  CnrRecipeSetDeviceTradeskillType   (<
+        RecipeWorkbench := StrReplace(RecipeWorkbench, ", ", "|", ALL)        ; replace , & space mit |  >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING);<
+        RecipeWorkbench := StrReplace(RecipeWorkbench, ");" , "", ALL)        ; delete );               >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING<
         
         IfInString, RecipeWorkbench, */
-          RecipeWorkbench := StrReplace(RecipeWorkbench, "*/", "", ALL)  ; loesche ggf. */ 
+          RecipeWorkbench := StrReplace(RecipeWorkbench, "*/", "", ALL)       ; delete pos. */ 
           
         WorkbenchArray := StrSplit(RecipeWorkbench, "|")
-        RecipeWorkbench := WorkbenchArray[1]                             ; name der Workbench in 1
+        RecipeWorkbench := WorkbenchArray[1]                                  ; name der Workbench in 1
         
-        IfInString, RecipeWorkbench, //                                  ; entferne ggf. kommentare
+        IfInString, RecipeWorkbench, //                                       ; entferne pos. kommentare
         {
           StringGetPos, Count, RecipeWorkbench, //
           StringLeft, RecipeWorkbench, RecipeWorkbench, Count
@@ -199,61 +199,61 @@ CreateArrayTempFile(FileToParse, FileForArray)
     ; add Recipe from "CnrRecipeCreateRecipe"  to  >R|<
     IfInString, A_LoopReadLine, CnrRecipeCreateRecipe
     {
-      RecipeRef =                                                           ; new recipe beginning, reset references
+      RecipeRef =                                                             ; new recipe beginning, reset references
       ; Ausgelesene Zeile besser verarbeitbar machen
-      RecipeResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)          ; loesche alle "                >  sKeyToRecipe = CnrRecipeCreateRecipe(cnrWaterTub, Filled Water Bucket, cnrBucketWater, 1);<
+      RecipeResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)            ; delete alle "                >  sKeyToRecipe = CnrRecipeCreateRecipe(cnrWaterTub, Filled Water Bucket, cnrBucketWater, 1);<
       
       StringGetPos, Count, RecipeResult, ( 
-      StringTrimLeft, RecipeResult, RecipeResult, Count+1                   ; loesche                        >  sKeyToRecipe = CnrRecipeCreateRecipe(<
+      StringTrimLeft, RecipeResult, RecipeResult, Count+1                     ; delete                        >  sKeyToRecipe = CnrRecipeCreateRecipe(<
       
-      StringReplace, Temp, RecipeResult, ), ), UseErrorLevel                ; zaehle nach, wieviel ) sind im string fuer >  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain (20)", "cnrArwHeadPlain", 1);  <
-      If (ErrorLevel > 1)                                                   ; > sKeyToRecipe = CnrRecipeCreateRecipe(
+      StringReplace, Temp, RecipeResult, ), ), UseErrorLevel                  ; zaehle nach, wieviel ) sind im string fuer >  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain (20)", "cnrArwHeadPlain", 1);  <
+      If (ErrorLevel > 1)                                                     ; > sKeyToRecipe = CnrRecipeCreateRecipe(
       {
-        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)            ; loesche );                     >sMenuTinkerArrowheads, Arrowheads, Plain (20), cnrArwHeadPlain, 1
-        RecipeResult := StrReplace(RecipeResult, ", " , "|", , 1)           ; ersetze ein , & space    >sMenuTinkerArrowheads|Arrowheads, Plain (20), cnrArwHeadPlain, 1
-        RecipeResult := StrReplace(RecipeResult, "), " , ")|", , 1)         ; ersetze ein ), & space   >sMenuTinkerArrowheads|Arrowheads, Plain (20|cnrArwHeadPlain, 1
-        StringGetPos, Count, RecipeResult, `,                               ; zaehle bis ,   => 32      >sMenuTinkerArrowheads|Arrowheads>,< Plain (20|cnrArwHeadPlain, 1
-        RecipeResult := RegExReplace(RecipeResult, ", ", "|", , , Count)    ; nun ersetze , & space danach
+        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)              ; delete );                     >sMenuTinkerArrowheads, Arrowheads, Plain (20), cnrArwHeadPlain, 1
+        RecipeResult := StrReplace(RecipeResult, ", " , "|", , 1)             ; replace ein , & space    >sMenuTinkerArrowheads|Arrowheads, Plain (20), cnrArwHeadPlain, 1
+        RecipeResult := StrReplace(RecipeResult, "), " , ")|", , 1)           ; replace ein ), & space   >sMenuTinkerArrowheads|Arrowheads, Plain (20|cnrArwHeadPlain, 1
+        StringGetPos, Count, RecipeResult, `,                                 ; zaehle bis ,   => 32      >sMenuTinkerArrowheads|Arrowheads>,< Plain (20|cnrArwHeadPlain, 1
+        RecipeResult := RegExReplace(RecipeResult, ", ", "|", , , Count)      ; nun replace , & space danach
       }
       
-      Else                                                                  ; > sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain", "cnrArwHeadPlain", 1);
+      Else                                                                    ; > sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain", "cnrArwHeadPlain", 1);
       {
-        RecipeResult := StrReplace(RecipeResult, ", ", "|", ALL)            ; ersetze , & space mit |  >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1);<
-        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)            ; loesche );                     >cnrWaterTub,Filled Water Bucket,cnrBucketWater,1
+        RecipeResult := StrReplace(RecipeResult, ", ", "|", ALL)              ; replace , & space mit |  >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1);<
+        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)              ; delete );                     >cnrWaterTub,Filled Water Bucket,cnrBucketWater,1
       }
       
       IfInString, RecipeResult, */
-        RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)           ; loesche ggf. */
+        RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)               ; delete pos. */
       
-      IfInString, RecipeResult, //                                        ; entferne ggf. kommentare
+      IfInString, RecipeResult, //                                            ; entferne pos. kommentare
       {
         StringGetPos, Count, RecipeResult, //
         StringLeft, RecipeResult, RecipeResult, Count
       }
       
-      IfInString, RecipeResult, GetObjectName                             ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
+      IfInString, RecipeResult, GetObjectName                                 ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
       {
-        TempArray := StrSplit(RecipeResult, "|")                          ; array anlegen
-        Replace := TempArray[2]                                           ; GetObjectName(NW_MAARCL037) ausgelesen
+        TempArray := StrSplit(RecipeResult, "|")                              ; array anlegen
+        Replace := TempArray[2]                                               ; GetObjectName(NW_MAARCL037) ausgelesen
         StringTrimLeft, ReplaceText, Replace, 14
         StringTrimRight, ReplaceText, ReplaceText, 1
         RecipeRef := ReplaceText
         
-        ReplaceText := GetObjectName(ReplaceText)                         ; lese korrekten Namen aus
-        RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)    ; und ersetze diesen
+        ReplaceText := GetObjectName(ReplaceText)                             ; lese korrekten Namen aus
+        RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)        ; und replace diesen
       }
       
-      RecipeResult = R|%RecipeResult%`n                                   ; solte das  >R|sMenuLevel5Scrolls|Dismissal|X1_IT_SPARSCR502|1<  produzieren
+      RecipeResult = R|%RecipeResult%`n                                       ; solte das  >R|sMenuLevel5Scrolls|Dismissal|X1_IT_SPARSCR502|1<  produzieren
       
       If (RecipeRef = "")
       {
-        TempArray := StrSplit(RecipeResult, "|")                          ; convert in an array
-        RecipeRef := TempArray[4]                                         ; look for tag and set that as reference
+        TempArray := StrSplit(RecipeResult, "|")                              ; convert in an array
+        RecipeRef := TempArray[4]                                             ; look for tag and set that as reference
       }
       
       If (RecipeResult != "")
         ArrayTmp.Write(RecipeResult)
-      CountedPs := 0                                                        ; ein neues rezept beginnt, setze komponenten auf null
+      CountedPs := 0                                                          ; ein neues rezept beginnt, setze komponenten auf null
       CountedBs := 0
     }
     
@@ -261,38 +261,38 @@ CreateArrayTempFile(FileToParse, FileForArray)
     IfInString, A_LoopReadLine, CnrRecipeAddComponent
     {
       ; Ausgelesene Zeile besser verarbeitbar machen
-      ComponentResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)   ; loesche alle "                >  CnrRecipeAddComponent(sKeyToRecipe, cnrBucketEmpty, 1);
+      ComponentResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)         ; delete alle "                >  CnrRecipeAddComponent(sKeyToRecipe, cnrBucketEmpty, 1);
       
       StringGetPos, Count, ComponentResult, `,
-      StringTrimLeft, ComponentResult, ComponentResult, Count           ; loesche                      >  CnrRecipeAddComponent(sKeyToRecipe
-      ComponentResult := StrReplace(ComponentResult, ", ", "|", ALL)    ; ersetze , & space mit |    >|cnrBucketEmpty| 1);
-      ComponentResult := StrReplace(ComponentResult, ");" , "", ALL)    ; loesche );                   >|cnrBucketEmpty| 1
+      StringTrimLeft, ComponentResult, ComponentResult, Count                 ; delete                      >  CnrRecipeAddComponent(sKeyToRecipe
+      ComponentResult := StrReplace(ComponentResult, ", ", "|", ALL)          ; replace , & space mit |    >|cnrBucketEmpty| 1);
+      ComponentResult := StrReplace(ComponentResult, ");" , "", ALL)          ; delete );                   >|cnrBucketEmpty| 1
       
       IfInString, ComponentResult, */
-        ComponentResult := StrReplace(ComponentResult, "*/", "", ALL)   ; loesche ggf. */
+        ComponentResult := StrReplace(ComponentResult, "*/", "", ALL)         ; delete pos. */
       
-      IfInString, ComponentResult, //                                   ; loesche ggf. kommentare
+      IfInString, ComponentResult, //                                         ; delete pos. kommentare
       {
         StringGetPos, Count, ComponentResult, //
         StringLeft, ComponentResult, ComponentResult, Count
       }
       
-      ComponentResult := StrReplace(ComponentResult, A_Space , "", ALL) ; loesche space               >|cnrBucketEmpty|1
+      ComponentResult := StrReplace(ComponentResult, A_Space , "", ALL)       ; delete space               >|cnrBucketEmpty|1
       
-      StringGetPos, Count, ComponentResult, |, , 1                      ; suche position des zweiten |
-      Length := StrLen(ComponentResult)                                 ; laenge des strings
+      StringGetPos, Count, ComponentResult, |, , 1                            ; suche position des zweiten |
+      Length := StrLen(ComponentResult)                                       ; laenge des strings
       Count := Length-Count
       
-      StringTrimLeft, ProductResult, ComponentResult, 1                 ; loesche erstes |             >NW_MAARCL078|1|1
-      StringTrimRight, ProductResult, ProductResult, Count              ; loesche nach letztem |   >NW_MAARCL078
+      StringTrimLeft, ProductResult, ComponentResult, 1                       ; delete erstes |             >NW_MAARCL078|1|1
+      StringTrimRight, ProductResult, ProductResult, Count                    ; delete nach letztem |   >NW_MAARCL078
       
-                                                                        ; P4|ERROR011|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
-      IfInString, ComponentResult, CNR_RECIPE_SPELL                     ; |CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
+                                                                              ; P4|ERROR011|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
+      IfInString, ComponentResult, CNR_RECIPE_SPELL                           ; |CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
       {
-        TempArray := StrSplit(ComponentResult, "|")                     ; array anlegen
-        Replace := TempArray[4]                                         ; SPELL_RAY_OF_FROST ausgelesen
+        TempArray := StrSplit(ComponentResult, "|")                           ; array anlegen
+        Replace := TempArray[4]                                               ; SPELL_RAY_OF_FROST ausgelesen
         
-        RecipeProduct := GetSpellName(Replace)                          ; lese korrekten Namen aus
+        RecipeProduct := GetSpellName(Replace)                                ; lese korrekten Namen aus
       }
       Else
         RecipeProduct := GetObjectName(ProductResult)
@@ -307,21 +307,21 @@ CreateArrayTempFile(FileToParse, FileForArray)
     IfInString, A_LoopReadLine, CnrRecipeSetRecipeBiproduct
     {
       ; Ausgelesene Zeile besser verarbeitbar machen
-      Temp := A_LoopReadLine                                ; auf temp speichern                      >  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+      Temp := A_LoopReadLine                                                  ; auf temp speichern                      >  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
       
-      StringGetPos, Count, Temp, `,                         ; suche position des ersten , = 42
-      StringTrimLeft, Temp, Temp, Count+3                   ; loesche bis zum , +1                   >cnrGlassVial", 1, 1);
-      StringGetPos, Count, Temp, `,                         ; suche position des zweiten ,   = 13
-      Length := StrLen(Temp)                                ; laenge des strings berechnen = 21
-      Count := Length-Count                                 ; 21-13 = 8
+      StringGetPos, Count, Temp, `,                                           ; suche position des ersten , = 42
+      StringTrimLeft, Temp, Temp, Count+3                                     ; delete bis zum , +1                   >cnrGlassVial", 1, 1);
+      StringGetPos, Count, Temp, `,                                           ; suche position des zweiten ,   = 13
+      Length := StrLen(Temp)                                                  ; laenge des strings berechnen = 21
+      Count := Length-Count                                                   ; 21-13 = 8
       
-      StringTrimRight, BiProduct, Temp, Count+1             ; reduziere auf                               >cnrGlassVial
+      StringTrimRight, BiProduct, Temp, Count+1                               ; reduziere auf                               >cnrGlassVial
       
-      Length := StrLen(BiProduct)                           ; laenge des strings berechnen = 12
-      StringTrimLeft, Qty, Temp, Length+3                   ; reduziere auf                               >1, 1);
+      Length := StrLen(BiProduct)                                             ; laenge des strings berechnen = 12
+      StringTrimLeft, Qty, Temp, Length+3                                     ; reduziere auf                               >1, 1);
       
-      Qty := StrReplace(Qty, ", ", "|", ALL)                ; ersetze , & space mit |                 >1|1);
-      StringTrimRight, Qty, Qty, 2                          ; reduziere auf                               >1|1
+      Qty := StrReplace(Qty, ", ", "|", ALL)                                  ; replace , & space mit |                 >1|1);
+      StringTrimRight, Qty, Qty, 2                                            ; reduziere auf                               >1|1
       
       CountedBs := CountedBs+1
       BiProductResult = B%CountedBs%|%BiProduct%|%Qty%|%RecipeRef%`n
@@ -335,10 +335,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
       ; Ausgelesene Zeile besser verarbeitbar machen
       LevelResult := A_LoopReadLine
       
-      StringTrimRight, LevelResult, LevelResult, 2      ; loesche die letzten zwei        >  CnrRecipeSetRecipeLevel(sKeyToRecipe, 18
-      StringGetPos, Count, LevelResult, `,              ; suche position des ersten , = 38
+      StringTrimRight, LevelResult, LevelResult, 2                            ; delete die letzten zwei        >  CnrRecipeSetRecipeLevel(sKeyToRecipe, 18
+      StringGetPos, Count, LevelResult, `,                                    ; suche position des ersten , = 38
       
-      StringTrimLeft, LevelResult, LevelResult, Count+2 ; loesche bis zum , +2             >18
+      StringTrimLeft, LevelResult, LevelResult, Count+2                       ; delete bis zum , +2             >18
       
       LevelResult = L|%LevelResult%|%RecipeRef%`n
       If (LevelResult != "")
@@ -352,12 +352,12 @@ CreateArrayTempFile(FileToParse, FileForArray)
       XpResult := A_LoopReadLine
       
       StringGetPos, Count, XpResult, `,
-      StringTrimLeft, XpResult, XpResult, Count           ; loesche                         >  CnrRecipeSetRecipeXP(sKeyToRecipe
-      XpResult := StrReplace(XpResult, ", ", "|", ALL)    ; ersetze , & space mit |   >| 5| 5);
-      XpResult := StrReplace(XpResult, ");" , "", ALL)    ; loesche );                      >| 5| 5
+      StringTrimLeft, XpResult, XpResult, Count                               ; delete                         >  CnrRecipeSetRecipeXP(sKeyToRecipe
+      XpResult := StrReplace(XpResult, ", ", "|", ALL)                        ; replace , & space mit |   >| 5| 5);
+      XpResult := StrReplace(XpResult, ");" , "", ALL)                        ; delete );                      >| 5| 5
       
       IfInString, XpResult, */
-        XpResult := StrReplace(XpResult, "*/", "", ALL)   ; loesche ggf. */
+        XpResult := StrReplace(XpResult, "*/", "", ALL)                       ; delete pos. */
       
       IfInString, XpResult, //
       {
@@ -365,7 +365,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         StringLeft, XpResult, XpResult, Count
       }
       
-      XpResult := StrReplace(XpResult, A_Space , "", ALL) ; loesche space               >|5|5
+      XpResult := StrReplace(XpResult, A_Space , "", ALL)                     ; delete space               >|5|5
       XpResult = X%XpResult%|%RecipeRef%`n
       If (XpResult != "")
         ArrayTmp.Write(XpResult)
@@ -378,12 +378,12 @@ CreateArrayTempFile(FileToParse, FileForArray)
       AbsResult := A_LoopReadLine
       
       StringGetPos, Count, AbsResult, `,
-      StringTrimLeft, AbsResult, AbsResult, Count           ; loesche                         >  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe
-      AbsResult := StrReplace(AbsResult, ", ", "|", ALL)    ; ersetze , & space mit |   >| 0| 0|40| 0|60| 0);
-      AbsResult := StrReplace(AbsResult, ");" , "", ALL)    ; loesche );                      >| 0| 0|40| 0|60| 0
+      StringTrimLeft, AbsResult, AbsResult, Count                             ; delete                    >  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe
+      AbsResult := StrReplace(AbsResult, ", ", "|", ALL)                      ; replace , & space mit |   >| 0| 0|40| 0|60| 0);
+      AbsResult := StrReplace(AbsResult, ");" , "", ALL)                      ; delete );                      >| 0| 0|40| 0|60| 0
       
       IfInString, AbsResult, */
-        AbsResult := StrReplace(AbsResult, "*/", "", ALL)   ; loesche ggf. */
+        AbsResult := StrReplace(AbsResult, "*/", "", ALL)                     ; delete pos. */
       
       IfInString, AbsResult, //
       {
@@ -391,7 +391,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         StringLeft, AbsResult, AbsResult, Count
       }
       
-      AbsResult := StrReplace(AbsResult, A_Space , "", ALL) ; loesche space               >|0|0|40|0|60|0
+      AbsResult := StrReplace(AbsResult, A_Space , "", ALL)                   ; delete space               >|0|0|40|0|60|0
       AbsResult = A%AbsResult%|%RecipeRef%`n
       If (AbsResult != "")
         ArrayTmp.Write(AbsResult)
@@ -419,7 +419,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
     Length = 
   }
   
-  ArrayTmp.Close()                                          ; Array were saved, so close file
+  ArrayTmp.Close()                                                            ; Array were saved, so close file
 }
 ;================================================================================
 
@@ -430,32 +430,32 @@ CreateArrayTempFile(FileToParse, FileForArray)
 ReturnWorkbenchFromRecipe(ArrayTmpPath)
 {
   AllThePlaceables := A_WorkingDir . "\plcs.csv"
-  Loop, Read, %ArrayTmpPath%                                  ; lese nun die Array-Datei aus
+  Loop, Read, %ArrayTmpPath%                                                  ; lese nun die Array-Datei aus
   {
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     LookFor := RecipeArray[1]
 ;       if "N"
-    If (LookFor = "N")                                        ; Name der Workbench
-      ResultAdd := RecipeArray[2]                             ; liegt unter "N" auf Platz zwei!
+    If (LookFor = "N")                                                        ; Name der Workbench
+      ResultAdd := RecipeArray[2]                                             ; liegt unter "N" auf Platz zwei!
   }
   
-  If (ResultAdd = "")                                         ; keine Workbench gefunden, Rezept hats!
+  If (ResultAdd = "")                                                         ; keine Workbench gefunden, Rezept hats!
   {
-    Loop, Read, %ArrayTmpPath%                                ; lese nun die Array-Datei aus
+    Loop, Read, %ArrayTmpPath%                                                ; lese nun die Array-Datei aus
     {
       RecipeArray := StrSplit(A_LoopReadLine, "|")
       LookFor := RecipeArray[1]
 ;           if "R"
-      If (LookFor = "R")                                      ; Name der Workbench
-        ResultAdd := RecipeArray[2]                           ; liegt unter "R" auf Platz zwei!
+      If (LookFor = "R")                                                      ; Name der Workbench
+        ResultAdd := RecipeArray[2]                                           ; liegt unter "R" auf Platz zwei!
     }
   }
   
-  Loop, Read, %AllThePlaceables%                              ; read from csv
+  Loop, Read, %AllThePlaceables%                                              ; read from csv
   {
     RecipeArray := StrSplit(A_LoopReadLine, ",")
-    LookFor := RecipeArray[2]                                 ; there is the Tag
-    Temp := RecipeArray[1]                                    ; this is the Name
+    LookFor := RecipeArray[2]                                                 ; there is the Tag
+    Temp := RecipeArray[1]                                                    ; this is the Name
     
     If (LookFor = ResultAdd)
       Result = %Temp% (%ResultAdd%)
