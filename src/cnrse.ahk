@@ -62,7 +62,10 @@ Main:                                                                         ; 
     {
       StringTrimRight, VarName, A_LoopFileName, 4
       Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY% w120 h20 v%VarName% cBlue gRecipeShow, %A_LoopFileName%
-      %VarName%_TT := "Double-click to start editing"                         ; want to do translate it later
+      
+      IfNotInString, VarName, Chr(34)                                         ; add tooltip only when its possible?! why it's not working?
+        %VarName%_TT := "Double-click to start editing"                       ; want to translate it later
+      
       CountedRecipes := CountedRecipes + 1
       RecipeSpacerY := RecipeSpacerY + RecipeSpacerYAdd
       
@@ -87,9 +90,7 @@ Main:                                                                         ; 
   Gui, 1: Show, center autosize, %NAME%
   WinSet, exstyle, -0x80000, %NAME%
   
-  OnMessage(0x200, "WM_MOUSEMOVE")
-  
-  WinGet, MainWin
+  WinGet, MainWin, ID, %NAME%
   WinGetPos, WinGui1X, WinGui1Y, WinGui1W, WinGui1H, %NAME%                   ; save position of the main window, later interesting for more than one monitor
   
   RecipeSpacerX = 
@@ -99,6 +100,8 @@ Main:                                                                         ; 
   
   RecipeSpacerXAdd = 
   RecipeSpacerYAdd = 
+  
+  OnMessage(0x200, "WM_MOUSEMOVE", 1)
   
   If (MOVE_WIN = 1)
   {
@@ -118,7 +121,7 @@ Main:                                                                         ; 
 }
 Return                                                                        ; <<<===  Main ending
 
-RecipeShow:                                                                   ; <<<===  RecipeShow begins
+RecipeShow:                                                                 ; <<<===  RecipeShow begins
 {
   If A_GuiEvent = DoubleClick                                               ; if user double clicks a script, editing begins
   {
@@ -128,9 +131,10 @@ RecipeShow:                                                                   ; 
       Return
     }
     
-    ; should set another if-question is the temp_dir existing. if not create it!
-    
-    FileDelete, %TEMP_DIR%*.tmp                                             ; first, delete all temporary files that where left over
+    IfNotExist, %TEMP_DIR%
+      FileCreateDir, %TEMP_DIR%
+    Else
+      FileDelete, %TEMP_DIR%*.tmp                                           ; first, delete all temporary files that where left over
     
     MouseGetPos, , , , RecipeScriptControl, 1                               ; which script was clicked
     StringTrimLeft, StaticNbr, RecipeScriptControl, 6                       ; recieve that number
@@ -181,7 +185,7 @@ RecipeShow:                                                                   ; 
     IfInString, PrintWorkbenchMenu, %PrintActRecipeWorkbenchName%
       Me := GetWorkbenchNumberInList(PrintWorkbenchMenu, PrintActRecipeWorkbenchName)
     
-    Gui, 2: Add, Tab2, x6 y35 w550 h300, RecipeTag|Components|Miscellaneous     ; build up contents
+    Gui, 2: Add, Tab2, x6 y35 w550 h300            vEditRecipeTab gEditRecipeTab, RecipeTag|Components|Miscellaneous     ; build up contents
       Gui, 2: Tab, RecipeTag, , Exact
         Gui, 2: Add, Text, x15  y65  w100 h21                                   , Workbench:
         Gui, 2: Add, Edit, x105 y61  w250      vEditWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
@@ -194,7 +198,6 @@ RecipeShow:                                                                   ; 
         Gui, 2: Add, Text, x15  y165 w100 h21                                   , ProductNbr:
         Gui, 2: Add, Edit, x105 y161 w250      vEditRecipeProductNbr    ReadOnly, %PrintActRecipeProductNbr%
         
-        ; skript beispiel einfuegen?!
         Gui, 2: Font, , Courier new
         SCRIPTVAR := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
         
@@ -203,9 +206,101 @@ RecipeShow:                                                                   ; 
         Gui, 2: Font, , MS Sans SerIf
         
       Gui, 2: Tab, Components, , Exact
-        Gui, 2: Add, Text, x15 y65, Test
-        Gui, 2: Add, Edit, x55 y61, Components
-      
+        ComponentsToShow := CompToArray(PrintActRecipeProductTag)
+        BiProductsToShow := BiProdToArray(PrintActRecipeProductTag)
+        
+        xa := 15
+        ya := 65
+        xb := 100
+        yb := 61
+        xc := 360
+        yc := 61
+        xd := 420
+        yd := 61
+        xe := 490
+        ye := 65
+        
+        Loop, Parse, ComponentsToShow, |
+        {
+          isSpell := 0
+          
+          If (A_LoopField != "")
+          {
+            CompNbr := StrReplace(PrintActRecipeProductTag, ",", "", ALL)
+            StringReplace, CompNbr, CompNbr, %A_SPACE%, , All
+            CompNbr = C%CompNbr%%A_Index%
+            
+            ComponentArray := ReturnPlaceComponent(A_LoopField)
+            ComponentArray := StrSplit(ComponentArray, "|")
+            
+            IfInString, A_LoopField, CNR_RECIPE_SPELL
+            {
+              PlaceComponent := ComponentArray[3]
+              NbrCA := ComponentArray[2]
+              isSpell := 1
+            }
+            Else
+            {
+              PlaceComponent := ComponentArray[1]
+              NbrCA := ComponentArray[2]
+              NbrCb := ComponentArray[3]
+              
+              If (NbrCb = 0)
+                NbrCb = 
+            }
+            
+            Gui, 2: Add, Text,     x%xa% y%ya% w90                   gSave, Component #%A_Index%:
+            Gui, 2: Add, Edit,     x%xb% y%yb% w250 v%CompNbr%       gSave, %PlaceComponent%
+            Gui, 2: Add, Edit,     x%xc% y%yc% w50                   gSave, %NbrCA%
+            Gui, 2: Add, Edit,     x%xd% y%yd% w50                   gSave, %NbrCb%
+            Gui, 2: Add, Checkbox, x%xe% y%ye%      Checked%isSpell% gSave, IsASpell
+            
+            ya := ya + 25
+            yb := yb + 25
+            yc := yc + 25
+            yd := yd + 25
+            ye := ye + 25
+          }
+        }
+        
+        If (BiProductsToShow != "")
+        {
+          yf := ya + 25
+          yg := yb + 25
+          yh := yc + 25
+          yi := yd + 25
+          
+          Loop, Parse, BiProductsToShow, |
+          {
+            If (A_LoopField != "")
+            {
+              BiPrNbr := StrReplace(PrintActRecipeProductTag, ",", "", ALL)
+              StringReplace, BiPrNbr, BiPrNbr, %A_SPACE%, , All
+              BiPrNbr = B%BiPrNbr%%A_Index%
+              
+              BiProductArray := ReturnPlaceBiProduct(A_LoopField)
+              BiProductArray := StrSplit(BiProductArray, "|")
+              
+              PlaceBiProduct := BiProductArray[1]
+              NbrBa := BiProductArray[2]
+              NbrBa := BiProductArray[3]
+              
+              If (NbrBb = 0)
+                NbrBb = 
+              
+              Gui, 2: Add, Text,     x%xa% y%yf% w90                    gSave, Bi-Product #%A_Index%:
+              Gui, 2: Add, Edit,     x%xb% y%yg% w250 v%BiPrNbr%        gSave, %PlaceBiProduct%
+              Gui, 2: Add, Edit,     x%xc% y%yh% w50                    gSave, %NbrBa%
+              Gui, 2: Add, Edit,     x%xd% y%yi% w50                    gSave, %NbrBb%
+              
+              yf := yf + 25
+              yg := yg + 25
+              yh := yh + 25
+              yi := yi + 25
+            }
+          }
+        }
+        
       Gui, 2: Tab, Miscellaneous, , Exact
         Gui, 2: Add, Text, x15 y65, Test
         Gui, 2: Add, Edit, x55 y61, Miscellaneous
@@ -228,6 +323,35 @@ RecipeShow:                                                                   ; 
     PrintActRecipeWorkbenchName = 
     PrintActRecipeProductNbr = 
     SCRIPTVAR = 
+    ComponentsToShow = 
+    ComponentArray = 
+    CompNbr = 
+    Count = 
+    PlaceComponent = 
+    isSpell = 
+    BiProductsToShow = 
+    BiProductArray = 
+    BiPrNbr = 
+    PlaceBiProduct = 
+    NbrCA = 
+    NbrCB = 
+    NbrBa = 
+    NbrBb = 
+    
+    xa = 
+    ya = 
+    xb = 
+    yb = 
+    xc = 
+    yc = 
+    xd = 
+    yd = 
+    xe = 
+    ye = 
+    yf = 
+    yg = 
+    yh = 
+    yi = 
   }
 }
 Return                                                                        ; <<<===  RecipeShow ending
@@ -251,6 +375,8 @@ RecipesWithinWorkbench:                                                       ; 
   
   GuiControl, ChooseString, EditWorkbenchMenu, %NewRecipeWorkbench%
   
+  NewRecipeLoaded := 1
+  
   PrintActRecipeProduct = 
   PrintActRecipeProductTag = 
   PrintActRecipeProductNbr = 
@@ -259,8 +385,40 @@ RecipesWithinWorkbench:                                                       ; 
 }
 Return                                                                        ; <<<===  RecipesWithinWorkbench ends
 
+Save:
+  ;Gui, 2: Submit, NoHide
+  MsgBox, SaveMe :-)
+Return
+
+EditRecipeTab:
+  Gui, 2: Submit, NoHide
+  MsgBox, %EditRecipeTab% and %NewRecipeLoaded% also %EditWin%
+  
+  If (EditRecipeTab = "Components")
+  {
+    MsgBox, %EditRecipeTab%
+    
+    If (NewRecipeLoaded = 1)
+    {
+      WinGet, ActiveControlList, ControlList, Edit Recipes
+      Loop, Parse, ActiveControlList, `n
+      {
+        If (A_LoopField = "SysTabControl321")
+        {
+          tabhwnd1 := GuiGetHWND(A_LoopField, "2")
+          tcount := DllCall("SendMessage", "UInt", tabhwnd1, "UInt", TCM_GETITEMCOUNT, Int, 0, Int, 0) - 1
+          MsgBox, %A_LoopField%|%tabhwnd1%|%tcount%
+        }
+        
+        NewRecipeLoaded := 0
+      }
+    }
+  }
+Return
+
 Options:
-  MsgBox, Nothing to show at "Options"
+  GoSub, RemoveItem
+  ;MsgBox, Nothing to show at "Options"
 Return
 
 ShowAbout:
@@ -274,8 +432,24 @@ Return
 ;==================================================================================
 WM_MOUSEMOVE()
 {
+    MouseGetPos, , , ActWindow
+    WinGet, MainWin, ID, "CNR - Recipe-Script Editor"
+    
+    If (%ActWindow% != %MainWin%)
+      return
+    
     static CurrControl, PrevControl, _TT  ; _TT is kept blank for use by the ToolTip command below.
     CurrControl := A_GuiControl
+    
+    CurrControl := StrReplace(CurrControl, Chr(34), "", ALL)
+    StringReplace, CurrControl, CurrControl, %A_SPACE%, , All
+    CurrControl := StrReplace(CurrControl, ",", "", ALL)
+    CurrControl := StrReplace(CurrControl, ")", "", ALL)
+    CurrControl := StrReplace(CurrControl, "(", "", ALL)
+    CurrControl := StrReplace(CurrControl, "#", "", ALL)
+    CurrControl := StrReplace(CurrControl, ":", "", ALL)
+    CurrControl := StrReplace(CurrControl, "-", "", ALL)
+    
     If (CurrControl <> PrevControl and not InStr(CurrControl, " "))
     {
         ToolTip  ; Turn off any previous tooltip.
@@ -295,6 +469,52 @@ WM_MOUSEMOVE()
     ToolTip
     return
 }
+
+RemoveItem:                                               ; Finds out the ClassNN
+  GuiControlGet,_targetHWND,hwnd,%_targetCtrlvName%       ; Get the hWnd of the VarName from
+  MsgBox %_targetCtrlvName% has the hWnd: %_targetHWND%   ; Control
+  if ( _targetHWND!="" ){
+    WinGet,List_Class_NN,ControlList,A                    ; Make a List from all Class_NN
+    WinGet,List_hWnd,ControlListHWND,A                    ;  used & their hWnds
+    _Class_NN_to_Destroy=
+    StringSplit,_tmp, List_hWnd, `n
+    Loop, Parse, List_Class_NN, `n                        ; Parse the found ClassNN List
+    {
+      _tmp:=_tmp%A_Index%
+      if ( _tmp%A_Index%=_targetHWND ) {                  ; if Match set the name
+        _Class_NN_to_Destroy := A_LoopField
+      }
+    }
+    if ( InStr(_Class_NN_to_Destroy,"SysTabControl")!=0 ) ; Picks the ClassNN
+    OR ( InStr(_Class_NN_to_Destroy,"ListBox")!=0 )       ; to determin the Method
+    OR ( InStr(_Class_NN_to_Destroy,"SysListView32")!=0 )
+    OR ( InStr(_Class_NN_to_Destroy,"msctls_progress32")!=0 )
+    OR ( InStr(_Class_NN_to_Destroy,"Edit")!=0 )
+    {
+      Gosub, DestroyControlMethod2
+    } else {
+      Gosub, DestroyControlMethod1
+    }
+  } else {
+    MSGBOX Error no Control with such a name!             ; No HWND found - Poop a Message
+  }
+return
+
+; Method 1 uses WM_DESTROY and WM_NC_DESTROY
+; Originally pasted in Forum by PhiLho
+; http://www.autohotkey.com/forum/topic7976.html
+DestroyControlMethod1:
+  SendMessage, 0x0002,,,%_Class_NN_to_Destroy%            ; WM_DESTROY
+  SendMessage, 0x0082,,,%_Class_NN_to_Destroy%            ; WM_NCDESTROY
+  WinSet, Redraw
+return
+
+; Method 2 uses WM_CLOSE
+; Originally pasted in Forum by JSLover
+; http://www.autohotkey.com/forum/viewtopic.php?t=2859#1816
+DestroyControlMethod2:
+  SendMessage, 0x10,,,%_Class_NN_to_Destroy%              ; WM_CLOSE
+return
 
 ;================================================================================
 ;                                                Ending and closing the GUI's

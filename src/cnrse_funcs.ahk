@@ -34,6 +34,11 @@
 ;
 */;==============================================================================
 
+CountTokens(string, dem) {
+  StringReplace, string, string, dem, dem, UseErrorLevel
+  string := ErrorLevel
+  return string
+}
 ;================================================================================
 ; GetObjectName(RecipientTag)
 ;================================================================================
@@ -76,8 +81,9 @@ GetObjectName(RecipientTag)
       If (RecipientTag = resarray)
       {
         Result := % itmarray[1]
-        StringReplace, Result, Result, (, (, UseErrorLevel
-        Counted := ErrorLevel
+        ;StringReplace, Result, Result, (, (, UseErrorLevel
+        ;Counted := ErrorLevel
+        Test := CountTokens(Result, "(" )
         
         If (Counted > 0)
         {
@@ -207,7 +213,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         RecipeResult := StrReplace(RecipeResult, ", " , "|", , 1)           ; ersetze ein , & space    >sMenuTinkerArrowheads|Arrowheads, Plain (20), cnrArwHeadPlain, 1
         RecipeResult := StrReplace(RecipeResult, "), " , ")|", , 1)         ; ersetze ein ), & space   >sMenuTinkerArrowheads|Arrowheads, Plain (20|cnrArwHeadPlain, 1
         StringGetPos, Count, RecipeResult, `,                               ; zaehle bis ,   => 32      >sMenuTinkerArrowheads|Arrowheads>,< Plain (20|cnrArwHeadPlain, 1
-        RecipeResult := RegExReplace(RecipeResult, ", ", "|", , , Count+2)  ; nun ersetze , & space danach?
+        RecipeResult := RegExReplace(RecipeResult, ", ", "|", , , Count)    ; nun ersetze , & space danach
       }
       
       Else                                                                  ; > sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain", "cnrArwHeadPlain", 1);
@@ -553,9 +559,11 @@ ReturnComponentsFromRecipe(ProductToLookFor)
   {
     StringReplace, Temp, A_LoopReadLine, |, |, UseErrorLevel       ; count all tokens
     Tokens := ErrorLevel
+    Temp := Tokens+1
     
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
+    ProductTag := % RecipeArray[Temp]                             ; take a look at the last token
     
     If (Tokens <= 4)
       Temp := RecipeArray[5]
@@ -563,9 +571,9 @@ ReturnComponentsFromRecipe(ProductToLookFor)
       Temp := RecipeArray[6]
     
 ;   if "P"
-    IfInString, WhatKindOf, P                                      ; build up array for second looü
+    IfInString, WhatKindOf, P                                      ; build up array for second loop
     {
-      IfInString, A_LoopReadLine, %ProductToLookFor%
+      If (ProductTag = ProductToLookFor)
         SecLoop = %A_LoopReadLine%,%SecLoop%
       
       IfInString, SecLoop, ERROR
@@ -601,7 +609,7 @@ ReturnComponentsFromRecipe(ProductToLookFor)
           Tag := RecipeArray[3]
           NbrA := RecipeArray[4]
           NbrB := RecipeArray[5]
-          AddMe = %Tag%, %NbrA%, %NbrB%
+          AddMe = "%Tag%", %NbrA%, %NbrB%
         }
       }
       Result = %Result%CnrRecipeAddComponent(sKeyToRecipe, %AddMe%);`n
@@ -613,6 +621,7 @@ ReturnComponentsFromRecipe(ProductToLookFor)
   Tokens = 
   RecipeArray = 
   WhatKindOf = 
+  ProductTag = 
   SecLoop = 
   Tag = 
   NbrA = 
@@ -622,6 +631,14 @@ ReturnComponentsFromRecipe(ProductToLookFor)
   return Result
 }
 ;================================================================================
+
+CompToArray(string) {
+  string := ReturnComponentsFromRecipe(string)
+  string := StrReplace(string, ";", "|")
+  StringReplace, string, string, `n, , All
+  
+  return string
+}
 
 ;================================================================================
 ; ReturnBiproductsFromRecipe(ProductToLookFor)                          ;time to do some loops!
@@ -636,9 +653,11 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
   {
     StringReplace, Temp, A_LoopReadLine, |, |, UseErrorLevel       ; count all tokens
     Tokens := ErrorLevel
+    Temp := Tokens+1
     
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
+    ProductTag := % RecipeArray[Temp]                             ; take a look at the last token
     
     If (Tokens <= 4)
       Temp := RecipeArray[5]
@@ -648,7 +667,7 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
 ;   if "B"
     IfInString, WhatKindOf, B                                      ; how many loops?
     {
-      IfInString, A_LoopReadLine, %ProductToLookFor%
+      If (ProductTag = ProductToLookFor)
         SecLoop = %A_LoopReadLine%,%SecLoop%
       
       IfInString, SecLoop, ERROR
@@ -688,6 +707,7 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
   Tokens = 
   RecipeArray = 
   WhatKindOf = 
+  ProductTag = 
   SecLoop = 
   Tag = 
   NbrA = 
@@ -698,6 +718,13 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
 }
 ;================================================================================
 
+BiProdToArray(string) {
+  string := ReturnBiproductsFromRecipe(string)
+  string := StrReplace(string, ";", "|")
+  StringReplace, string, string, `n, , All
+  
+  return string
+}
 ;================================================================================
 ; ReturnLevelFromRecipe(ProductToLookFor)
 ; from  >  L|1|ProductToLookFor  <
@@ -1041,3 +1068,45 @@ ReturnScriptSnippetForRecipe(ProductToShow)
   return Result
 }
 ;================================================================================
+
+;================================================================================
+;  ReturnPlaceComponent(string)
+;================================================================================
+ReturnPlaceComponent(string)
+{
+  StringTrimLeft, string, string, 37
+  string := StrReplace(string, Chr(34), "", ALL)
+  string := StrReplace(string, ", ", "|", ALL)
+  string := StrReplace(string, ");" , "", ALL)
+  StringTrimRight, string, string, 1
+  
+  return string
+}
+;================================================================================
+
+;================================================================================
+;  ReturnPlaceBiProduct(string)
+;================================================================================
+ReturnPlaceBiProduct(string)
+{
+  StringTrimLeft, string, string, 43
+  string := StrReplace(string, Chr(34), "", ALL)
+  string := StrReplace(string, ", ", "|", ALL)
+  string := StrReplace(string, ");" , "", ALL)
+  StringTrimRight, string, string, 1
+  
+  return string
+}
+
+
+; ** function to retrieve HWNDs
+GuiGetHWND(xxClassNN="", xxGUI=0) 
+{ 
+  If (xxGUI) 
+    Gui, %xxGUI%:+LastFound 
+  xxGui_hwnd := WinExist() 
+  If xxClassNN= 
+    Return, xxGui_hwnd 
+  ControlGet, xxOutputVar, Hwnd,, %xxClassNN%, ahk_id %xxGui_hwnd% 
+Return, xxOutputVar 
+}
