@@ -4,8 +4,9 @@
 ;================================================================================
 ; v0.8.0.1  now more fexibility is provided, but not all possibilities are shown.
 ; v0.8.0.2  static GUI for components and misc, reloads components
+; v0.8.0.3  moving some code to funcs-file for readability, more viewing/saving for recipes, translating-files
 ;================================================================================
-VERSION := "0.8.0.2"
+VERSION := "0.8.0.3"
 ;================================================================================
 
 #NoTrayIcon
@@ -32,11 +33,6 @@ VERSION := "0.8.0.2"
 ;================================================================================
 EXE := A_WorkingDir . "\cnrse.exe"
 NAME := "CNR - Recipe-Script Editor"
-IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\mod\        ; at first, but configurable at latest run
-IniRead, TEMP_DIR,   config.ini, Default, TEMP_DIR,   %A_WorkingDir%\tmp\        ; folder where temporary files are saved
-IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\items.csv   ; at first, a file with comma-separated values, here items of CNR 3.05
-IniRead, MOVE_WIN,   config.ini, Default, MOVE_WIN,   1                          ; should the recipe window moved with the main window
-IniRead, DEBUG,      config.ini, Default, DEBUG,      0                          ; DebugMode 1 / 0
 
 ;================================================================================
 ;                                                Main Scripts
@@ -44,17 +40,14 @@ IniRead, DEBUG,      config.ini, Default, DEBUG,      0                         
 
 Main:                                                                            ; <<<===  Main begins
 {
-  Menu, MyMenu, Add, Options, Options                                            ; build up menue
-  Menu, MyMenu, Add, ShowAbout, ShowAbout
+  GetConfig()
+  GetLanguage()
+  
+  Menu, MyMenu, Add, %MenuOptions%, Options
+  Menu, MyMenu, Add, %MenuShowAbout%, ShowAbout
   Gui, 1: Menu, MyMenu
   
-  IniRead, RecipeSpacerX, config.ini, Lists, RecipeSpacerX, 10                   ; load the definitions for building up the list of the scripts
-  IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 30                   ; later more adjustable?
-  IniRead, MaxRecipesPerRow, config.ini, Lists, MaxRecipesPerRow, 9
   CountedRecipes := 0
-  
-  IniRead, RecipeSpacerXAdd, config.ini, Lists, RecipeSpacerXAdd, 120
-  IniRead, RecipeSpacerYAdd, config.ini, Lists, RecipeSpacerYAdd, 25
   
   Loop, Files, %SCRIPT_DIR%cnr*.nss                                              ; go through all cnr*.nss scripts in folder. this is for testing yet. later it should extract it from mod
   {
@@ -64,7 +57,7 @@ Main:                                                                           
       Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY% w120 h20 v%VarName% cBlue gRecipeShow, %A_LoopFileName%
       
       IfNotInString, VarName, Chr(34)                                            ; add tooltip only when its possible?! why it's not working?
-        %VarName%_TT := "Double-click to start editing"                          ; want to translate it later
+        %VarName%_TT = %OnToolTipMain%
       
       CountedRecipes := CountedRecipes + 1
       RecipeSpacerY := RecipeSpacerY + RecipeSpacerYAdd
@@ -72,7 +65,7 @@ Main:                                                                           
       If (CountedRecipes > MaxRecipesPerRow)
       {
         RecipeSpacerX := RecipeSpacerX + RecipeSpacerXAdd
-        IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 30
+        IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 30             ; reload this value again...
         CountedRecipes := 0
       }
       
@@ -123,11 +116,13 @@ Return                                                                          
 
 RecipeShow:                                                                      ; <<<===  RecipeShow begins
 {
+  GetLanguage()
+  
   If A_GuiEvent = DoubleClick                                                    ; if user double clicks a script, editing begins
   {
     If (EditWin != "")                                                           ; bäh, you are editing one recipe already. don't open another one!
     {
-      MsgBox, A recipe is already being edited                                   ; bad spelling?! should be corrected and later translated
+      MsgBox, %OnRecipeIsEdited%
       Return
     }
     
@@ -145,7 +140,7 @@ RecipeShow:                                                                     
     
     If (RecipeScript = )                                                         ; the text of the control is missing, so is the script?
     {                                                                            ; tell the user that something went wrong...
-      MsgBox, The clicked script is somehow missing.                             ; translate that later
+      MsgBox, %OnRecipeIsMissing%
       Return
     }
     
@@ -195,6 +190,8 @@ Return                                                                          
 
 BuildUpCompAndMisc:
 {
+  GetLanguage()
+  
   Gui, 2: Submit, NoHide
   
   PrintActRecipeProduct := TrimToGetProduct(ActRecipeProduct)
@@ -209,19 +206,19 @@ BuildUpCompAndMisc:
   IfInString, PrintWorkbenchMenu, %PrintActRecipeWorkbenchName%
     Me := GetWorkbenchNumberInList(PrintWorkbenchMenu, PrintActRecipeWorkbenchName)
   
-  Gui, 2: Add, Tab2, x6 y35 w550 h300                           gEditRecipeTab, RecipeTag|Components|Miscellaneous     ; build up contents
+  Gui, 2: Add, Tab2, x6 y35 w550 h300                           gEditRecipeTab, %Tab2RecipePure%|%Tab2ComBiPEdit%|%Tab2MiscEditor%
   {
-    Gui, 2: Tab, RecipeTag, , Exact
+    Gui, 2: Tab, %Tab2RecipePure%, , Exact
     {
-      Gui, 2: Add, Text, x15  y65  w100 h21                                   , Workbench:
+      Gui, 2: Add, Text, x15  y65  w100 h21                                   , %Tab2RecipWorkb%:
       Gui, 2: Add, Edit, x105 y61  w250      vEditWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
-      Gui, 2: Add, Text, x15  y90  w100 h21                                   , WorkbenchMenu:
+      Gui, 2: Add, Text, x15  y90  w100 h21                                   , %Tab2RecipWbMen%:
       Gui, 2: Add, DDL,  x105 y86  w250      vEditWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
-      Gui, 2: Add, Text, x15  y115 w100 h21                                   , ProductName:
+      Gui, 2: Add, Text, x15  y115 w100 h21                                   , %Tab2RecipProdN%:
       Gui, 2: Add, Edit, x105 y111 w250      vEditRecipeProduct       ReadOnly, %PrintActRecipeProduct%
-      Gui, 2: Add, Text, x15  y140 w100 h21                                   , ProductTag:
+      Gui, 2: Add, Text, x15  y140 w100 h21                                   , %Tab2RecipProdT%:
       Gui, 2: Add, Edit, x105 y136 w250      vEditRecipeProductTag    ReadOnly, %PrintActRecipeProductTag%
-      Gui, 2: Add, Text, x15  y165 w100 h21                                   , ProductNbr:
+      Gui, 2: Add, Text, x15  y165 w100 h21                                   , %Tab2RecipPrNbr%:
       Gui, 2: Add, Edit, x105 y161 w250      vEditRecipeProductNbr    ReadOnly, %PrintActRecipeProductNbr%
       
       Gui, 2: Font, , Courier new
@@ -232,7 +229,7 @@ BuildUpCompAndMisc:
       Gui, 2: Font, , MS Sans SerIf
     }
     
-    Gui, 2: Tab, Components, , Exact
+    Gui, 2: Tab, %Tab2ComBiPEdit%, , Exact
     {
       ComponentsToShow := CompToArray(PrintActRecipeProductTag)
       BiProductsToShow := BiProdToArray(PrintActRecipeProductTag)
@@ -274,11 +271,11 @@ BuildUpCompAndMisc:
               NbrCb = 
           }
           
-          Gui, 2: Add, Text,     x%xa% y%ya% w90                                , Component #%A_Index%:
+          Gui, 2: Add, Text,     x%xa% y%ya% w90                                , %Tab2ComBiPEdCo% #%A_Index%:
           Gui, 2: Add, Edit,     x%xb% y%yb% w250 vCA#%A_Index%                 , %PlaceComponent%
           Gui, 2: Add, Edit,     x%xc% y%yc% w50  vCB#%A_Index%                 , %NbrCa%
           Gui, 2: Add, Edit,     x%xd% y%yd% w50  vCC#%A_Index%                 , %NbrCb%
-          Gui, 2: Add, Checkbox, x%xe% y%ye%      vCD#%A_Index% Checked%isSpell%, IsASpell
+          Gui, 2: Add, Checkbox, x%xe% y%ye%      vCD#%A_Index% Checked%isSpell%, %Tab2ComBiPEdiS%
           
           ya := ya + 25
           yb := yb + 25
@@ -295,11 +292,11 @@ BuildUpCompAndMisc:
       {
         nbr := fx + A_Index
         
-        Gui, 2: Add, Text,     x%xa% y%ya% w90           , Component #%nbr%:
+        Gui, 2: Add, Text,     x%xa% y%ya% w90           , %Tab2ComBiPEdCo% #%nbr%:
         Gui, 2: Add, Edit,     x%xb% y%yb% w250 vCA#%nbr%, 
         Gui, 2: Add, Edit,     x%xc% y%yc% w50  vCB#%nbr%, 
         Gui, 2: Add, Edit,     x%xd% y%yd% w50  vCC#%nbr%, 
-        Gui, 2: Add, Checkbox, x%xe% y%ye%      vCD#%nbr%, IsASpell
+        Gui, 2: Add, Checkbox, x%xe% y%ye%      vCD#%nbr%, %Tab2ComBiPEdiS%
         
         ya := ya + 25
         yb := yb + 25
@@ -328,7 +325,7 @@ BuildUpCompAndMisc:
             NbrBa := BiProductArray[2]
             NbrBb := BiProductArray[3]
             
-            Gui, 2: Add, Text, x%xa% y%yf% w90               , Bi-Product #%A_Index%:
+            Gui, 2: Add, Text, x%xa% y%yf% w90               , %Tab2ComBiPEdBi% #%A_Index%:
             Gui, 2: Add, Edit, x%xb% y%yg% w250 vBA#%A_Index%, %PlaceBiProduct%
             Gui, 2: Add, Edit, x%xc% y%yh% w50  vBB#%A_Index%, %NbrBa%
             Gui, 2: Add, Edit, x%xd% y%yi% w50  vBC#%A_Index%, %NbrBb%
@@ -348,7 +345,7 @@ BuildUpCompAndMisc:
       {
         nbr := fx + A_Index
         
-        Gui, 2: Add, Text, x%xa% y%yf% w90           , Bi-Product #%nbr%:
+        Gui, 2: Add, Text, x%xa% y%yf% w90           , %Tab2ComBiPEdBi% #%nbr%:
         Gui, 2: Add, Edit, x%xb% y%yg% w250 vBA#%nbr%, 
         Gui, 2: Add, Edit, x%xc% y%yh% w50  vBB#%nbr%, 
         Gui, 2: Add, Edit, x%xd% y%yi% w50  vBC#%nbr%, 
@@ -359,12 +356,12 @@ BuildUpCompAndMisc:
         yi := yi + 25
       }
       
-      xd := xd + 80
+      xd := xd + 60
       yi := yi - 26
-      Gui, 2: Add, Button, x%xd% y%yi% gSave Default, Save
+      Gui, 2: Add, Button, x%xd% y%yi% gSave Default, %Tab2ComBiPSave%
     }  
     
-    Gui, 2: Tab, Miscellaneous, , Exact
+    Gui, 2: Tab, %Tab2MiscEditor%, , Exact
     {
       Gui, 2: Add, Text, x15 y65, Test
       Gui, 2: Add, Edit, x55 y61, Miscellaneous
@@ -412,6 +409,8 @@ Return
 
 RecipesWithinWorkbench:                                                          ; <<<===  RecipesWithinWorkbench begins
 {
+  GetLanguage()
+  
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
   PrintActRecipeProduct := TrimToGetProduct(ActRecipeProduct)
@@ -442,7 +441,7 @@ RecipesWithinWorkbench:                                                         
     GuiControl,, CA#%A_Index%, 
     GuiControl,, CB#%A_Index%, 
     GuiControl,, CC#%A_Index%, 
-    GuiControl,, CD#%A_Index%, IsASpell
+    GuiControl,, CD#%A_Index%, %Tab2ComBiPEdiS%
     
     GuiControl,, BA#%A_Index%, 
     GuiControl,, BB#%A_Index%, 
@@ -527,67 +526,31 @@ Return                                                                          
 Save:
   SomethingChanged := 0                                                          ; assume at first, nothing was changed
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
-  tmp = 
   
-  ;tmp = %tmp%|%EditRecipeProductTag%
-  ;tmp = %tmp%|EditWorkbenchMenu
+  original := EditRecipeProductTag
+  changed  := CreateChangedRecipeVersion()
+  result   := ReturnWasSomethingChanged(original, changed)
   
-  Loop, 5                                                                        ; look for vars
+  If (DEBUG = 1)
   {
-    srt = % CA#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|PA=%srt%
-    
-    srt = % CB#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|PB=%srt%
-    
-    srt = % CC#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|PC=%srt%
-    
-    srt = % CD#%A_Index%
-    If (srt != "") 
-      If (srt != "0")
-        tmp = %tmp%|PD=%srt%
-    
-    srt = % BA#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|BA=%srt%
-    
-    srt = % BB#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|BB=%srt%
-    
-    srt = % BC#%A_Index%
-    If (srt != "")
-      tmp = %tmp%|BC=%srt%
+    cti := TurnToArray( CompToArray(original) ) TurnToArray( BiProdToArray(original) )
+    MsgBox, Original recipe: %cti%`nChanged recipe: %changed%`n`nThere have been %result% changes.
   }
-  StringLeft, Dem, tmp, 1
-  If (Dem == "|")
-    StringTrimLeft, tmp, tmp, 1                                                  ; delete first |
-  tmp = %tmp%|                                                                   ; > PA=cnrMoldSmall|PB=1|BA=cnrMangledCopp|BB=0|BC=1|PA=cnrIngotCopp|PB=4|BA=cnrTestBiProd|BB=0|BC=1|PA=cnrTestComp|PB=1|
-  ;PA=cnrMoldSmall|PB=1|
-  ;BA=cnrMangledCopp|BB=0|BC=1|
-  ;PA=cnrIngotCopp|PB=4|
-  ;BA=cnrTestBiProd|BB=0|BC=1|
-  ;PA=cnrTestComp|PB=1|
-  
-  MsgBox, %tcp%`n%tmp%
 Return
 
 EditRecipeTab:
-  ;MsgBox, Nothing to do yet!
+  ;MsgBox, %OnNothingToShow%
 Return
 
 Options:
-  MsgBox, Nothing to show at "Options"
+  MsgBox, %OnNothingToShow%
 Return
 
 ShowAbout:
   ListVars
-  ;MsgBox, Nothing to show at "About"
+  ;MsgBox, %OnNothingToShow%
 Return
+
 
 ;==================================================================================
 ;                                                Necessary funcs

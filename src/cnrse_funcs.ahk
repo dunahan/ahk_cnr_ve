@@ -620,6 +620,20 @@ ReturnComponentsFromRecipe(ProductToLookFor)
 }
 ;================================================================================
 
+TurnToArray(string) {
+  IfInString, string, CnrRecipeAddComponent
+    string := StrReplace(string, "CnrRecipeAddComponent(sKeyToRecipe, ", "", ALL)
+  
+  IfInString, string, CnrRecipeSetRecipeBiproduct
+    string := StrReplace(string, "CnrRecipeSetRecipeBiproduct(sKeyToRecipe, ", "", ALL)
+  
+  string := StrReplace(string, Chr(34), "", ALL)
+  string := StrReplace(string, ", ", "|", ALL)
+  string := StrReplace(string, ")" , "", ALL)
+  
+  return string
+}
+
 CompToArray(string) {
   string := ReturnComponentsFromRecipe(string)
   string := StrReplace(string, ";", "|")
@@ -1082,13 +1096,318 @@ ReturnPlaceBiProduct(string)
   return string
 }
 
-ReturnWasSomethingChanged(string, token)
+CreateChangedRecipeVersion()
 {
-  result := 0
+  Loop, 5                                                                        ; look for vars
+  {
+    srt = % CA#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+    
+    srt = % CB#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+    
+    srt = % CC#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+    
+    srt = % CD#%A_Index%
+    If (srt != "") 
+      If (srt != "0")
+        tmp = %tmp%|%srt%
+  }
   
+  Loop, 5
+  {
+    srt = % BA#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+    
+    srt = % BB#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+    
+    srt = % BC#%A_Index%
+    If (srt != "")
+      tmp = %tmp%|%srt%
+  }
   
+  StringLeft, dem, tmp, 1
+  
+  If (dem == "|")
+    StringTrimLeft, tmp, tmp, 1                                                  ; delete first |
+  tmp = %tmp%|                                                                   ; > PA=cnrMoldSmall|PB=1|BA=cnrMangledCopp|BB=0|BC=1|PA=cnrIngotCopp|PB=4|BA=cnrTestBiProd|BB=0|BC=1|PA=cnrTestComp|PB=1|
+  
+  srt = 
+  tst = 
+  
+  return tmp
+}
+
+ReturnWasSomethingChanged(original, changed)
+{
+  result := ERROR
+  ctn := CountTokens(changed, "|")
+  crp := 0
+  
+  cts := CompToArray(original)
+  cts := TurnToArray(cts)
+  bts := BiProdToArray(original)
+  bts := TurnToArray(bts)
+  
+  ctc := CountTokens(cts, "|")
+  
+  If (bts == "")
+  {
+    ctr := CountTokens(cts, "|")
+    
+    If (cts == changed)                                                          ; nothing changed!
+    {
+      ;MsgBox, no biproducts and nothing changed!
+      result := 0
+    }
+    
+    Else                                                                         ; something changed
+    {
+      ;MsgBox, no biproducts but something changed?`n%cts%`n%changed%
+      cta := StrSplit(cts, "|")                                                  ; split up to arrays
+      
+      ;If (A_LoopField != "")
+      {
+        Loop, Parse, changed, |                                                    ; loop through changed string
+        {
+          test := cta[ A_Index ]
+          
+          If (A_LoopField != test)                                                 ; existing field was changed/added
+          {
+           ;StringReplace, tmp, tmp, %test%, %A_LoopField%                         ; replace it with new value
+            crp := crp + 1                                                         ; how many changes were made
+          }
+          
+          If (test == "")                                                          ; this isnt found in string!
+          {
+           ;cts := cts A_LoopField "|"                                             ; so add it
+          }
+        }
+      }
+      
+      If (ctr > ctn)                                                             ; is original greater than changed
+      {
+        crp := ctn - ctr                                                         ; show changed number
+      }
+      
+      result := crp
+    }
+  }
+  
+  Else
+  {
+    ctb := CountTokens(bts, "|")
+    ; >cnrMoldSmall|1|cnrIngotCopp|4|cnrMangledCopp|0|1|<
+    cti := cts  bts                                                               ; combine both
+    ctr := CountTokens(cti, "|")
+    
+    If (cti == changed)
+    {
+      ;MsgBox, Biproducts found but nothing changed!
+      result := 0
+    }
+    
+    Else
+    {
+      ;MsgBox, Biproducts found and something changed!
+      cai := StrSplit(cts, "|")
+      StringGetPos, a, changed, %bts%
+      a := a + 1
+      b := StrLen(changed)
+      b := b - a
+      StringTrimRight, chc, changed, b + 1
+      chb := SubStr(changed, a, b)
+      
+      Loop, Parse, chc, |
+      {
+        test    := cai[ A_Index ]
+        ;MsgBox, % A_LoopField "`n" test
+        If (A_LoopField != test)
+        {
+          crp := crp + 1
+          
+          ;MsgBox, Found in changed com string %crp%
+        }
+      }
+      
+      cai := StrSplit(bts, "|")
+      Loop, Parse, chb, |
+      {
+        test    := cai[ A_Index ]
+        
+        If (A_LoopField != test)
+        {
+          crp := crp + 1
+          ;MsgBox, Found in changed bi string %crp%
+        }
+      }
+    }
+    
+    If (ctr > ctn)                                                               ; is original greater than changed
+      crp := ctn - ctr                                                           ; show changed number
+    
+    result := crp
+  }
+  ctn = 
+  crp = 
+  cts = 
+  ctc = 
+  cta = 
+  bts = 
+  ctb = 
+  cti = 
+  ctr = 
+  cai = 
+  chc = 
+  a = 
+  b = 
+  test = 
+  
+  ;MsgBox, % result
   
   return result
+}
+
+ChangeOriginal(original, changed)
+{
+  return 0
+}
+
+GetConfig()
+{
+  Global
+  IfExist, config.ini
+  {
+    IniRead, LANG,       config.ini, Default, LANG,       EN
+    
+    IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\mod\        ; at first, but configurable at latest version
+    IniRead, TEMP_DIR,   config.ini, Default, TEMP_DIR,   %A_WorkingDir%\tmp\        ; folder where temporary files are saved
+    IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\items.csv   ; at first, a file with comma-separated values, here items of CNR 3.05
+    IniRead, MOVE_WIN,   config.ini, Default, MOVE_WIN,   1                          ; should the recipe window moved with the main window
+    IniRead, DEBUG,      config.ini, Default, DEBUG,      0                          ; DebugMode 1 / 0
+    
+    IniRead, RecipeSpacerX, config.ini, Lists, RecipeSpacerX, 10                     ; load the definitions for building up the list of the scripts
+    IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 30                     ; later more adjustable?
+    IniRead, MaxRecipesPerRow, config.ini, Lists, MaxRecipesPerRow, 9
+    
+    IniRead, RecipeSpacerXAdd, config.ini, Lists, RecipeSpacerXAdd, 120
+    IniRead, RecipeSpacerYAdd, config.ini, Lists, RecipeSpacerYAdd, 25
+  }
+  Else
+  {
+    MsgBox, No config file existing, creating a new one with defaults.`nStart the %NAME% again.
+    
+    IniWrite, %VERSION%,                config.ini, Default, VERSION
+    IniWrite, EN,                       config.ini, Default, LANG
+    
+    IniWrite, %A_WorkingDir%\mod\,      config.ini, Default, SCRIPT_DIR
+    IniWrite, %A_WorkingDir%\tmp\,      config.ini, Default, TEMP_DIR
+    IniWrite, %A_WorkingDir%\items.csv, config.ini, Default, ITM_FILE
+    IniWrite, 1,                        config.ini, Default, MOVE_WIN
+    IniWrite, 0,                        config.ini, Default, DEBUG
+    
+    IniWrite, 10,                       config.ini, Lists,   RecipeSpacerX
+    IniWrite, 30,                       config.ini, Lists,   RecipeSpacerY
+    IniWrite, 9,                        config.ini, Lists,   MaxRecipesPerRow
+    
+    IniWrite, 120,                      config.ini, Lists,   RecipeSpacerXAdd
+    IniWrite, 25,                       config.ini, Lists,   RecipeSpacerYAdd
+    
+    GoSub, GuiClose
+  }
+}
+
+GetLanguage()
+{
+  Global
+  IfExist, language.ini
+  {
+    IniRead, OnToolTipMain,     language.ini, %LANG%, OnToolTipMain,      Double-click to start editing
+    
+    IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited
+    IniRead, OnRecipeIsMissing, language.ini, %LANG%, OnRecipeIsMissing,  The clicked script is somehow missing?
+    
+    IniRead, OnNothingToShow,   language.ini, %LANG%, OnNothingToShow,    Nothing to show here yet!
+    
+    IniRead, MenuOptions,       language.ini, %LANG%, MenuOptions,        Options
+    IniRead, MenuShowAbout,     language.ini, %LANG%, MenuShowAbout,      About
+    
+    IniRead, Tab2RecipePure,    language.ini, %LANG%, Tab2RecipePure,     Recipe
+    IniRead, Tab2ComBiPEdit,    language.ini, %LANG%, Tab2ComBiPEdit,     Components and Biproducts
+    IniRead, Tab2MiscEditor,    language.ini, %LANG%, Tab2MiscEditor,     Miscellaneous
+    
+    IniRead, Tab2RecipWorkb,    language.ini, %LANG%, Tab2RecipWorkb,     Workbench
+    IniRead, Tab2RecipWbMen,    language.ini, %LANG%, Tab2RecipWbMen,     Menue
+    IniRead, Tab2RecipProdN,    language.ini, %LANG%, Tab2RecipProdN,     Product Name
+    IniRead, Tab2RecipProdT,    language.ini, %LANG%, Tab2RecipProdT,     Tag/ResRef
+    IniRead, Tab2RecipPrNbr,    language.ini, %LANG%, Tab2RecipPrNbr,     Creates
+    
+    IniRead, Tab2ComBiPEdCo,    language.ini, %LANG%, Tab2ComBiPEdCo,     Component
+    IniRead, Tab2ComBiPEdiS,    language.ini, %LANG%, Tab2ComBiPEdiS,     Spell
+    IniRead, Tab2ComBiPEdBi,    language.ini, %LANG%, Tab2ComBiPEdBi,     Bi-Product
+    IniRead, Tab2ComBiPSave,    language.ini, %LANG%, Tab2ComBiPSave,     Save
+  }
+  Else
+  {
+    ; build up english language-file
+    IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain
+    IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
+    IniWrite, The clicked script is somehow missing?, language.ini, EN, OnRecipeIsMissing
+    
+    IniWrite, Nothing to show here yet!,              language.ini, EN, OnNothingToShow
+    
+    IniWrite, Options,                                language.ini, EN, MenuOptions
+    IniWrite, About,                                  language.ini, EN, MenuShowAbout
+    
+    IniWrite, Recipe,                                 language.ini, EN, Tab2RecipePure
+    IniWrite, Components and Biproducts,              language.ini, EN, Tab2ComBiPEdit
+    IniWrite, Miscellaneous,                          language.ini, EN, Tab2MiscEditor
+    
+    IniWrite, Workbench,                              language.ini, EN, Tab2RecipWorkb
+    IniWrite, Menue,                                  language.ini, EN, Tab2RecipWbMen
+    IniWrite, Product Name,                           language.ini, EN, Tab2RecipProdN
+    IniWrite, Tag/ResRef,                             language.ini, EN, Tab2RecipProdT
+    IniWrite, Creates,                                language.ini, EN, Tab2RecipPrNbr
+    
+    IniWrite, Component,                              language.ini, EN, Tab2ComBiPEdCo
+    IniWrite, Spell,                                  language.ini, EN, Tab2ComBiPEdiS
+    IniWrite, Bi-Product,                             language.ini, EN, Tab2ComBiPEdBi
+    IniWrite, Save,                                   language.ini, EN, Tab2ComBiPSave
+    ; continues...
+    
+    ; add german lang [DE]
+    IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain
+    
+    IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, EN, OnRecipeIsEdited
+    IniWrite, Das Rezept ist verschwunden?,           language.ini, EN, OnRecipeIsMissing
+    
+    IniWrite, Hier gibts noch nichts!,                language.ini, EN, OnNothingToShow
+    
+    IniWrite, Optionen,                               language.ini, EN, MenuOptions
+    IniWrite, Über,                                   language.ini, EN, MenuShowAbout
+    
+    IniWrite, Rezept,                                 language.ini, EN, Tab2RecipePure
+    IniWrite, Komponenten und Abfallprodukte,         language.ini, EN, Tab2ComBiPEdit
+    IniWrite, Verschiedenes,                          language.ini, EN, Tab2MiscEditor
+    
+    IniWrite, Werkbank,                               language.ini, EN, Tab2RecipWorkb
+    IniWrite, Menü,                                   language.ini, EN, Tab2RecipWbMen
+    IniWrite, Produktname,                            language.ini, EN, Tab2RecipProdN
+    IniWrite, Tag/ResRef,                             language.ini, EN, Tab2RecipProdT
+    IniWrite, Erzeugt insg.,                          language.ini, EN, Tab2RecipPrNbr
+    
+    IniWrite, Komponente,                             language.ini, EN, Tab2ComBiPEdCo
+    IniWrite, Spruch,                                 language.ini, EN, Tab2ComBiPEdiS
+    IniWrite, Abfallprodukt,                          language.ini, EN, Tab2ComBiPEdBi
+    IniWrite, Speichern,                              language.ini, EN, Tab2ComBiPSave
+  }
 }
 
 RemoveUnessesaries(string)
