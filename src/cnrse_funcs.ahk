@@ -563,14 +563,14 @@ ReturnComponentsFromRecipe(ProductToLookFor)
     IfInString, WhatKindOf, P                                                    ; build up array for second loop
     {
       If (ProductTag = ProductToLookFor)
-        SecLoop = %A_LoopReadLine%,%SecLoop%
+        SecLoop = %A_LoopReadLine%$%SecLoop%
       
       IfInString, SecLoop, ERROR
         StringTrimRight, SecLoop, SecLoop, 9                                     ; delete Error-Msg, result should not contain false!
     }
   }
   
-  Loop, Parse, SecLoop, `,
+  Loop, Parse, SecLoop, $
   {
     If (A_LoopField != "")
     {
