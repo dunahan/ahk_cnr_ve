@@ -2,11 +2,11 @@
 ;  CNR - Recipe-Script Editor
 ;  Author: Tobias Wirth (dunahan@schwerterkueste.de)
 ;================================================================================
-; v0.8.0.1  now more fexibility is provided, but not all possibilities are shown.
 ; v0.8.0.2  static GUI for components and misc, reloads components
 ; v0.8.0.3  moving some code to funcs-file for readability, more viewing/saving for recipes, translating-files
+; v0.8.0.4  rewrote the saving checks, should now be easier???
 ;================================================================================
-VERSION := "0.8.0.3"
+VERSION := "0.8.0.4"
 ;================================================================================
 
 #NoTrayIcon
@@ -157,6 +157,9 @@ RecipeShow:                                                                     
     PrintWorkbenchName := ReturnWorkbenchFromRecipe(ArrayTmpPath)
     PrintWorkbenchMenu := ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
     PrintRecipesWithinWorkbench := ReturnRecipeListFromRecipe(ArrayTmpPath)
+    
+    If (PrintWorkbenchName == "")
+      PrintWorkbenchName := RecipeScript
     
     If (DEBUG = 1)
       Gui, 2: Add, ListView, x6 y350 r20 c50 w550 h220 vListViewElement, ClassNN|HWND|Tab Control|Tab #|Text
@@ -527,14 +530,15 @@ Save:
   SomethingChanged := 0                                                          ; assume at first, nothing was changed
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
-  original := EditRecipeProductTag
-  changed  := CreateChangedRecipeVersion()
-  result   := ReturnWasSomethingChanged(original, changed)
+  OriginalRecipe  := BuildOriginalString(EditRecipeProductTag)
+  ChangedRecipe   := CreateChangedRecipeVersion()
+  NumberOfChanges := ReturnNumOfChanges(OriginalRecipe, ChangedRecipe)
+  WhatWasChanged  := ReturnWhatWasChanged(OriginalRecipe, ChangedRecipe)
   
-  If (DEBUG = 1)
+  ;If (DEBUG = 1)
   {
-    cti := TurnToArray( CompToArray(original) ) TurnToArray( BiProdToArray(original) )
-    MsgBox, Original recipe: %cti%`nChanged recipe: %changed%`n`nThere have been %result% changes.
+    cti := BuildOriginalString(EditRecipeProductTag)
+    MsgBox, Ori:`n%cti%`nCha:`n%ChangedRecipe%`n`nThere have been %NumberOfChanges% changes.`n`nAnd that was changed: %WhatWasChanged%
   }
 Return
 

@@ -32,7 +32,7 @@
 ;   =>  e X perience points (X|60|60)                         => how many XP the PC gets (XP | CNR-XP)
 ;   =>  A ttributes  (A|0|0|0|50|50|0)                        => which attributes are needed and at what percentage, MUST be in sum 100(%)!
 ;
-*/;==============================================================================
+*/;================================================================================
 
 CountTokens(string, dem) {
   temp := StrReplace(string, dem, dem, result)
@@ -537,7 +537,7 @@ ReturnRecipeListFromRecipe(ArrayTmpPath)
 
 ;================================================================================
 ; ReturnComponentsFromRecipe(ProductToLookFor)
-; from  >  P1|Blank Scroll|cnrScrollBlank|1|ProductToLookFor  <
+; from       >  P1|Blank Scroll|cnrScrollBlank|1|ProductToLookFor  <
 ; sometimes  >  P4|Ray of Frost|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST|NW_IT_SPARSCR002  <
 ;================================================================================
 ReturnComponentsFromRecipe(ProductToLookFor)
@@ -555,9 +555,13 @@ ReturnComponentsFromRecipe(ProductToLookFor)
     ProductTag := % RecipeArray[Temp]                                            ; take a look at the last token
     
     If (Tokens <= 4)
+    {
       Temp := RecipeArray[5]
+    }
     Else
+    {
       Temp := RecipeArray[6]
+    }
     
     ; if "P"
     IfInString, WhatKindOf, P                                                    ; build up array for second loop
@@ -1005,8 +1009,9 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
+
 /*
-  referents to PrintActRecipeProduct
+  Referents to PrintActRecipeProduct
   sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
   CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
   CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
@@ -1027,6 +1032,7 @@ CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
                CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
                CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
 */
+
 ;================================================================================
 ReturnScriptSnippetForRecipe(ProductToShow)
 {
@@ -1034,13 +1040,13 @@ ReturnScriptSnippetForRecipe(ProductToShow)
   PD := GetObjectName(ProductToShow)
   TG := (ProductToShow)
   NB := GetCreatedProductNbr(ProductToShow)
-
+  
   Result = sKeyToRecipe = CnrRecipeCreateRecipe(%WB%, "%PD%", "%TG%", %NB%);`n
   
   PX := ReturnComponentsFromRecipe(ProductToShow)
   If (PX != "")
     Result = %Result%%PX%
-
+  
   BX := ReturnBiproductsFromRecipe(ProductToShow)
   If (BX != "")
     Result = %Result%%BX%
@@ -1096,6 +1102,9 @@ ReturnPlaceBiProduct(string)
   return string
 }
 
+;================================================================================
+;  CreateChangedRecipeVersion()
+;================================================================================
 CreateChangedRecipeVersion()
 {
   Loop, 5                                                                        ; look for vars
@@ -1139,145 +1148,114 @@ CreateChangedRecipeVersion()
     StringTrimLeft, tmp, tmp, 1                                                  ; delete first |
   tmp = %tmp%|                                                                   ; > PA=cnrMoldSmall|PB=1|BA=cnrMangledCopp|BB=0|BC=1|PA=cnrIngotCopp|PB=4|BA=cnrTestBiProd|BB=0|BC=1|PA=cnrTestComp|PB=1|
   
+  ; org: CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+  ; tmp:                    SPELL_LIGHT|1|1|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+  ; note: this is only a small help... must script a better solution (it assumes the spell is everytime at the first place)!
+  IfInString, tmp, SPELL_
+  {
+    SrSp := InStr(tmp, SPELL_)
+    StringGetPos, NuSp, tmp, |1|1
+    CoSp := SubStr(tmp, SrSp, NuSp) 
+    
+    If (SrSp == 1) AND (NuSp > 1)
+    {
+      ntmp := StrReplace(tmp, "|1|1", "", , 1)
+      ntmp := StrReplace(ntmp, CoSp, "CNR_RECIPE_SPELL|1|"CoSp, , 1)
+      
+      tmp := ntmp
+    }
+  }
+  
   srt = 
   tst = 
+  ntmp = 
+  SrtSpell = 
+  NumSpell = 
+  ConSpell = 
   
   return tmp
 }
 
-ReturnWasSomethingChanged(original, changed)
+BuildOriginalString(ProductTag)
 {
-  result := ERROR
-  ctn := CountTokens(changed, "|")
-  crp := 0
-  
-  cts := CompToArray(original)
-  cts := TurnToArray(cts)
-  bts := BiProdToArray(original)
-  bts := TurnToArray(bts)
-  
-  ctc := CountTokens(cts, "|")
-  
-  If (bts == "")
-  {
-    ctr := CountTokens(cts, "|")
-    
-    If (cts == changed)                                                          ; nothing changed!
-    {
-      ;MsgBox, no biproducts and nothing changed!
-      result := 0
-    }
-    
-    Else                                                                         ; something changed
-    {
-      ;MsgBox, no biproducts but something changed?`n%cts%`n%changed%
-      cta := StrSplit(cts, "|")                                                  ; split up to arrays
-      
-      ;If (A_LoopField != "")
-      {
-        Loop, Parse, changed, |                                                    ; loop through changed string
-        {
-          test := cta[ A_Index ]
-          
-          If (A_LoopField != test)                                                 ; existing field was changed/added
-          {
-           ;StringReplace, tmp, tmp, %test%, %A_LoopField%                         ; replace it with new value
-            crp := crp + 1                                                         ; how many changes were made
-          }
-          
-          If (test == "")                                                          ; this isnt found in string!
-          {
-           ;cts := cts A_LoopField "|"                                             ; so add it
-          }
-        }
-      }
-      
-      If (ctr > ctn)                                                             ; is original greater than changed
-      {
-        crp := ctn - ctr                                                         ; show changed number
-      }
-      
-      result := crp
-    }
-  }
-  
-  Else
-  {
-    ctb := CountTokens(bts, "|")
-    ; >cnrMoldSmall|1|cnrIngotCopp|4|cnrMangledCopp|0|1|<
-    cti := cts  bts                                                               ; combine both
-    ctr := CountTokens(cti, "|")
-    
-    If (cti == changed)
-    {
-      ;MsgBox, Biproducts found but nothing changed!
-      result := 0
-    }
-    
-    Else
-    {
-      ;MsgBox, Biproducts found and something changed!
-      cai := StrSplit(cts, "|")
-      StringGetPos, a, changed, %bts%
-      a := a + 1
-      b := StrLen(changed)
-      b := b - a
-      StringTrimRight, chc, changed, b + 1
-      chb := SubStr(changed, a, b)
-      
-      Loop, Parse, chc, |
-      {
-        test    := cai[ A_Index ]
-        ;MsgBox, % A_LoopField "`n" test
-        If (A_LoopField != test)
-        {
-          crp := crp + 1
-          
-          ;MsgBox, Found in changed com string %crp%
-        }
-      }
-      
-      cai := StrSplit(bts, "|")
-      Loop, Parse, chb, |
-      {
-        test    := cai[ A_Index ]
-        
-        If (A_LoopField != test)
-        {
-          crp := crp + 1
-          ;MsgBox, Found in changed bi string %crp%
-        }
-      }
-    }
-    
-    If (ctr > ctn)                                                               ; is original greater than changed
-      crp := ctn - ctr                                                           ; show changed number
-    
-    result := crp
-  }
-  ctn = 
-  crp = 
-  cts = 
-  ctc = 
-  cta = 
-  bts = 
-  ctb = 
-  cti = 
-  ctr = 
-  cai = 
-  chc = 
-  a = 
-  b = 
-  test = 
-  
-  ;MsgBox, % result
+  result := TurnToArray( CompToArray(ProductTag) ) TurnToArray( BiProdToArray(ProductTag) )
   
   return result
 }
 
-ChangeOriginal(original, changed)
+;================================================================================
+;  ReturnNumOfChanges(original, changed)
+;================================================================================
+ReturnNumOfChanges(original, changed)
 {
-  return 0
+  result := -99
+  
+  If (changed = original)                                                        ; nothing changed, return 0
+    result := 0
+  
+  Else
+  {
+    If ( CountTokens(changed, "|") != CountTokens(original, "|") )               ; something was removed/added
+      result := CountTokens(changed, "|") - CountTokens(original, "|")           ; how many? shows + and - (summarizes!)
+    
+  }
+  
+  return result
+}
+/*
+  Ori:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+  Cha:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrGlassVial|1|1|
+  There have been -3 changes.
+  And that was changed: 10|
+*/
+
+;================================================================================
+;  ReturnWhatWasChanged(original, changed)
+;================================================================================
+ReturnWhatWasChanged(original, changed)
+{
+  result := "ERROR"
+  tmp := original
+  nbr := ReturnNumOfChanges(original, changed)
+  
+  If (nbr == 0)
+    result := "Nothing."
+  
+  Else
+  {
+    chd := StrSplit(changed, "|")
+    org := StrSplit(original, "|")
+    
+    Loop, Parse, changed, |
+    {
+      tst := A_LoopField
+      chk := org [ A_Index ]
+      
+      If ( tst != "")
+      {
+        If (tst != chk)
+        {
+          StringReplace, tmp, tmp, %chk%, %tst%
+          ;chi = %A_Index%|%chi%
+          ;MsgBox, Diff found!`na) %tst%`nb) %chk%`nc) %chi%`nd) %tmp%
+        }
+      }
+    }
+    
+    If (nbr < 0)
+    {
+      sum := CountTokens(tmp, "|")
+      tma := StrSplit(tmp, "|")
+      
+      Loop, sum, 
+    }
+    
+    result := tmp
+  }
+  
+  
+  
+  return result
 }
 
 GetConfig()
@@ -1385,28 +1363,28 @@ GetLanguage()
     ; add german lang [DE]
     IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain
     
-    IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, EN, OnRecipeIsEdited
-    IniWrite, Das Rezept ist verschwunden?,           language.ini, EN, OnRecipeIsMissing
+    IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, DE, OnRecipeIsEdited
+    IniWrite, Das Rezept ist verschwunden?,           language.ini, DE, OnRecipeIsMissing
     
-    IniWrite, Hier gibts noch nichts!,                language.ini, EN, OnNothingToShow
+    IniWrite, Hier gibts noch nichts!,                language.ini, DE, OnNothingToShow
     
-    IniWrite, Optionen,                               language.ini, EN, MenuOptions
-    IniWrite, Über,                                   language.ini, EN, MenuShowAbout
+    IniWrite, Optionen,                               language.ini, DE, MenuOptions
+    IniWrite, Über,                                   language.ini, DE, MenuShowAbout
     
-    IniWrite, Rezept,                                 language.ini, EN, Tab2RecipePure
-    IniWrite, Komponenten und Abfallprodukte,         language.ini, EN, Tab2ComBiPEdit
-    IniWrite, Verschiedenes,                          language.ini, EN, Tab2MiscEditor
+    IniWrite, Rezept,                                 language.ini, DE, Tab2RecipePure
+    IniWrite, Komponenten und Abfallprodukte,         language.ini, DE, Tab2ComBiPEdit
+    IniWrite, Verschiedenes,                          language.ini, DE, Tab2MiscEditor
     
-    IniWrite, Werkbank,                               language.ini, EN, Tab2RecipWorkb
-    IniWrite, Menü,                                   language.ini, EN, Tab2RecipWbMen
-    IniWrite, Produktname,                            language.ini, EN, Tab2RecipProdN
-    IniWrite, Tag/ResRef,                             language.ini, EN, Tab2RecipProdT
-    IniWrite, Erzeugt insg.,                          language.ini, EN, Tab2RecipPrNbr
+    IniWrite, Werkbank,                               language.ini, DE, Tab2RecipWorkb
+    IniWrite, Menü,                                   language.ini, DE, Tab2RecipWbMen
+    IniWrite, Produktname,                            language.ini, DE, Tab2RecipProdN
+    IniWrite, Tag/ResRef,                             language.ini, DE, Tab2RecipProdT
+    IniWrite, Erzeugt insg.,                          language.ini, DE, Tab2RecipPrNbr
     
-    IniWrite, Komponente,                             language.ini, EN, Tab2ComBiPEdCo
-    IniWrite, Spruch,                                 language.ini, EN, Tab2ComBiPEdiS
-    IniWrite, Abfallprodukt,                          language.ini, EN, Tab2ComBiPEdBi
-    IniWrite, Speichern,                              language.ini, EN, Tab2ComBiPSave
+    IniWrite, Komponente,                             language.ini, DE, Tab2ComBiPEdCo
+    IniWrite, Spruch,                                 language.ini, DE, Tab2ComBiPEdiS
+    IniWrite, Abfallprodukt,                          language.ini, DE, Tab2ComBiPEdBi
+    IniWrite, Speichern,                              language.ini, DE, Tab2ComBiPSave
   }
 }
 
