@@ -1,4 +1,4 @@
-/*;==============================================================================
+;==============================================================================
 ;   Error Messages:
 ;   ERROR100: from GetObjectName(RecipientTag)                =>  it was nothing recognized from temporary array
 ;   ERROR101: from GetObjectName(RecipientTag)                =>  it was nothing recognized from csv => really nothing!
@@ -32,7 +32,7 @@
 ;   =>  e X perience points (X|60|60)                         => how many XP the PC gets (XP | CNR-XP)
 ;   =>  A ttributes  (A|0|0|0|50|50|0)                        => which attributes are needed and at what percentage, MUST be in sum 100(%)!
 ;
-*/;================================================================================
+;================================================================================
 
 CountTokens(string, dem) {
   temp := StrReplace(string, dem, dem, result)
@@ -131,6 +131,8 @@ GetSpellName(SpellConstant)
   
   return Result
 }
+;================================================================================
+
 ;================================================================================
 ; CreateArrayTempFile(FileToParse, FileForArray)
 ;================================================================================
@@ -1009,31 +1011,29 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
-
-/*
-  Referents to PrintActRecipeProduct
-  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
-  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
-  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
-  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-  
-sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
-CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
-               CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-               CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
-               CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
-               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-*/
-
+;
+;  Referents to PrintActRecipeProduct
+;  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
+;  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+;  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
+;  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
+;  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+;  
+;sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
+;CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
+;               CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
+;               CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
+;               CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
+;               CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+;               CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
+;               CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
+;               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
 ;================================================================================
+
 ReturnScriptSnippetForRecipe(ProductToShow)
 {
   WB := GetWorkbenchName(ProductToShow)
@@ -1202,12 +1202,13 @@ ReturnNumOfChanges(original, changed)
   
   return result
 }
-/*
-  Ori:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
-  Cha:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrGlassVial|1|1|
-  There have been -3 changes.
-  And that was changed: 10|
-*/
+
+
+;  Ori:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+;  Cha:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrGlassVial|1|1|
+;  There have been -3 changes.
+;  And that was changed: 10|
+
 
 ;================================================================================
 ;  ReturnWhatWasChanged(original, changed)
@@ -1242,18 +1243,16 @@ ReturnWhatWasChanged(original, changed)
       }
     }
     
-    If (nbr < 0)
-    {
-      sum := CountTokens(tmp, "|")
-      tma := StrSplit(tmp, "|")
-      
-      Loop, sum, 
-    }
+;    If (nbr < 0)
+;    {
+;      sum := CountTokens(tmp, "|")
+;      tma := StrSplit(tmp, "|")
+;      
+;      Loop, sum, 
+;    }
     
     result := tmp
   }
-  
-  
   
   return result
 }
