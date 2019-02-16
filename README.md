@@ -5,3 +5,4 @@ Added bin-folder with compiled executable, folderstructure and some .nss-scripts
 
 Now at version 0.802 the most data from the recipe is viewed. Changes to those scripts don't work yet, but will be in the future.
 With version 0.803 all the data can be viewed and changes can be recognized. 
+At version 0.804 I did a rewrite of the save check. It should be better, but yet not super and final.
