@@ -4,7 +4,7 @@
 ;================================================================================
 ; v0.8.0.2  static GUI for components and misc, reloads components
 ; v0.8.0.3  moving some code to funcs-file for readability, more viewing/saving for recipes, translating-files
-; v0.8.0.4  rewrote the saving checks, should now be easier???
+; v0.8.0.4  ???
 ;================================================================================
 VERSION := "0.8.0.4"
 ;================================================================================
@@ -532,14 +532,13 @@ Save:
   
   OriginalRecipe  := BuildOriginalString(EditRecipeProductTag)
   ChangedRecipe   := CreateChangedRecipeVersion()
-  NumberOfChanges := ReturnNumOfChanges(OriginalRecipe, ChangedRecipe)
-  WhatWasChanged  := ReturnWhatWasChanged(OriginalRecipe, ChangedRecipe)
   
-  ;If (DEBUG = 1)
-  {
-    cti := BuildOriginalString(EditRecipeProductTag)
-    MsgBox, Ori:`n%cti%`nCha:`n%ChangedRecipe%`n`nThere have been %NumberOfChanges% changes.`n`nAnd that was changed: %WhatWasChanged%
-  }
+  If (OriginalRecipe == ChangedRecipe)
+    Msgbox, Nothing has changed.
+  Else
+    MsgBox, Changes:`n%OriginalRecipe%`n%ChangedRecipe%
+    
+  
 Return
 
 EditRecipeTab:

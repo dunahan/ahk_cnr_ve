@@ -15,9 +15,9 @@
 ;   ERROR403: from ReturnXPFromRecipe(ProductToLookFor)       =>  no matching product, so nothing was found?!
 ;   ERROR404: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  nothing was found, error from the beginning
 ;   ERROR405: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  no matching product, so nothing was found?!
-;   ERROR406: from 
-;   ERROR407: from 
-;   ERROR408: from 
+;   ERROR500: from ReturnWhatWasChanged(original, changed)    =>  something went terribly wrong!
+;   ERROR501: from 
+;   ERROR502: from 
 ;   ERROR409: from 
 ;   
 ;   
@@ -31,7 +31,6 @@
 ;   =>  L evel  (L|6)                                         => the creation level required
 ;   =>  e X perience points (X|60|60)                         => how many XP the PC gets (XP | CNR-XP)
 ;   =>  A ttributes  (A|0|0|0|50|50|0)                        => which attributes are needed and at what percentage, MUST be in sum 100(%)!
-;
 ;================================================================================
 
 CountTokens(string, dem) {
@@ -131,8 +130,6 @@ GetSpellName(SpellConstant)
   
   return Result
 }
-;================================================================================
-
 ;================================================================================
 ; CreateArrayTempFile(FileToParse, FileForArray)
 ;================================================================================
@@ -1011,29 +1008,31 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
-;
-;  Referents to PrintActRecipeProduct
-;  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
-;  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
-;  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
-;  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
-;  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
-;  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-;  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
-;  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
-;  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-;  
-;sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
-;CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
-;               CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
-;               CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
-;               CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
-;               CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-;               CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
-;               CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
-;               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-;================================================================================
 
+/*
+  Referents to PrintActRecipeProduct
+  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
+  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
+  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
+  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
+  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+  
+sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
+CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
+               CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
+               CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
+               CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
+               CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+               CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
+               CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
+               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+*/
+
+;================================================================================
 ReturnScriptSnippetForRecipe(ProductToShow)
 {
   WB := GetWorkbenchName(ProductToShow)
@@ -1111,148 +1110,95 @@ CreateChangedRecipeVersion()
   {
     srt = % CA#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tma = %tma%|%srt%
     
     srt = % CB#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tma = %tma%|%srt%
     
     srt = % CC#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tma = %tma%|%srt%
     
     srt = % CD#%A_Index%
     If (srt != "") 
       If (srt != "0")
-        tmp = %tmp%|%srt%
+        tma = %tma%|%srt%
   }
   
   Loop, 5
   {
     srt = % BA#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tmb = %tmb%|%srt%
     
     srt = % BB#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tmb = %tmb%|%srt%
     
     srt = % BC#%A_Index%
     If (srt != "")
-      tmp = %tmp%|%srt%
+      tmb = %tmb%|%srt%
   }
   
-  StringLeft, dem, tmp, 1
+  If (SubStr(tma, 1, 1) == "|")
+    StringTrimLeft, tma, tma, 1
   
-  If (dem == "|")
-    StringTrimLeft, tmp, tmp, 1                                                  ; delete first |
-  tmp = %tmp%|                                                                   ; > PA=cnrMoldSmall|PB=1|BA=cnrMangledCopp|BB=0|BC=1|PA=cnrIngotCopp|PB=4|BA=cnrTestBiProd|BB=0|BC=1|PA=cnrTestComp|PB=1|
+  If (SubStr(tmb, 1, 1) == "|")
+    StringTrimLeft, tmb, tmb, 1
   
-  ; org: CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
-  ; tmp:                    SPELL_LIGHT|1|1|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
-  ; note: this is only a small help... must script a better solution (it assumes the spell is everytime at the first place)!
+  If (tmb != "")
+    tmp = %tma%|$%tmb%|
+  Else
+    tmp = %tma%|$
+  
+  If (SubStr(tmp, 1, 1) == "|")
+    StringTrimLeft, tmp, tmp, 1
+  
+  ;                    cnrMoldSmall|1|cnrIngotCopp|4|                $cnrMangledCopp|0|1|
+  ; CNR_RECIPE_SPELL|1|cnrMoldSmall|1|cnrIngotCopp|4|SPELL_CONFUSION|$cnrMangledCopp|0|1|
+  ; Spell found, at 31 next dem found at 41 from
+  ; cnrMoldSmall|1|cnrIngotCopp|4|                   SPELL_DAZE|1|1|$cnrMangledCopp|0|1|
+  ; That's 10 long and is SPELL_DAZE
+  ; cnrMoldSmall|1|cnrIngotCopp|4|CNR_RECIPE_SPELL|1|SPELL_DAZE|    $cnrMangledCopp|0|1|
+  
   IfInString, tmp, SPELL_
   {
-    SrSp := InStr(tmp, SPELL_)
-    StringGetPos, NuSp, tmp, |1|1
-    CoSp := SubStr(tmp, SrSp, NuSp) 
+    a := InStr(tmp, "SPELL_")
+    b := InStr(tmp, "|", , a + 1)
+    c := b - a
+    d := SubStr(tmp, a, c) 
     
-    If (SrSp == 1) AND (NuSp > 1)
-    {
-      ntmp := StrReplace(tmp, "|1|1", "", , 1)
-      ntmp := StrReplace(ntmp, CoSp, "CNR_RECIPE_SPELL|1|"CoSp, , 1)
-      
-      tmp := ntmp
-    }
+    ntmp := StrReplace(tmp, "|1|1", "", , 1)
+    ntmp := StrReplace(ntmp, d, "CNR_RECIPE_SPELL|1|"d, , 1)
+    ;MsgBox, Spell found, at %a% next dem found at %b% from`n%tmp%`nThat's %c% long and is %d%`n%ntmp%
+    
+    tmp := ntmp
   }
   
   srt = 
   tst = 
+  tma = 
+  tmb = 
   ntmp = 
-  SrtSpell = 
-  NumSpell = 
-  ConSpell = 
+  a = 
+  b = 
+  c = 
+  d = 
   
   return tmp
 }
 
 BuildOriginalString(ProductTag)
 {
-  result := TurnToArray( CompToArray(ProductTag) ) TurnToArray( BiProdToArray(ProductTag) )
+  tma := TurnToArray( CompToArray(ProductTag) )
+  tmb := TurnToArray( BiProdToArray(ProductTag) )
+  StringTrimRight, tma, tma, 1
   
-  return result
-}
-
-;================================================================================
-;  ReturnNumOfChanges(original, changed)
-;================================================================================
-ReturnNumOfChanges(original, changed)
-{
-  result := -99
+  result = %tma%|$%tmb%
   
-  If (changed = original)                                                        ; nothing changed, return 0
-    result := 0
-  
-  Else
-  {
-    If ( CountTokens(changed, "|") != CountTokens(original, "|") )               ; something was removed/added
-      result := CountTokens(changed, "|") - CountTokens(original, "|")           ; how many? shows + and - (summarizes!)
-    
-  }
-  
-  return result
-}
-
-
-;  Ori:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrBucketEmpty|1|1|cnrGlassVial|1|1|
-;  Cha:  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|cnrGlassVial|1|1|
-;  There have been -3 changes.
-;  And that was changed: 10|
-
-
-;================================================================================
-;  ReturnWhatWasChanged(original, changed)
-;================================================================================
-ReturnWhatWasChanged(original, changed)
-{
-  result := "ERROR"
-  tmp := original
-  nbr := ReturnNumOfChanges(original, changed)
-  
-  If (nbr == 0)
-    result := "Nothing."
-  
-  Else
-  {
-    chd := StrSplit(changed, "|")
-    org := StrSplit(original, "|")
-    
-    Loop, Parse, changed, |
-    {
-      tst := A_LoopField
-      chk := org [ A_Index ]
-      
-      If ( tst != "")
-      {
-        If (tst != chk)
-        {
-          StringReplace, tmp, tmp, %chk%, %tst%
-          ;chi = %A_Index%|%chi%
-          ;MsgBox, Diff found!`na) %tst%`nb) %chk%`nc) %chi%`nd) %tmp%
-        }
-      }
-    }
-    
-;    If (nbr < 0)
-;    {
-;      sum := CountTokens(tmp, "|")
-;      tma := StrSplit(tmp, "|")
-;      
-;      Loop, sum, 
-;    }
-    
-    result := tmp
-  }
+  tma = 
+  tmb = 
   
   return result
 }
@@ -1279,7 +1225,7 @@ GetConfig()
   }
   Else
   {
-    MsgBox, No config file existing, creating a new one with defaults.`nStart the %NAME% again.
+    MsgBox, No config file existing, creating a new one with defaults.`nStart %NAME% again.
     
     IniWrite, %VERSION%,                config.ini, Default, VERSION
     IniWrite, EN,                       config.ini, Default, LANG
@@ -1333,6 +1279,7 @@ GetLanguage()
   }
   Else
   {
+    {
     ; build up english language-file
     IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain
     IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
@@ -1358,7 +1305,9 @@ GetLanguage()
     IniWrite, Bi-Product,                             language.ini, EN, Tab2ComBiPEdBi
     IniWrite, Save,                                   language.ini, EN, Tab2ComBiPSave
     ; continues...
+    }
     
+    {
     ; add german lang [DE]
     IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain
     
@@ -1384,6 +1333,7 @@ GetLanguage()
     IniWrite, Spruch,                                 language.ini, DE, Tab2ComBiPEdiS
     IniWrite, Abfallprodukt,                          language.ini, DE, Tab2ComBiPEdBi
     IniWrite, Speichern,                              language.ini, DE, Tab2ComBiPSave
+    }
   }
 }
 
