@@ -535,9 +535,24 @@ Save:
   
   If (OriginalRecipe == ChangedRecipe)
     Msgbox, Nothing has changed.
-  Else
-    MsgBox, Changes:`n%OriginalRecipe%`n%ChangedRecipe%
+  
+  Else                                                                           
+  {                                                                              ; Changes:
+    ;If (DEBUG = 1)                                                              ; cnrMoldSmall|1|cnrIngotCopp|4|$cnrMangledCopp|0|1|
+      MsgBox, Changes:`n%OriginalRecipe%`n%ChangedRecipe%                        ; cnrMoldSmall|1|cnrIngotCopp|3|$cnrMangledCopp|0|1|
     
+    SomethingChanged := 1
+  }
+  
+  If (SomethingChanged == 1)
+  {
+    ;If (DEBUG = 1)
+      MsgBox, Saving now?
+    
+    save := BuildChangedScript(ChangedRecipe)
+    MsgBox, %save%
+    
+  }
   
 Return
 

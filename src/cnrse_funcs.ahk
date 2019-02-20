@@ -15,13 +15,14 @@
 ;   ERROR403: from ReturnXPFromRecipe(ProductToLookFor)       =>  no matching product, so nothing was found?!
 ;   ERROR404: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  nothing was found, error from the beginning
 ;   ERROR405: from ReturnAbilitysFromRecipe(ProductToLookFor) =>  no matching product, so nothing was found?!
-;   ERROR500: from ReturnWhatWasChanged(original, changed)    =>  something went terribly wrong!
+;   
+;   ERROR500: from CreateChangedRecipeVersion()               =>  couldn't create a array with the changed components
 ;   ERROR501: from 
-;   ERROR502: from 
-;   ERROR409: from 
 ;   
+;   ERROR600: from BuildOriginalString(ProductTag)            =>  couldn't create a array with the original components
+;   ERROR601: from 
 ;   
-;   As a reminder, the array-file holds of the following:
+;   As a reminder, the array-file holds the following informations:
 ;   =>  M enues  (M|sMenuLevel5Scrolls)                       => more than one possible
 ;   =>  N ame of the workbench (N|cnrScribeAverage)           => sometimes there isn't one existent (as for cnrWaterTub.nss)
 ;   =>  R ecipes  (R|sMenuLevel5Scrolls|See Invisibility|NW_IT_SPARSCR205|1) => as many recipes are provided in the recipe scripts
@@ -781,7 +782,7 @@ ReturnXPFromRecipe(ProductToLookFor)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "X"
-    If (WhatKindOf = "X")                                                        ; EP fuers Erstellen des Produkts
+    If (WhatKindOf = "X")                                                        ; XP for creating a product
     {
       WhatKindOf := RecipeArray[4]                                               ; look for tag
       RecipeCP := RecipeArray[2]
@@ -822,7 +823,7 @@ ReturnAbilitysFromRecipe(ProductToLookFor)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "A"
-    If (WhatKindOf = "A")                                                        ; Attribute festlegen  >A|0|50|50|0|0|0|ProductToLookFor
+    If (WhatKindOf = "A")                                                        ; set abilities  >A|0|50|50|0|0|0|ProductToLookFor
     {
       WhatKindOf := RecipeArray[8]                                               ; look for tag
       AbilityStr := RecipeArray[2]
@@ -1100,12 +1101,15 @@ ReturnPlaceBiProduct(string)
   
   return string
 }
+;================================================================================
 
 ;================================================================================
 ;  CreateChangedRecipeVersion()
 ;================================================================================
 CreateChangedRecipeVersion()
 {
+  tmp = ERROR500
+  
   Loop, 5                                                                        ; look for vars
   {
     srt = % CA#%A_Index%
@@ -1158,9 +1162,9 @@ CreateChangedRecipeVersion()
   ;                    cnrMoldSmall|1|cnrIngotCopp|4|                $cnrMangledCopp|0|1|
   ; CNR_RECIPE_SPELL|1|cnrMoldSmall|1|cnrIngotCopp|4|SPELL_CONFUSION|$cnrMangledCopp|0|1|
   ; Spell found, at 31 next dem found at 41 from
-  ; cnrMoldSmall|1|cnrIngotCopp|4|                   SPELL_DAZE|1|1|$cnrMangledCopp|0|1|
+  ; cnrMoldSmall|1|cnrIngotCopp|4|                   SPELL_DAZE|1|1| $cnrMangledCopp|0|1|
   ; That's 10 long and is SPELL_DAZE
-  ; cnrMoldSmall|1|cnrIngotCopp|4|CNR_RECIPE_SPELL|1|SPELL_DAZE|    $cnrMangledCopp|0|1|
+  ; cnrMoldSmall|1|cnrIngotCopp|4|CNR_RECIPE_SPELL|1|SPELL_DAZE|     $cnrMangledCopp|0|1|
   
   IfInString, tmp, SPELL_
   {
@@ -1188,9 +1192,15 @@ CreateChangedRecipeVersion()
   
   return tmp
 }
+;================================================================================
 
+;================================================================================
+;  BuildOriginalString(ProductTag)
+;================================================================================
 BuildOriginalString(ProductTag)
 {
+  result = ERROR600
+  
   tma := TurnToArray( CompToArray(ProductTag) )
   tmb := TurnToArray( BiProdToArray(ProductTag) )
   StringTrimRight, tma, tma, 1
@@ -1202,6 +1212,59 @@ BuildOriginalString(ProductTag)
   
   return result
 }
+;================================================================================
+
+;================================================================================
+;  BuildOriginalString(ProductTag) 
+;  
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrMoldSmall", 1);
+;  ", cnrIngotCopp);
+;  ", 3);
+;================================================================================
+BuildChangedScript(StringToSplit)
+{
+  result = ERROR700
+  
+  spa := StrSplit(StringToSplit, "$")                                            ; split up the arrays
+  com := spa[1]
+  bip := spa[2]
+  
+  Loop, Parse, com, |
+  {
+    If (A_Loopfield != "")
+    {
+      Needle := Chr(10)
+      MsgBox, % InStr(tmp, Needle)
+      
+      If (InStr(%tma%, "`n") > 0) ;NotInString, tmp, `n                                                     ; line finished
+      {
+        IfInString, tma, sKeyToRecipe                                            ; first part of nss script func finished
+          tma := % tma "$, " A_Loopfield ");`n"                                  ; close it
+        Else
+          tma := % "CnrRecipeAddComponent(sKeyToRecipe, $" A_Loopfield           ; add tag/resref to beginning func of nss-script
+      }
+      Else
+        MsgBox, Line finished
+      
+      IfInString, tma, $
+        tma := StrReplace(tma, "$", Chr(34), ALL)
+    }
+  }
+  
+;  Loop, Parse, bip, |
+;  {
+;    If (A_Loopfield != "")
+;    {
+;      MsgBox, % A_Loopfield
+;    }
+;  }
+;  
+  ;"CnrRecipeAddComponent(sKeyToRecipe, "
+  ;"CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "
+  
+  return tma
+}
+;================================================================================
 
 GetConfig()
 {
