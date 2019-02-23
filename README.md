@@ -7,4 +7,4 @@ Now at version 0.802 the most data from the recipe is viewed. Changes to those s
 
 With version 0.803 all the data can be viewed and changes can be recognized. 
 
-At version 0.804 I did a rewrite of the save check. It should be better, but yet not super and final. Okay, did another change to the save func, it was to complicating (why do I think in such complicated ways?). Now, it isn't finshed, so it throws many debug messages. That will be reduced in time ;-)
+At version 0.804 I did a rewrite of the save check. It should be better, but yet not super and final. Okay, did another change to the save func, it was to complicating (why do I think in such complicated ways?). For now, it isn't finshed yet, but it actualizes the script snippet at the recipe tab for the components and biproducts.
