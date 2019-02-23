@@ -1034,7 +1034,7 @@ CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
 */
 
 ;================================================================================
-ReturnScriptSnippetForRecipe(ProductToShow)
+ReturnScriptSnippetForRecipe(ProductToShow, SaveChanges = "")
 {
   WB := GetWorkbenchName(ProductToShow)
   PD := GetObjectName(ProductToShow)
@@ -1043,13 +1043,21 @@ ReturnScriptSnippetForRecipe(ProductToShow)
   
   Result = sKeyToRecipe = CnrRecipeCreateRecipe(%WB%, "%PD%", "%TG%", %NB%);`n
   
-  PX := ReturnComponentsFromRecipe(ProductToShow)
-  If (PX != "")
-    Result = %Result%%PX%
+  If (SaveChanges == "")
+  {
+    PX := ReturnComponentsFromRecipe(ProductToShow)
+    If (PX != "")
+      Result = %Result%%PX%
+    
+    BX := ReturnBiproductsFromRecipe(ProductToShow)
+    If (BX != "")
+      Result = %Result%%BX%
+  }
   
-  BX := ReturnBiproductsFromRecipe(ProductToShow)
-  If (BX != "")
-    Result = %Result%%BX%
+  Else
+  {
+    Result := % Result SaveChanges "`n"
+  }
   
   LV := ReturnLevelFromRecipe(ProductToShow)
   If (LV != "")
@@ -1215,13 +1223,20 @@ BuildOriginalString(ProductTag)
 ;================================================================================
 
 ;================================================================================
-;  BuildOriginalString(ProductTag) 
-;  
+;  RecipeArrayToScriptSnippet(ProductTag) 
+;  CnrRecipeAddComponent(string sKeyToRecipe, string sComponentTag, int nComponentQty, int nRetainOnFailQty=0);
+;  Spells:
+;  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_RAY_OF_FROST);
+;  Normal:
 ;  CnrRecipeAddComponent(sKeyToRecipe, "cnrMoldSmall", 1);
-;  ", cnrIngotCopp);
-;  ", 3);
+;  Retaining:
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrMoldSmall", 1, 1);
+;  
+;  Changes:
+;  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|  $cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+;  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|1|$cnrBucketEmpty|1|1|cnrGlassVial|1|1|
 ;================================================================================
-BuildChangedScript(StringToSplit)
+RecipeArrayToScriptSnippet(StringToSplit)
 {
   result = ERROR700
   
@@ -1231,38 +1246,53 @@ BuildChangedScript(StringToSplit)
   
   Loop, Parse, com, |
   {
-    If (A_Loopfield != "")
+    If (A_LoopField != "")                                                       ; don't use it if its empty
     {
-      Needle := Chr(10)
-      MsgBox, % InStr(tmp, Needle)
-      
-      If (InStr(%tma%, "`n") > 0) ;NotInString, tmp, `n                                                     ; line finished
+      If A_LoopField Is Not Digit
       {
-        IfInString, tma, sKeyToRecipe                                            ; first part of nss script func finished
-          tma := % tma "$, " A_Loopfield ");`n"                                  ; close it
+        If (SubStr(A_LoopField, 1 , 6) == "SPELL_")
+          tmc := % tmc ", " A_LoopField
+          
         Else
-          tma := % "CnrRecipeAddComponent(sKeyToRecipe, $" A_Loopfield           ; add tag/resref to beginning func of nss-script
+          tmc := % tmc ");`nCnrRecipeAddComponent(sKeyToRecipe, $" A_LoopField "$"
       }
-      Else
-        MsgBox, Line finished
       
-      IfInString, tma, $
-        tma := StrReplace(tma, "$", Chr(34), ALL)
+      If A_LoopField Is Digit
+        tmc := % tmc ", " A_LoopField
     }
   }
   
-;  Loop, Parse, bip, |
-;  {
-;    If (A_Loopfield != "")
-;    {
-;      MsgBox, % A_Loopfield
-;    }
-;  }
-;  
-  ;"CnrRecipeAddComponent(sKeyToRecipe, "
-  ;"CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "
+  Loop, Parse, bip, |
+  {
+    If (A_LoopField != "")                                                       ; don't use it if its empty
+    {
+      If A_LoopField Is Not Digit
+        tmb := % tmb ");`CnrRecipeSetRecipeBiproduct(sKeyToRecipe, $" A_LoopField "$"
+      
+      If A_LoopField Is Digit
+        tmb := % tmb ", " A_LoopField
+    }
+  }
   
-  return tma
+  StringTrimLeft, tmc, tmc, 3
+  tmc := % tmc ");"
+  
+  IfInString, tmc, CNR_RECIPE_SPELL
+    StringReplace, tmc, tmc, $CNR_RECIPE_SPELL$, CNR_RECIPE_SPELL
+  
+  StringTrimLeft, tmb, tmb, 2
+  tmb := % tmb ");"
+  
+  result := tmc "`n" tmb
+  result := StrReplace(result, "$", Chr(34))
+  
+  tmc = 
+  tmb = 
+  com = 
+  bip = 
+  spa = 
+  
+  return result
 }
 ;================================================================================
 

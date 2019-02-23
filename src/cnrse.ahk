@@ -527,6 +527,7 @@ RecipesWithinWorkbench:                                                         
 Return                                                                           ; <<<===  RecipesWithinWorkbench ends
 
 Save:
+{
   SomethingChanged := 0                                                          ; assume at first, nothing was changed
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
@@ -538,7 +539,7 @@ Save:
   
   Else                                                                           
   {                                                                              ; Changes:
-    ;If (DEBUG = 1)                                                              ; cnrMoldSmall|1|cnrIngotCopp|4|$cnrMangledCopp|0|1|
+    If (DEBUG = 1)                                                               ; cnrMoldSmall|1|cnrIngotCopp|4|$cnrMangledCopp|0|1|
       MsgBox, Changes:`n%OriginalRecipe%`n%ChangedRecipe%                        ; cnrMoldSmall|1|cnrIngotCopp|3|$cnrMangledCopp|0|1|
     
     SomethingChanged := 1
@@ -546,14 +547,22 @@ Save:
   
   If (SomethingChanged == 1)
   {
-    ;If (DEBUG = 1)
-      MsgBox, Saving now?
+    save := RecipeArrayToScriptSnippet(ChangedRecipe)
+    script := ReturnScriptSnippetForRecipe(EditRecipeProductTag, save)
     
-    save := BuildChangedScript(ChangedRecipe)
-    MsgBox, %save%
+    If (DEBUG = 1)
+      MsgBox, Save function:`n%save%
+    
+    ;GuiControl,, EditRecipeProduct, %PrintActRecipeProduct%                      ; update necessary fields
+    ;GuiControl,, EditRecipeProductTag, %PrintActRecipeProductTag%
+    ;GuiControl,, EditRecipeProductNbr, %PrintActRecipeProductNbr%
+    GuiControl,, EditRecipeScript, %script%
+    
+    ;GuiControl, ChooseString, EditWorkbenchMenu, %NewRecipeWorkbench%
     
   }
   
+}
 Return
 
 EditRecipeTab:
