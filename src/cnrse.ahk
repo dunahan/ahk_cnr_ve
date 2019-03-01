@@ -2,11 +2,11 @@
 ;  CNR - Recipe-Script Editor
 ;  Author: Tobias Wirth (dunahan@schwerterkueste.de)
 ;================================================================================
-; v0.8.0.2  static GUI for components and misc, reloads components
 ; v0.8.0.3  moving some code to funcs-file for readability, more viewing/saving for recipes, translating-files
-; v0.8.0.4  ???
+; v0.8.0.4  updating save func, so it is possible to actualize the script snippet at recipe tab
+; v0.8.0.5  save func now builds up full script snippet, added the ability per right mouse to edit the nss directly
 ;================================================================================
-VERSION := "0.8.0.4"
+VERSION := "0.8.0.5"
 ;================================================================================
 
 #NoTrayIcon
@@ -47,6 +47,9 @@ Main:                                                                           
   Menu, MyMenu, Add, %MenuShowAbout%, ShowAbout
   Gui, 1: Menu, MyMenu
   
+  Gui, 1: Add, Button, x6  y4 w75           gNewRecipe           , %NewRecipeButton%
+ ;Gui, 1: Add, DDL,    x81 y5     AltSubmit gSaveVariant vSaveVar, %SaveVariantText%
+  
   CountedRecipes := 0
   
   Loop, Files, %SCRIPT_DIR%cnr*.nss                                              ; go through all cnr*.nss scripts in folder. this is for testing yet. later it should extract it from mod
@@ -56,8 +59,8 @@ Main:                                                                           
       StringTrimRight, VarName, A_LoopFileName, 4
       Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY% w120 h20 v%VarName% cBlue gRecipeShow, %A_LoopFileName%
       
-      IfNotInString, VarName, Chr(34)                                            ; add tooltip only when its possible?! why it's not working?
-        %VarName%_TT = %OnToolTipMain%
+      IfNotInString, VarName, Chr(34)                                            ; add tooltip only if its possible
+        %VarName%_TT = %OnToolTipMain1%`n%OnToolTipMain2%
       
       CountedRecipes := CountedRecipes + 1
       RecipeSpacerY := RecipeSpacerY + RecipeSpacerYAdd
@@ -114,11 +117,57 @@ Main:                                                                           
 }
 Return                                                                           ; <<<===  Main ending
 
+SaveVariant:
+{
+  GetLanguage()
+ ;Gui, 1: Submit, NoHide
+  SaveVar := 1
+  
+  IniRead, SVT, language.ini, %LANG%, SaveVariantText, Save|Copy|User
+  StringReplace, SVT, SVT, ||, |, ALL
+  
+  SVTA := StrSplit(SVT, "|")
+  SVTS := SVTA[ SaveVar ]
+  
+  SaveC := SVTS
+  SaveM := SVTS
+  
+  GuiControl, , SaveC, %SVTS%
+  GuiControl, , SaveM, %SVTS%
+  
+  ;If (DEBUG = 1)
+    MsgBox, Choosen Item: %SaveVar%`nArray to Parse: %SVT%`nString found: %SVTS%`nCompBut: %SaveC%`nMiscBut: %SaveM%
+  
+  SVT = 
+  SVTA = 
+  SVTS = 
+}
+Return
+
+~RButton::                                                                       ; <<<===  use of right Mouse button
+{
+  MouseGetPos, , , MainWinID
+  If (MainWinID == MainWin)
+  {
+    MouseGetPos, , , , Ctrl
+    ControlGetText, RecipeToEdit, %Ctrl%, %NAME%
+    
+    If (DEBUG = 1)
+      MsgBox, % "Control " Ctrl "`nRecipe " RecipeToEdit
+    
+    If (FAV != "")
+      Run %FAV% %SCRIPT_DIR%%RecipeToEdit%
+    Else
+      Run Notepad.exe %SCRIPT_DIR%%RecipeToEdit%
+  }
+}
+Return                                                                           ; <<<===  use of right Mouse button
+
 RecipeShow:                                                                      ; <<<===  RecipeShow begins
 {
   GetLanguage()
   
-  If A_GuiEvent = DoubleClick                                                    ; if user double clicks a script, editing begins
+  If A_GuiControlEvent = DoubleClick                                             ; if user double clicks a script, editing begins
   {
     If (EditWin != "")                                                           ; bäh, you are editing one recipe already. don't open another one!
     {
@@ -154,8 +203,8 @@ RecipeShow:                                                                     
     ArrayTmpPath = %TEMP_DIR%array.tmp                                           ; this would be the array, where the translated script would be saved to
     CreateArrayTempFile(RecipeScriptTemp, ArrayTmpPath)                          ; create the file for saving the arrays to it, less memory using
     
-    PrintWorkbenchName := ReturnWorkbenchFromRecipe(ArrayTmpPath)
-    PrintWorkbenchMenu := ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
+    PrintWorkbenchName          := ReturnWorkbenchFromRecipe(ArrayTmpPath)
+    PrintWorkbenchMenu          := ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
     PrintRecipesWithinWorkbench := ReturnRecipeListFromRecipe(ArrayTmpPath)
     
     If (PrintWorkbenchName == "")
@@ -166,6 +215,7 @@ RecipeShow:                                                                     
     
     Gui, 2: Add, Text, x6   y8 w250 h21, %PrintWorkbenchName%                    ; build up GUI 2
     Gui, 2: Add, DDL,  x235 y5 w310 Sort vActRecipeProduct Choose1 gRecipesWithinWorkbench, %PrintRecipesWithinWorkbench%
+      ActRecipeProduct_TT = Changed data will be erased if you change the recipe without using the <Save button>
     
     GoSub, BuildUpCompAndMisc
     
@@ -191,16 +241,16 @@ RecipeShow:                                                                     
 }
 Return                                                                           ; <<<===  RecipeShow ending
 
-BuildUpCompAndMisc:
+BuildUpCompAndMisc:                                                              ; <<<===  Build up contents begins
 {
   GetLanguage()
   
   Gui, 2: Submit, NoHide
   
-  PrintActRecipeProduct := TrimToGetProduct(ActRecipeProduct)
-  PrintActRecipeProductTag := TrimToGetTag(ActRecipeProduct)
+  PrintActRecipeProduct       := TrimToGetProduct(ActRecipeProduct)
+  PrintActRecipeProductTag    := TrimToGetTag(ActRecipeProduct)
   PrintActRecipeWorkbenchName := GetWorkbenchName(PrintActRecipeProductTag)
-  PrintActRecipeProductNbr := GetCreatedProductNbr(PrintActRecipeProductTag)
+  PrintActRecipeProductNbr    := GetCreatedProductNbr(PrintActRecipeProductTag)
   
   Me := 0
   If (PrintWorkbenchMenu = "None")
@@ -214,20 +264,20 @@ BuildUpCompAndMisc:
     Gui, 2: Tab, %Tab2RecipePure%, , Exact
     {
       Gui, 2: Add, Text, x15  y65  w100 h21                                   , %Tab2RecipWorkb%:
-      Gui, 2: Add, Edit, x105 y61  w250      vEditWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
+      Gui, 2: Add, Edit, x105 y61  w250      vShowWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
       Gui, 2: Add, Text, x15  y90  w100 h21                                   , %Tab2RecipWbMen%:
-      Gui, 2: Add, DDL,  x105 y86  w250      vEditWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
+      Gui, 2: Add, DDL,  x105 y86  w250      vShowWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
       Gui, 2: Add, Text, x15  y115 w100 h21                                   , %Tab2RecipProdN%:
-      Gui, 2: Add, Edit, x105 y111 w250      vEditRecipeProduct       ReadOnly, %PrintActRecipeProduct%
+      Gui, 2: Add, Edit, x105 y111 w250      vShowRecipeProduct       ReadOnly, %PrintActRecipeProduct%
       Gui, 2: Add, Text, x15  y140 w100 h21                                   , %Tab2RecipProdT%:
-      Gui, 2: Add, Edit, x105 y136 w250      vEditRecipeProductTag    ReadOnly, %PrintActRecipeProductTag%
+      Gui, 2: Add, Edit, x105 y136 w250      vShowRecipeProductTag    ReadOnly, %PrintActRecipeProductTag%
       Gui, 2: Add, Text, x15  y165 w100 h21                                   , %Tab2RecipPrNbr%:
-      Gui, 2: Add, Edit, x105 y161 w250      vEditRecipeProductNbr    ReadOnly, %PrintActRecipeProductNbr%
+      Gui, 2: Add, Edit, x105 y161 w250      vShowRecipeProductNbr    ReadOnly, %PrintActRecipeProductNbr%
       
       Gui, 2: Font, , Courier new
       SCRIPTVAR := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
       
-      Gui, 2: Add, Edit, x15  y190 w535 h140 vEditRecipeScript -Wrap ReadOnly, %SCRIPTVAR%
+      Gui, 2: Add, Edit, x15  y190 w535 h140 vShowRecipeScript -Wrap ReadOnly, %SCRIPTVAR%
       
       Gui, 2: Font, , MS Sans SerIf
     }
@@ -361,13 +411,51 @@ BuildUpCompAndMisc:
       
       xd := xd + 60
       yi := yi - 26
-      Gui, 2: Add, Button, x%xd% y%yi% gSave Default, %Tab2ComBiPSave%
-    }  
+      Gui, 2: Add, Button, x%xd% y%yi% Default gSave vSaveC , Save
+    }
     
     Gui, 2: Tab, %Tab2MiscEditor%, , Exact
     {
-      Gui, 2: Add, Text, x15 y65, Test
-      Gui, 2: Add, Edit, x55 y61, Miscellaneous
+      Gui, 2: Add, Text, x15  y65  w100 h21                                   , %Tab2RecipWorkb%:
+      Gui, 2: Add, Edit, x105 y61  w250      vEditWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
+      Gui, 2: Add, Text, x15  y90  w100 h21                                   , %Tab2RecipWbMen%:
+      Gui, 2: Add, DDL,  x105 y86  w250      vEditWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
+      Gui, 2: Add, Text, x15  y115 w100 h21                                   , %Tab2RecipProdN%:
+      Gui, 2: Add, Edit, x105 y111 w250      vEditRecipeProduct               , %PrintActRecipeProduct%
+      Gui, 2: Add, Text, x15  y140 w100 h21                                   , %Tab2RecipProdT%:
+      Gui, 2: Add, Edit, x105 y136 w124      vEditRecipeProductTag            , %PrintActRecipeProductTag%
+      Gui, 2: Add, Text, x233 y140 w100 h21                                   , %Tab2RecipPrNbr%:
+      Gui, 2: Add, Edit, x316 y136 w40       vEditRecipeProductNbr            , %PrintActRecipeProductNbr%
+      
+      Gui, 2: Add, Text, x15  y165 w100 h21                                   , %Tab2MiscLevel%:
+      Gui, 2: Add, Edit, x105 y161 w40       vEditRecipeLevel                 , % ReturnLevelFromRecipe(PrintActRecipeProductTag)
+      
+      XPArray := StrSplit(ReturnXPFromRecipe(PrintActRecipeProductTag), "|")
+      Gui, 2: Add, Text, x155 y165 w100 h21                                   , %Tab2MiscXPaCXP%:
+      Gui, 2: Add, Edit, x273 y161 w40       vEditRecipeXP                    , % XPArray[ 1 ]
+      Gui, 2: Add, Edit, x316 y161 w40       vEditRecipeCnrXP                 , % XPArray[ 2 ]
+      
+      AbsArray := StrSplit(ReturnAbilitysFromRecipe(PrintActRecipeProductTag), "|")  ; create the Ability Array
+      Gui, 2: Add, Text, x15  y190 w100 h21                                   , %Tab2MiscAbilit%:
+      Gui, 2: Add, Edit, x105 y186 w40       vEditRecipeAbilityStr   gCheckAbs, % AbsArray[ 1 ]
+      Gui, 2: Add, Edit, x147 y186 w40       vEditRecipeAbilityDex   gCheckAbs, % AbsArray[ 2 ]
+      Gui, 2: Add, Edit, x189 y186 w40       vEditRecipeAbilityCon   gCheckAbs, % AbsArray[ 3 ]
+      Gui, 2: Add, Edit, x231 y186 w40       vEditRecipeAbilityInt   gCheckAbs, % AbsArray[ 4 ]
+      Gui, 2: Add, Edit, x273 y186 w40       vEditRecipeAbilityWis   gCheckAbs, % AbsArray[ 5 ]
+      Gui, 2: Add, Edit, x316 y186 w40       vEditRecipeAbilityCha   gCheckAbs, % AbsArray[ 6 ]
+      Gui, 2: Add, Edit, x359 y186 w40       vShowRecipeAbilitySum    ReadOnly, 
+      
+      EditRecipeAbilityStr_TT = %Tab2MiscAbStr%
+      EditRecipeAbilityDex_TT = %Tab2MiscAbDex%
+      EditRecipeAbilityCon_TT = %Tab2MiscAbCon%
+      EditRecipeAbilityInt_TT = %Tab2MiscAbInt%
+      EditRecipeAbilityWis_TT = %Tab2MiscAbWis%
+      EditRecipeAbilityCha_TT = %Tab2MiscAbCha%
+      ShowRecipeAbilitySum_TT = %Tab2MiscAbSum%
+      
+      Gui, 2: Add, Edit, x15  y215 w450 h110 vEditRecipeComments -Wrap        , %Tab2MiscCommen%
+      
+      Gui, 2: Add, Button, x%xd% y%yi%       vSaveM gSave, Save
     }
   }
   
@@ -392,6 +480,8 @@ BuildUpCompAndMisc:
   NbrCB = 
   NbrBa = 
   NbrBb = 
+  XPArray = 
+  AbsArray = 
   
   xa = 
   ya = 
@@ -408,7 +498,16 @@ BuildUpCompAndMisc:
   yh = 
   yi = 
 }
-Return
+Return                                                                           ; <<<===  Build up contents ends
+
+CheckAbs:                                                                        ; <<<===  Check Abilities begins
+{
+  Gui, 2: Submit, NoHide
+  Sum := EditRecipeAbilityStr + EditRecipeAbilityDex + EditRecipeAbilityCon + EditRecipeAbilityInt + EditRecipeAbilityWis + EditRecipeAbilityCha
+  
+  GuiControl, , ShowRecipeAbilitySum, %Sum%
+}
+Return                                                                           ; <<<===  Check Abilities ends
 
 RecipesWithinWorkbench:                                                          ; <<<===  RecipesWithinWorkbench begins
 {
@@ -416,11 +515,11 @@ RecipesWithinWorkbench:                                                         
   
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
-  PrintActRecipeProduct := TrimToGetProduct(ActRecipeProduct)
-  PrintActRecipeProductTag := TrimToGetTag(ActRecipeProduct)
-  PrintActRecipeProductNbr := GetCreatedProductNbr(PrintActRecipeProductTag)
-  NewRecipeWorkbench := GetWorkbenchName(PrintActRecipeProductTag)
-  SCRIPTVAR := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
+  PrintActRecipeProduct     := TrimToGetProduct(ActRecipeProduct)
+  PrintActRecipeProductTag  := TrimToGetTag(ActRecipeProduct)
+  PrintActRecipeProductNbr  := GetCreatedProductNbr(PrintActRecipeProductTag)
+  NewRecipeWorkbench        := GetWorkbenchName(PrintActRecipeProductTag)
+  SCRIPTVAR                 := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
   
   ComponentsToShow := CompToArray(PrintActRecipeProductTag)
   BiProductsToShow := BiProdToArray(PrintActRecipeProductTag)
@@ -432,10 +531,31 @@ RecipesWithinWorkbench:                                                         
   If (DEBUG = 1)
     MsgBox, RecipesWithinWorkbench: %NewRecipeWorkbench%
   
-  GuiControl,, EditRecipeProduct, %PrintActRecipeProduct%                        ; update necessary fields
-  GuiControl,, EditRecipeProductTag, %PrintActRecipeProductTag%
-  GuiControl,, EditRecipeProductNbr, %PrintActRecipeProductNbr%
-  GuiControl,, EditRecipeScript, %SCRIPTVAR%
+  GuiControl,, ShowRecipeProduct,     %PrintActRecipeProduct%                    ; update necessary fields
+  GuiControl,, ShowRecipeProductTag,  %PrintActRecipeProductTag%
+  GuiControl,, ShowRecipeProductNbr,  %PrintActRecipeProductNbr%
+  GuiControl,, ShowRecipeScript,      %SCRIPTVAR%
+  
+  GuiControl, ChooseString, ShowWorkbenchMenu, %NewRecipeWorkbench%
+  
+  GuiControl,, EditRecipeProduct,     %PrintActRecipeProduct%                    ; update necessary fields
+  GuiControl,, EditRecipeProductTag,  %PrintActRecipeProductTag%
+  GuiControl,, EditRecipeProductNbr,  %PrintActRecipeProductNbr%
+  GuiControl,, EditRecipeScript,      %SCRIPTVAR%
+  
+  GuiControl,, EditRecipeLevel,       % ReturnLevelFromRecipe(PrintActRecipeProductTag)
+  
+  XPArray := StrSplit(ReturnXPFromRecipe(PrintActRecipeProductTag), "|")
+  GuiControl,, EditRecipeXP,          % XPArray[ 1 ]
+  GuiControl,, EditRecipeCnrXP,       % XPArray[ 2 ]
+  
+  AbsArray := StrSplit(ReturnAbilitysFromRecipe(PrintActRecipeProductTag), "|")  ; create the Ability Array
+  GuiControl,, EditRecipeAbilityStr,  % AbsArray[ 1 ]
+  GuiControl,, EditRecipeAbilityDex,  % AbsArray[ 2 ]
+  GuiControl,, EditRecipeAbilityCon,  % AbsArray[ 3 ]
+  GuiControl,, EditRecipeAbilityInt,  % AbsArray[ 4 ]
+  GuiControl,, EditRecipeAbilityWis,  % AbsArray[ 5 ]
+  GuiControl,, EditRecipeAbilityCha,  % AbsArray[ 6 ]
   
   GuiControl, ChooseString, EditWorkbenchMenu, %NewRecipeWorkbench%
   
@@ -509,6 +629,9 @@ RecipesWithinWorkbench:                                                         
   NewRecipeWorkbench = 
   SCRIPTVAR = 
   
+  XPArray = 
+  AbsArray = 
+  
   ComponentsToShow = 
   ComponentArray = 
   CompNbr = 
@@ -526,47 +649,69 @@ RecipesWithinWorkbench:                                                         
 }
 Return                                                                           ; <<<===  RecipesWithinWorkbench ends
 
-Save:
+Save:                                                                            ; <<<===  Save check begins
 {
-  SomethingChanged := 0                                                          ; assume at first, nothing was changed
+  SaveVar := 1                                                                   
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
-  OriginalRecipe  := BuildOriginalString(EditRecipeProductTag)
+  OriginalRecipe  := BuildOriginalRecipeVersion(ShowRecipeProductTag)
+  OriginalMiscs   := BuildOriginalMiscVersion(ShowRecipeProductTag)
   ChangedRecipe   := CreateChangedRecipeVersion()
+  ChangedMiscs    := CreateChangedMiscVersion()
   
-  If (OriginalRecipe == ChangedRecipe)
-    Msgbox, Nothing has changed.
+  Original := OriginalRecipe "`n" OriginalMiscs
+  Changed  := ChangedRecipe "`n" ChangedMiscs
   
-  Else                                                                           
-  {                                                                              ; Changes:
-    If (DEBUG = 1)                                                               ; cnrMoldSmall|1|cnrIngotCopp|4|$cnrMangledCopp|0|1|
-      MsgBox, Changes:`n%OriginalRecipe%`n%ChangedRecipe%                        ; cnrMoldSmall|1|cnrIngotCopp|3|$cnrMangledCopp|0|1|
+  If (Original == Changed)
+    Msgbox, %Tab2NoChanges%
+  
+  Else
+  {
+    If (DEBUG = 1)
+      MsgBox, % "Changes:`n" Original "`n" Changed
     
     SomethingChanged := 1
   }
   
   If (SomethingChanged == 1)
   {
-    save := RecipeArrayToScriptSnippet(ChangedRecipe)
-    script := ReturnScriptSnippetForRecipe(EditRecipeProductTag, save)
+    SCRIPTVAR := ChangedRecipeToScriptSnippet(Changed)
+    SCRIPTVAR := % "sKeyToRecipe = CnrRecipeCreateRecipe(" GetWorkbenchFromProduct(ShowRecipeProductTag) ", " SCRIPTVAR
     
     If (DEBUG = 1)
-      MsgBox, Save function:`n%save%
+      MsgBox, 1) Save function:`n%SCRIPTVAR%
     
-    ;GuiControl,, EditRecipeProduct, %PrintActRecipeProduct%                      ; update necessary fields
-    ;GuiControl,, EditRecipeProductTag, %PrintActRecipeProductTag%
-    ;GuiControl,, EditRecipeProductNbr, %PrintActRecipeProductNbr%
-    GuiControl,, EditRecipeScript, %script%
+    If (SaveVar == 1)                                                            ; later, that should save it to the original
+    {
+      GuiControl, , ShowRecipeProduct,    % ChangedRecipeProductName(ChangedMiscs) ; for now it only updates the necessary fields
+      GuiControl, , ShowRecipeProductTag, % ChangedRecipeTagResRef(ChangedMiscs)
+      GuiControl, , ShowRecipeProductNbr, % ChangedRecipeCreate(ChangedMiscs)
+      GuiControl, , ShowRecipeScript,     %SCRIPTVAR%
+      
+      ;GuiControl, ChooseString, ShowWorkbenchMenu, %NewRecipeWorkbench%
+    }
     
-    ;GuiControl, ChooseString, EditWorkbenchMenu, %NewRecipeWorkbench%
-    
+    Else
+      MsgBox, %OnNothingToShow%
   }
   
+  SaveVar = 
+  OriginalRecipe = 
+  OriginalMiscs = 
+  ChangedRecipe = 
+  ChangedMiscs = 
+  Original = 
+  Changed = 
+  SCRIPTVAR = 
 }
-Return
+Return                                                                           ; <<<===  Save check ends
 
 EditRecipeTab:
   ;MsgBox, %OnNothingToShow%
+Return
+
+NewRecipe:
+  MsgBox, %OnNothingToShow%
 Return
 
 Options:

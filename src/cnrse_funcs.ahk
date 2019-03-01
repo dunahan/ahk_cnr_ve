@@ -22,6 +22,14 @@
 ;   ERROR600: from BuildOriginalString(ProductTag)            =>  couldn't create a array with the original components
 ;   ERROR601: from 
 ;   
+;   ERROR700: from RecipeArrayToScriptSnippet(StringToSplit)  =>  couldn't create the script snippet
+;   
+;   ERROR800
+;   
+;   ERROR900
+;   
+;   ERROR000: from GetWorkbenchFromProduct(ProductToSearchFor) => couldn't find workbench from product/recipe!
+;   
 ;   As a reminder, the array-file holds the following informations:
 ;   =>  M enues  (M|sMenuLevel5Scrolls)                       => more than one possible
 ;   =>  N ame of the workbench (N|cnrScribeAverage)           => sometimes there isn't one existent (as for cnrWaterTub.nss)
@@ -1009,32 +1017,29 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
-
-/*
-  Referents to PrintActRecipeProduct
-  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
-  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
-  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
-  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
-  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-  
-sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
-CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
-               CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
-               CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
-               CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
-               CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
-               CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
-*/
-
+;  Referents to PrintActRecipeProduct
+;  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "cnrGemDust003", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_VAMPIRIC_TOUCH);
+;  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+;  CnrRecipeSetRecipeLevel(sKeyToRecipe, 6);
+;  CnrRecipeSetRecipeXP(sKeyToRecipe, 60, 60);
+;  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+;  
+;  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel1Scrolls, "Ray of Frost", "NW_IT_SPARSCR002", 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, CNR_RECIPE_SPELL,1,SPELL_RAY_OF_FROST);
+;  CnrRecipeAddComponent(sKeyToRecipe, cnrGemDust001, 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, cnrInkLConj, 1);
+;  CnrRecipeAddComponent(sKeyToRecipe, cnrScrollBlank, 1);
+;  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
+;  CnrRecipeSetRecipeLevel(sKeyToRecipe, 1);
+;  CnrRecipeSetRecipeXP(sKeyToRecipe, 10, 10);
+;  CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 0, 0, 50, 50, 0);
+;
 ;================================================================================
-ReturnScriptSnippetForRecipe(ProductToShow, SaveChanges = "")
+ReturnScriptSnippetForRecipe(ProductToShow)
 {
   WB := GetWorkbenchName(ProductToShow)
   PD := GetObjectName(ProductToShow)
@@ -1043,21 +1048,13 @@ ReturnScriptSnippetForRecipe(ProductToShow, SaveChanges = "")
   
   Result = sKeyToRecipe = CnrRecipeCreateRecipe(%WB%, "%PD%", "%TG%", %NB%);`n
   
-  If (SaveChanges == "")
-  {
-    PX := ReturnComponentsFromRecipe(ProductToShow)
-    If (PX != "")
-      Result = %Result%%PX%
-    
-    BX := ReturnBiproductsFromRecipe(ProductToShow)
-    If (BX != "")
-      Result = %Result%%BX%
-  }
+  PX := ReturnComponentsFromRecipe(ProductToShow)
+  If (PX != "")
+    Result = %Result%%PX%
   
-  Else
-  {
-    Result := % Result SaveChanges "`n"
-  }
+  BX := ReturnBiproductsFromRecipe(ProductToShow)
+  If (BX != "")
+    Result = %Result%%BX%
   
   LV := ReturnLevelFromRecipe(ProductToShow)
   If (LV != "")
@@ -1116,7 +1113,7 @@ ReturnPlaceBiProduct(string)
 ;================================================================================
 CreateChangedRecipeVersion()
 {
-  tmp = ERROR500
+  result = ERROR500
   
   Loop, 5                                                                        ; look for vars
   {
@@ -1160,12 +1157,12 @@ CreateChangedRecipeVersion()
     StringTrimLeft, tmb, tmb, 1
   
   If (tmb != "")
-    tmp = %tma%|$%tmb%|
+    result = %tma%|$%tmb%|
   Else
-    tmp = %tma%|$
+    result = %tma%|$
   
-  If (SubStr(tmp, 1, 1) == "|")
-    StringTrimLeft, tmp, tmp, 1
+  If (SubStr(result, 1, 1) == "|")
+    StringTrimLeft, result, result, 1
   
   ;                    cnrMoldSmall|1|cnrIngotCopp|4|                $cnrMangledCopp|0|1|
   ; CNR_RECIPE_SPELL|1|cnrMoldSmall|1|cnrIngotCopp|4|SPELL_CONFUSION|$cnrMangledCopp|0|1|
@@ -1174,18 +1171,18 @@ CreateChangedRecipeVersion()
   ; That's 10 long and is SPELL_DAZE
   ; cnrMoldSmall|1|cnrIngotCopp|4|CNR_RECIPE_SPELL|1|SPELL_DAZE|     $cnrMangledCopp|0|1|
   
-  IfInString, tmp, SPELL_
+  IfInString, result, SPELL_
   {
-    a := InStr(tmp, "SPELL_")
-    b := InStr(tmp, "|", , a + 1)
+    a := InStr(result, "SPELL_")
+    b := InStr(result, "|", , a + 1)
     c := b - a
-    d := SubStr(tmp, a, c) 
+    d := SubStr(result, a, c) 
     
-    ntmp := StrReplace(tmp, "|1|1", "", , 1)
-    ntmp := StrReplace(ntmp, d, "CNR_RECIPE_SPELL|1|"d, , 1)
+    ntmp := StrReplace(result, "|1|1", "", , 1)
+    ntmp := StrReplace(result, d, "CNR_RECIPE_SPELL|1|"d, , 1)
     ;MsgBox, Spell found, at %a% next dem found at %b% from`n%tmp%`nThat's %c% long and is %d%`n%ntmp%
     
-    tmp := ntmp
+    result := ntmp
   }
   
   srt = 
@@ -1198,14 +1195,14 @@ CreateChangedRecipeVersion()
   c = 
   d = 
   
-  return tmp
+  return result
 }
 ;================================================================================
 
 ;================================================================================
-;  BuildOriginalString(ProductTag)
+;  BuildOriginalRecipeVersion(ProductTag)
 ;================================================================================
-BuildOriginalString(ProductTag)
+BuildOriginalRecipeVersion(ProductTag)
 {
   result = ERROR600
   
@@ -1222,27 +1219,144 @@ BuildOriginalString(ProductTag)
 }
 ;================================================================================
 
+
+; <cnrTinkerToolbox|sMenuTinkerTrapsAverage|> Average Acid Trap|NW_IT_TRAP034|1|9|90|90|0|50|0|50|0|0|
+; <cnrTinkerToolbox|sMenuTinkerTrapsAverage|> Average Acid Trap|NW_IT_TRAP034|1|9|90|90|0|50|0|50|0|0|
+CreateChangedMiscVersion()
+{
+  result = ERROR800
+  
+  ;result = %PrintWorkbenchName%|
+  ;result = %result%%ShowWorkbenchMenu%|
+  GuiControlGet, a, , EditRecipeProduct
+  result := % a "|"
+  GuiControlGet, a, , EditRecipeProductTag
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeProductNbr
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeLevel
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeXP
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeCnrXP
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityStr
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityDex
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityCon
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityInt
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityWis
+  result := % result a "|"
+  GuiControlGet, a, , EditRecipeAbilityCha
+  result := % result a "|"
+  
+  result := StrReplace(result, " |", "|", ALL)
+  
+  return result
+}
+
+;  =>  N|cnrTinkerToolbox
+GetWorkbenchFromProduct(ProductToSearchFor)
+{
+  result = ERROR000
+  ArrayTmpPath = %A_WorkingDir%\tmp\array.tmp
+  
+  Loop, Read, %ArrayTmpPath%                                                     ; read array-file
+  {
+    RecipeArray := StrSplit(A_LoopReadLine, "|")
+    WhatKindOf := RecipeArray[1]
+    ; if "N"
+    If (WhatKindOf = "N")                                                        ; workbench beginning
+      result := RecipeArray[2]                                                   ; get ResRef/Tag
+  }
+  
+  If (result == "ERROR000")
+  {
+    Loop, Read, %ArrayTmpPath%                                                   ; read array-file
+    {
+      RecipeArray := StrSplit(A_LoopReadLine, "|")
+      WhatKindOf := RecipeArray[1]
+      ; if "R"
+      If (WhatKindOf = "R")                                                      ; recipe beginning
+        result := RecipeArray[2]                                                 ; get ResRef/Tag
+    }
+  }
+  
+  ArrayTmpPath = 
+  RecipeArray = 
+  WhatKindOf = 
+  RecipeProductTag = 
+  
+  return result
+}
+
+BuildOriginalMiscVersion(ProductTag)
+{
+  result = ERROR900
+  
+ ;result := % GetWorkbenchFromProduct(ProductTag) "|"                            ; Workbench?
+ ;result := % result GetWorkbenchName(ProductTag) "|"                            ; Menue
+  result := % GetObjectName(ProductTag) "|"                                      ; Name
+  result := % result ProductTag "|"                                              ; Tag
+  result := % result GetCreatedProductNbr(ProductTag) "|"
+  result := % result ReturnLevelFromRecipe(ProductTag) "|"
+  result := % result ReturnXPFromRecipe(ProductTag) "|"
+  result := % result ReturnAbilitysFromRecipe(ProductTag) "|"
+  
+  result := StrReplace(result, " |", "|", ALL)
+  
+  return result
+}
+
 ;================================================================================
-;  RecipeArrayToScriptSnippet(ProductTag) 
-;  CnrRecipeAddComponent(string sKeyToRecipe, string sComponentTag, int nComponentQty, int nRetainOnFailQty=0);
-;  Spells:
-;  CnrRecipeAddComponent(sKeyToRecipe, "CNR_RECIPE_SPELL", 1, SPELL_RAY_OF_FROST);
-;  Normal:
-;  CnrRecipeAddComponent(sKeyToRecipe, "cnrMoldSmall", 1);
-;  Retaining:
-;  CnrRecipeAddComponent(sKeyToRecipe, "cnrMoldSmall", 1, 1);
-;  
-;  Changes:
-;  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|  $cnrBucketEmpty|1|1|cnrGlassVial|1|1|
-;  CNR_RECIPE_SPELL|1|SPELL_LIGHT|cnrGemDust001|1|cnrInkLEvoc|1|cnrScrollBlank|1|1|$cnrBucketEmpty|1|1|cnrGlassVial|1|1|
+;  ChangedRecipeToScriptSnippet(ProductTag) 
 ;================================================================================
-RecipeArrayToScriptSnippet(StringToSplit)
+ChangedRecipeToScriptSnippet(StringToSplit)
 {
   result = ERROR700
   
-  spa := StrSplit(StringToSplit, "$")                                            ; split up the arrays
-  com := spa[1]
-  bip := spa[2]
+  spa := StrSplit(StringToSplit, "`n")                                           ; split up the arrays
+  ing := spa[1]                                                                  ; here are the ingredients
+  mis := spa[2]                                                                  ; and here the rest of misc
+  
+  Loop, Parse, mis, |
+  {
+    If (A_LoopField != "")
+    {
+      ; "Average Acid Trap", "NW_IT_TRAP034", 1);
+      If (A_Index == 1)
+         mia := % mia "$" A_LoopField "$, "
+       If (A_Index == 2)
+         mia := % mia "$" A_LoopField "$, "
+       If (A_Index == 3)
+         mia := % mia A_LoopField ");`n"
+       
+      ; CnrRecipeSetRecipeLevel(sKeyToRecipe, 9);
+       If (A_Index == 4)
+        mib := % mib "`nCnrRecipeSetRecipeLevel(sKeyToRecipe, " A_LoopField ");`n"
+      
+      ; CnrRecipeSetRecipeXP(sKeyToRecipe, 90, 90);
+       If (A_Index == 5)
+        mib := % mib "CnrRecipeSetRecipeXP(sKeyToRecipe, " A_LoopField ", "
+       If (A_Index == 6)
+        mib := % mib A_LoopField ");`n"
+      
+      ; CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, 0, 50, 0, 50, 0, 0);
+       If (A_Index == 7)
+         mib := % mib "CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, " A_LoopField ", "
+       If (A_Index >= 8 AND A_Index <= 11 )
+        mib := % mib A_LoopField ", "
+       If (A_Index == 12)
+        mib := % mib A_LoopField ");`n"
+    }
+  }
+  
+  spa := StrSplit(ing, "$")                                                      ; split up the ingredients
+  com := spa[1]                                                                  ; to components
+  bip := spa[2]                                                                  ; and biproducts
   
   Loop, Parse, com, |
   {
@@ -1267,7 +1381,7 @@ RecipeArrayToScriptSnippet(StringToSplit)
     If (A_LoopField != "")                                                       ; don't use it if its empty
     {
       If A_LoopField Is Not Digit
-        tmb := % tmb ");`CnrRecipeSetRecipeBiproduct(sKeyToRecipe, $" A_LoopField "$"
+        tmb := % tmb ");`nCnrRecipeSetRecipeBiproduct(sKeyToRecipe, $" A_LoopField "$"
       
       If A_LoopField Is Digit
         tmb := % tmb ", " A_LoopField
@@ -1280,21 +1394,57 @@ RecipeArrayToScriptSnippet(StringToSplit)
   IfInString, tmc, CNR_RECIPE_SPELL
     StringReplace, tmc, tmc, $CNR_RECIPE_SPELL$, CNR_RECIPE_SPELL
   
-  StringTrimLeft, tmb, tmb, 2
-  tmb := % tmb ");"
+  If (tmb != "")
+  {
+    StringTrimLeft, tmb, tmb, 3
+    tmb := % tmb ");"
+    result := tmc "`n" tmb
+  }
+  Else
+    result := tmc
   
-  result := tmc "`n" tmb
+  result := mia result mib
   result := StrReplace(result, "$", Chr(34))
+  
+  ;MsgBox, % result
   
   tmc = 
   tmb = 
   com = 
   bip = 
   spa = 
+  mia = 
+  mib = 
+  ing = 
+  mis = 
   
   return result
 }
 ;================================================================================
+
+ChangedRecipeCreate(StringToSplit)
+{
+  spa := StrSplit(StringToSplit, "|")
+  result := spa[3]
+  
+  return result
+}
+
+ChangedRecipeTagResRef(StringToSplit)
+{
+  spa := StrSplit(StringToSplit, "|")
+  result := spa[2]
+  
+  return result
+}
+
+ChangedRecipeProductName(StringToSplit)
+{
+  spa := StrSplit(StringToSplit, "|")
+  result := spa[1]
+  
+  return result
+}
 
 GetConfig()
 {
@@ -1336,6 +1486,8 @@ GetConfig()
     IniWrite, 120,                      config.ini, Lists,   RecipeSpacerXAdd
     IniWrite, 25,                       config.ini, Lists,   RecipeSpacerYAdd
     
+    GetLanguage()
+    
     GoSub, GuiClose
   }
 }
@@ -1345,7 +1497,8 @@ GetLanguage()
   Global
   IfExist, language.ini
   {
-    IniRead, OnToolTipMain,     language.ini, %LANG%, OnToolTipMain,      Double-click to start editing
+    IniRead, OnToolTipMain1,    language.ini, %LANG%, OnToolTipMain1,     Double-click to start editing
+    IniRead, OnToolTipMain2,    language.ini, %LANG%, OnToolTipMain2,     Right-click to edit *.nss directly
     
     IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited
     IniRead, OnRecipeIsMissing, language.ini, %LANG%, OnRecipeIsMissing,  The clicked script is somehow missing?
@@ -1354,6 +1507,9 @@ GetLanguage()
     
     IniRead, MenuOptions,       language.ini, %LANG%, MenuOptions,        Options
     IniRead, MenuShowAbout,     language.ini, %LANG%, MenuShowAbout,      About
+    
+    IniRead, NewRecipeButton,   language.ini, %LANG%, NewRecipeButton,    New Recipe
+    IniRead, SaveVariantText,   language.ini, %LANG%, SaveVariantText,    Save||Copy|User
     
     IniRead, Tab2RecipePure,    language.ini, %LANG%, Tab2RecipePure,     Recipe
     IniRead, Tab2ComBiPEdit,    language.ini, %LANG%, Tab2ComBiPEdit,     Components and Biproducts
@@ -1365,16 +1521,30 @@ GetLanguage()
     IniRead, Tab2RecipProdT,    language.ini, %LANG%, Tab2RecipProdT,     Tag/ResRef
     IniRead, Tab2RecipPrNbr,    language.ini, %LANG%, Tab2RecipPrNbr,     Creates
     
+    IniRead, Tab2MiscLevel,     language.ini, %LANG%, Tab2MiscLevel,      Level
+    IniRead, Tab2MiscXPaCXP,    language.ini, %LANG%, Tab2MiscXPaCXP,     XP and CNR-XP
+    IniRead, Tab2MiscAbilit,    language.ini, %LANG%, Tab2MiscAbilit,     Abilities
+    IniRead, Tab2MiscAbStr,     language.ini, %LANG%, Tab2MiscAbStr,      Strength
+    IniRead, Tab2MiscAbDex,     language.ini, %LANG%, Tab2MiscAbDex,      Dexternity
+    IniRead, Tab2MiscAbCon,     language.ini, %LANG%, Tab2MiscAbCon,      Constitution
+    IniRead, Tab2MiscAbInt,     language.ini, %LANG%, Tab2MiscAbInt,      Intelligence
+    IniRead, Tab2MiscAbWis,     language.ini, %LANG%, Tab2MiscAbWis,      Wisdom
+    IniRead, Tab2MiscAbCha,     language.ini, %LANG%, Tab2MiscAbCha,      Charisma
+    IniRead, Tab2MiscAbSum,     language.ini, %LANG%, Tab2MiscAbSum,      Sum of abilities (max. 100)
+    IniRead, Tab2MiscCommen,    language.ini, %LANG%, Tab2MiscCommen,     For future comments...
+    
     IniRead, Tab2ComBiPEdCo,    language.ini, %LANG%, Tab2ComBiPEdCo,     Component
     IniRead, Tab2ComBiPEdiS,    language.ini, %LANG%, Tab2ComBiPEdiS,     Spell
     IniRead, Tab2ComBiPEdBi,    language.ini, %LANG%, Tab2ComBiPEdBi,     Bi-Product
-    IniRead, Tab2ComBiPSave,    language.ini, %LANG%, Tab2ComBiPSave,     Save
+    
+    IniRead, Tab2NoChanges,     language.ini, %LANG%, Tab2NoChanges,      Nothing has changed.
   }
   Else
   {
     {
     ; build up english language-file
-    IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain
+    IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain1
+    IniWrite, Right-click to edit *.nss directly,     language.ini, EN, OnToolTipMain2
     IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
     IniWrite, The clicked script is somehow missing?, language.ini, EN, OnRecipeIsMissing
     
@@ -1382,6 +1552,9 @@ GetLanguage()
     
     IniWrite, Options,                                language.ini, EN, MenuOptions
     IniWrite, About,                                  language.ini, EN, MenuShowAbout
+    
+    IniWrite, New Recipe,                             language.ini, EN, NewRecipeButton
+    IniWrite, Save||Copy|User,                        language.ini, EN, SaveVariantText
     
     IniWrite, Recipe,                                 language.ini, EN, Tab2RecipePure
     IniWrite, Components and Biproducts,              language.ini, EN, Tab2ComBiPEdit
@@ -1396,13 +1569,27 @@ GetLanguage()
     IniWrite, Component,                              language.ini, EN, Tab2ComBiPEdCo
     IniWrite, Spell,                                  language.ini, EN, Tab2ComBiPEdiS
     IniWrite, Bi-Product,                             language.ini, EN, Tab2ComBiPEdBi
-    IniWrite, Save,                                   language.ini, EN, Tab2ComBiPSave
+    
+    IniWrite, Level,                                  language.ini, EN, Tab2MiscLevel
+    IniWrite, XP and CNR-XP,                          language.ini, EN, Tab2MiscXPaCXP
+    IniWrite, Abilities,                              language.ini, EN, Tab2MiscAbilit
+    IniWrite, Strength,                               language.ini, EN, Tab2MiscAbStr
+    IniWrite, Dexternity,                             language.ini, EN, Tab2MiscAbDex
+    IniWrite, Constitution,                           language.ini, EN, Tab2MiscAbCon
+    IniWrite, Intelligence,                           language.ini, EN, Tab2MiscAbInt
+    IniWrite, Wisdom,                                 language.ini, EN, Tab2MiscAbWis
+    IniWrite, Charisma,                               language.ini, EN, Tab2MiscAbCha
+    IniWrite, Sum of abilities (max. 100),            language.ini, EN, Tab2MiscAbSum
+    IniWrite, For future comments...,                 language.ini, EN, Tab2MiscCommen
+    
+    IniWrite, Nothing has changed.,                   language.ini, EN, Tab2NoChanges
     ; continues...
     }
     
     {
     ; add german lang [DE]
-    IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain
+    IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain1
+    IniWrite, Rechts-Klick um *.nss direkt zu bearbeiten, language.ini, DE, OnToolTipMain2
     
     IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, DE, OnRecipeIsEdited
     IniWrite, Das Rezept ist verschwunden?,           language.ini, DE, OnRecipeIsMissing
@@ -1410,22 +1597,37 @@ GetLanguage()
     IniWrite, Hier gibts noch nichts!,                language.ini, DE, OnNothingToShow
     
     IniWrite, Optionen,                               language.ini, DE, MenuOptions
-    IniWrite, Über,                                   language.ini, DE, MenuShowAbout
+    IniWrite, Ueber,                                  language.ini, DE, MenuShowAbout
+    
+    IniWrite, Neues Rezept,                           language.ini, DE, NewRecipeButton
+    IniWrite, Speichern||Kopieren|Benutzer,           language.ini, DE, SaveVariantText
     
     IniWrite, Rezept,                                 language.ini, DE, Tab2RecipePure
     IniWrite, Komponenten und Abfallprodukte,         language.ini, DE, Tab2ComBiPEdit
     IniWrite, Verschiedenes,                          language.ini, DE, Tab2MiscEditor
     
     IniWrite, Werkbank,                               language.ini, DE, Tab2RecipWorkb
-    IniWrite, Menü,                                   language.ini, DE, Tab2RecipWbMen
+    IniWrite, Menue,                                  language.ini, DE, Tab2RecipWbMen
     IniWrite, Produktname,                            language.ini, DE, Tab2RecipProdN
     IniWrite, Tag/ResRef,                             language.ini, DE, Tab2RecipProdT
     IniWrite, Erzeugt insg.,                          language.ini, DE, Tab2RecipPrNbr
     
+    IniWrite, Stufe,                                  language.ini, DE, Tab2MiscLevel
+    IniWrite, EP und CNR-EP,                          language.ini, DE, Tab2MiscXPaCXP
+    IniWrite, Attribute,                              language.ini, DE, Tab2MiscAbilit
+    IniWrite, Staerke,                                language.ini, DE, Tab2MiscAbStr
+    IniWrite, Geschicklichkeit,                       language.ini, DE, Tab2MiscAbDex
+    IniWrite, Konstitution,                           language.ini, DE, Tab2MiscAbCon
+    IniWrite, Intelligenz,                            language.ini, DE, Tab2MiscAbInt
+    IniWrite, Weisheit,                               language.ini, DE, Tab2MiscAbWis
+    IniWrite, Charisma,                               language.ini, DE, Tab2MiscAbCha
+    IniWrite, Summe der Attribute (max. 100),         language.ini, DE, Tab2MiscAbSum
+    IniWrite, Fuer zukuenftige Kommentare...,         language.ini, DE, Tab2MiscCommen
+    
     IniWrite, Komponente,                             language.ini, DE, Tab2ComBiPEdCo
     IniWrite, Spruch,                                 language.ini, DE, Tab2ComBiPEdiS
     IniWrite, Abfallprodukt,                          language.ini, DE, Tab2ComBiPEdBi
-    IniWrite, Speichern,                              language.ini, DE, Tab2ComBiPSave
+    IniWrite, Es hat sich nichts veraendert.,         language.ini, DE, Tab2NoChanges
     }
   }
 }
