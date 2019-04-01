@@ -2,11 +2,11 @@
 ;  CNR - Recipe-Script Editor
 ;  Author: Tobias Wirth (dunahan@schwerterkueste.de)
 ;================================================================================
-; v0.8.0.3  moving some code to funcs-file for readability, more viewing/saving for recipes, translating-files
-; v0.8.0.4  updating save func, so it is possible to actualize the script snippet at recipe tab
 ; v0.8.0.5  save func now builds up full script snippet, added the ability per right mouse to edit the nss directly
+; v0.8.0.6  some code corrections and more things to do... trying to add erf-reader without third party tools
+; v0.8.0.7  adding third party tools for erf extraction/creation by niv at github.com (neverwinter.nim)
 ;================================================================================
-VERSION := "0.8.0.5"
+VERSION := "0.8.0.7"
 ;================================================================================
 
 #NoTrayIcon
@@ -14,19 +14,6 @@ VERSION := "0.8.0.5"
 #SingleInstance force
 
 #Include cnrse_funcs.ahk                                                         ; external funcitons, won't blow up main script and maintains readability
-
-;==================================================================================
-; As a reminder, the array-file holds of the following:
-;  =>  M enues  (M|sMenuLevel5Scrolls)                                           => more than one possible
-;  =>  N ame of the workbench (N|cnrScribeAverage)                               => sometimes there isn't one existent (as for cnrWaterTub.nss)
-;  =>  R ecipes  (R|sMenuLevel5Scrolls|See Invisibility|NW_IT_SPARSCR205|1)      => as many recipes are provided in the recipe scripts
-;  =>  another reminder, the function prints the product-tag from every recipe at the end of the following strings  <=
-;  =>  Com P onents (P1|Blank Scroll|x2_it_cfm_bscrl|1)                          => more than one possible, number of components are at P<#>
-;  =>  B iproducts (B1|hw_glassphio|1|1)                                         => if a recipe produces a leftover, these are biproducts (numbering same as products)
-;  =>  L evel  (L|6)                                                             => the creation level required
-;  =>  e X perience points (X|60|60)                                             => how many XP the PC gets (XP | CNR-XP)
-;  =>  A ttributes  (A|0|0|0|50|50|0)                                            => which attributes are needed and at what percentage, MUST be in sum 100(%)!
-;================================================================================
 
 ;================================================================================
 ;                                                Persistent Variables
@@ -47,10 +34,14 @@ Main:                                                                           
   Menu, MyMenu, Add, %MenuShowAbout%, ShowAbout
   Gui, 1: Menu, MyMenu
   
-  Gui, 1: Add, Button, x6  y4 w75           gNewRecipe           , %NewRecipeButton%
- ;Gui, 1: Add, DDL,    x81 y5     AltSubmit gSaveVariant vSaveVar, %SaveVariantText%
+  Gui, 1: Add, Button, x6   y4   w75           gOpenErf             , %OnButtonOpenErf%
+  Gui, 1: Add, Button, x81  y4   w75           gNewRecipe           , %NewRecipeButton%
+  Gui, 1: Add, DDL,    x156 y5   w75 AltSubmit gSaveVariant vSaveVar, %SaveVariantText%
   
   CountedRecipes := 0
+  
+  If !FileExist(SCRIPT_DIR)
+    MsgBox, %OnNoRecipeHere% %SCRIPT_DIR%.
   
   Loop, Files, %SCRIPT_DIR%cnr*.nss                                              ; go through all cnr*.nss scripts in folder. this is for testing yet. later it should extract it from mod
   {
@@ -120,8 +111,7 @@ Return                                                                          
 SaveVariant:
 {
   GetLanguage()
- ;Gui, 1: Submit, NoHide
-  SaveVar := 1
+  Gui, 1: Submit, NoHide
   
   IniRead, SVT, language.ini, %LANG%, SaveVariantText, Save|Copy|User
   StringReplace, SVT, SVT, ||, |, ALL
@@ -129,14 +119,14 @@ SaveVariant:
   SVTA := StrSplit(SVT, "|")
   SVTS := SVTA[ SaveVar ]
   
-  SaveC := SVTS
-  SaveM := SVTS
+  SaveC := SVTS           ; Button6
+  SaveM := SVTS           ; Button7
   
-  GuiControl, , SaveC, %SVTS%
-  GuiControl, , SaveM, %SVTS%
+  ControlGetText, HWNDSaveC, Button6
+  ControlGetText, HWNDSaveM, Button7
   
   ;If (DEBUG = 1)
-    MsgBox, Choosen Item: %SaveVar%`nArray to Parse: %SVT%`nString found: %SVTS%`nCompBut: %SaveC%`nMiscBut: %SaveM%
+    MsgBox, Choosen Item: %SaveVar%`nArray to Parse: %SVT%`nString found: %SVTS%`nCompBut: %SaveC%/%HWNDSaveC%`nMiscBut: %SaveM%/%HWNDSaveM%
   
   SVT = 
   SVTA = 
@@ -146,19 +136,22 @@ Return
 
 ~RButton::                                                                       ; <<<===  use of right Mouse button
 {
+  IniRead, FAV, config.ini, Other, FAV, Notepad.exe
+  
   MouseGetPos, , , MainWinID
   If (MainWinID == MainWin)
   {
     MouseGetPos, , , , Ctrl
-    ControlGetText, RecipeToEdit, %Ctrl%, %NAME%
     
-    If (DEBUG = 1)
-      MsgBox, % "Control " Ctrl "`nRecipe " RecipeToEdit
-    
-    If (FAV != "")
+    If InStr(Ctrl, "Static")                                                     ; open only if it's a script
+    {
+      ControlGetText, RecipeToEdit, %Ctrl%, %NAME%
+      
+      If (DEBUG = 1)
+        MsgBox, % "Control " Ctrl "`nRecipe " RecipeToEdit "`n" SCRIPT_DIR "`n" FAV
+      
       Run %FAV% %SCRIPT_DIR%%RecipeToEdit%
-    Else
-      Run Notepad.exe %SCRIPT_DIR%%RecipeToEdit%
+    }
   }
 }
 Return                                                                           ; <<<===  use of right Mouse button
@@ -506,6 +499,8 @@ CheckAbs:                                                                       
   Sum := EditRecipeAbilityStr + EditRecipeAbilityDex + EditRecipeAbilityCon + EditRecipeAbilityInt + EditRecipeAbilityWis + EditRecipeAbilityCha
   
   GuiControl, , ShowRecipeAbilitySum, %Sum%
+  
+  Sum = 
 }
 Return                                                                           ; <<<===  Check Abilities ends
 
@@ -654,6 +649,12 @@ Save:                                                                           
   SaveVar := 1                                                                   
   Gui, 2: Submit, NoHide                                                         ; send variables to memory
   
+  If (DEBUG = 1)
+  {
+    MouseGetPos, , , , AusgabeSteuerelement
+    MsgBox, % AusgabeSteuerelement
+  }
+  
   OriginalRecipe  := BuildOriginalRecipeVersion(ShowRecipeProductTag)
   OriginalMiscs   := BuildOriginalMiscVersion(ShowRecipeProductTag)
   ChangedRecipe   := CreateChangedRecipeVersion()
@@ -683,7 +684,7 @@ Save:                                                                           
     
     If (SaveVar == 1)                                                            ; later, that should save it to the original
     {
-      GuiControl, , ShowRecipeProduct,    % ChangedRecipeProductName(ChangedMiscs) ; for now it only updates the necessary fields
+      GuiControl, , ShowRecipeProduct,    % ChangedRecipeProductName(ChangedMiscs) ; for now, it only updates the necessary fields
       GuiControl, , ShowRecipeProductTag, % ChangedRecipeTagResRef(ChangedMiscs)
       GuiControl, , ShowRecipeProductNbr, % ChangedRecipeCreate(ChangedMiscs)
       GuiControl, , ShowRecipeScript,     %SCRIPTVAR%
@@ -710,17 +711,126 @@ EditRecipeTab:
   ;MsgBox, %OnNothingToShow%
 Return
 
+OpenErf:
+{
+  MsgBox, 4, ,
+  (
+Note: This relays on third party tools (in this case on niv's neverwinter.nim) to extract the nss' from an ERF-file.
+So it is nessesary to check if it's a new version online.
+On this early stage you must check for yourself.
+
+Is it on the least stable version?
+  )
+  
+  IfMsgBox No
+    Return
+  
+  FileSelectFile, OpenErfVar, , , , ERF-File (*.erf)
+  If !FileExist("\erf")
+    FileCreateDir, erf
+  
+  If OpenErfVar
+  {
+    FileCopy, %OpenErfVar%, %A_WorkingDir%, TRUE
+    SplitPath, OpenErfVar, File
+    
+    If DEBUG
+    {
+      Run, %ComSpec% /k %A_WorkingDir%\tools\nwn_erf.exe -f %File% -t > log.txt
+      Run, %ComSpec% /k %A_WorkingDir%\tools\nwn_erf.exe -f %File% -x
+    }
+    Else
+    {
+      Run, %ComSpec% /c %A_WorkingDir%\tools\nwn_erf.exe -f %File% -t > log.txt
+      Run, %ComSpec% /c %A_WorkingDir%\tools\nwn_erf.exe -f %File% -x
+    }
+  }
+  Else
+    Return
+  
+  Sleep, 1000                                                                   ; wait 1 sec before continue
+  If FileExist("log.txt")
+  {
+    Loop, Read, log.txt
+    {
+      FileMove, %A_LoopReadLine%, %A_WorkingDir%\erf\, TRUE
+      FileMove, %File%, %A_WorkingDir%\erf\, TRUE
+    }
+  }
+  
+  Else
+    MsgBox, %OpenErfError%
+  
+  FileDelete, log.txt
+  
+  MsgBox, %OpenErfClose%
+  GoSub, GuiClose
+}
+Return
+
 NewRecipe:
   MsgBox, %OnNothingToShow%
 Return
 
 Options:
-  MsgBox, %OnNothingToShow%
+  Gui, 3: Add, Text,   x6   y6                    , %OptWinFavEditTxt%:
+  Gui, 3: Add, Button, x6   y27 w87  gChooseEditor, %OptWinFavEditBtn%
+  Gui, 3: Add, Button, x97  y27     gEditorDefault, %OptWinFavEditDef%
+  
+  IniRead, LANGS, language.ini
+  LANGS := StrReplace(LANGS, "`n", "|") "|"
+  LANGS := StrReplace(LANGS, LANG, LANG "|")
+  Gui, 3: Add, Text,   x6   y54                   , %OptWinLangTxt%:
+  Gui, 3: Add, DDL,    x6   y74        gLang vLANG, %LANGS%
+  
+  Gui, 3: Add, Button, x55  y105        gCloseOpts, %OptWinFavEditCls%
+  Gui, 1: +Disabled
+  Gui, 2: +Disabled
+  Gui, 3: Show
+  Gui, 3: Show, center w150 h150, %OptWinName%
+Return
+
+Lang:
+  MsgBox, %OptWinLangMsg%
+Return
+
+CloseOpts:
+  Gui, 3: Submit, NoHide
+  IniWrite, %FAV%,  config.ini, Other,   FAV
+  IniWrite, %LANG%, config.ini, Default, LANG
+  
+  Gui, 1: -Disabled
+  Gui, 2: -Disabled
+  Gui, 3: Destroy
+Return
+
+ChooseEditor:
+{
+  FileSelectFile, FAV, , , , Exe-File (*.exe)
+  
+  If FAV
+  {
+    IniWrite, %FAV%, config.ini, Other, FAV
+  }
+  Else
+  {
+    MsgBox, %OptWinFavEdDefMs%
+    FAV = Notepad.exe
+    IniWrite, %FAV%, config.ini, Other, FAV
+  }
+}
+Return
+
+EditorDefault:
+  FAV = Notepad.exe
+  IniWrite, %FAV%, config.ini, Other, FAV
 Return
 
 ShowAbout:
-  ListVars
-  ;MsgBox, %OnNothingToShow%
+  If DEBUG
+    ListVars
+  Else
+    MsgBox, %OnNothingToShow%
 Return
 
 
@@ -773,6 +883,17 @@ WM_MOUSEMOVE()
   EditWin = 
   RecipeTagTabBuilded = 0
 Return
+
+3GuiClose:
+3GuiEscape:
+  ;save options!
+  Gui, 3: Submit, NoHide
+  IniWrite, %FAV%, config.ini, Other, FAV
+  Gui, 1: -Disabled
+  Gui, 2: -Disabled
+  Gui, 3: Destroy
+Return
+
 
 ; Ends app and destroys program
 GuiClose:

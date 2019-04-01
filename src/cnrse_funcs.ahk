@@ -44,7 +44,7 @@
 
 CountTokens(string, dem) {
   temp := StrReplace(string, dem, dem, result)
-  
+  temp = 
   return result
 }
 
@@ -78,7 +78,7 @@ GetObjectName(RecipientTag)
   If (Result = "ERROR100")
   { 
     Result = ERROR101
-    Loop, Read, %A_WorkingDir%\items.csv                                        ; search from csv-file then
+    Loop, Read, %A_WorkingDir%\tools\items.csv                                  ; search from csv-file then
     {
       itmarray := StrSplit(A_LoopReadLine, ",")
       resarray := % itmarray[2]
@@ -127,7 +127,7 @@ GetSpellName(SpellConstant)
 {
   Result = ERROR102
   
-  Loop, Read, %A_WorkingDir%\spells.csv                                          ; search from csv-file only
+  Loop, Read, %A_WorkingDir%\tools\spells.csv                                   ; search from csv-file only
   {
     spellarray := StrSplit(A_LoopReadLine, ",")
     spellsearch := % spellarray[1]
@@ -148,7 +148,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
   
   If !IsObject(ArrayTmp)
   {
-    MsgBox Can't open "%FileName%" for writing.
+    MsgBox, Can't open "%FileName%" for writing.
     Return
   }
   
@@ -427,7 +427,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
 ;================================================================================
 ReturnWorkbenchFromRecipe(ArrayTmpPath)
 {
-  AllThePlaceables := A_WorkingDir . "\plcs.csv"
+  AllThePlaceables := A_WorkingDir . "\tools\plcs.csv"
   Loop, Read, %ArrayTmpPath%                                                     ; read array-file
   {
     RecipeArray := StrSplit(A_LoopReadLine, "|")
@@ -1018,6 +1018,9 @@ GetWorkbenchNumberInList(WorkbenchMenuToLookAt, ProductTagToLookFor)
 ;================================================================================
 ; ReturnScriptSnippetForRecipe(ProductToShow)
 ;  Referents to PrintActRecipeProduct
+;
+
+;================================================================================
 ;  sKeyToRecipe = CnrRecipeCreateRecipe(sMenuLevel6Scrolls, "Vampiric Touch", "NW_IT_SPARSCR311", 1);
 ;  CnrRecipeAddComponent(sKeyToRecipe, "cnrScrollBlank", 1);
 ;  CnrRecipeAddComponent(sKeyToRecipe, "cnrInkNecro", 1);
@@ -1218,7 +1221,6 @@ BuildOriginalRecipeVersion(ProductTag)
   return result
 }
 ;================================================================================
-
 
 ; <cnrTinkerToolbox|sMenuTinkerTrapsAverage|> Average Acid Trap|NW_IT_TRAP034|1|9|90|90|0|50|0|50|0|0|
 ; <cnrTinkerToolbox|sMenuTinkerTrapsAverage|> Average Acid Trap|NW_IT_TRAP034|1|9|90|90|0|50|0|50|0|0|
@@ -1453,9 +1455,9 @@ GetConfig()
   {
     IniRead, LANG,       config.ini, Default, LANG,       EN
     
-    IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\mod\        ; at first, but configurable at latest version
+    IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\erf\        ; at first, but configurable at latest version
     IniRead, TEMP_DIR,   config.ini, Default, TEMP_DIR,   %A_WorkingDir%\tmp\        ; folder where temporary files are saved
-    IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\items.csv   ; at first, a file with comma-separated values, here items of CNR 3.05
+    IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\tools\items.csv   ; at first, a file with comma-separated values, here items of CNR 3.05
     IniRead, MOVE_WIN,   config.ini, Default, MOVE_WIN,   1                          ; should the recipe window moved with the main window
     IniRead, DEBUG,      config.ini, Default, DEBUG,      0                          ; DebugMode 1 / 0
     
@@ -1465,6 +1467,8 @@ GetConfig()
     
     IniRead, RecipeSpacerXAdd, config.ini, Lists, RecipeSpacerXAdd, 120
     IniRead, RecipeSpacerYAdd, config.ini, Lists, RecipeSpacerYAdd, 25
+    
+    IniRead, FAV, config.ini, Other, FAV, Notepad.exe
   }
   Else
   {
@@ -1473,9 +1477,9 @@ GetConfig()
     IniWrite, %VERSION%,                config.ini, Default, VERSION
     IniWrite, EN,                       config.ini, Default, LANG
     
-    IniWrite, %A_WorkingDir%\mod\,      config.ini, Default, SCRIPT_DIR
+    IniWrite, %A_WorkingDir%\erf\,      config.ini, Default, SCRIPT_DIR
     IniWrite, %A_WorkingDir%\tmp\,      config.ini, Default, TEMP_DIR
-    IniWrite, %A_WorkingDir%\items.csv, config.ini, Default, ITM_FILE
+    IniWrite, %A_WorkingDir%\tools\items.csv, config.ini, Default, ITM_FILE
     IniWrite, 1,                        config.ini, Default, MOVE_WIN
     IniWrite, 0,                        config.ini, Default, DEBUG
     
@@ -1485,6 +1489,8 @@ GetConfig()
     
     IniWrite, 120,                      config.ini, Lists,   RecipeSpacerXAdd
     IniWrite, 25,                       config.ini, Lists,   RecipeSpacerYAdd
+    
+    IniWrite, Notepad.exe,              config.ini, Other,   FAV
     
     GetLanguage()
     
@@ -1499,6 +1505,8 @@ GetLanguage()
   {
     IniRead, OnToolTipMain1,    language.ini, %LANG%, OnToolTipMain1,     Double-click to start editing
     IniRead, OnToolTipMain2,    language.ini, %LANG%, OnToolTipMain2,     Right-click to edit *.nss directly
+    IniRead, OnButtonOpenErf,   language.ini, %LANG%, OnButtonOpenErf,    Open Erf
+    IniRead, OnNoRecipeHere,    language.ini, %LANG%, OnNoRecipeHere,     Please export some scripts to
     
     IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited
     IniRead, OnRecipeIsMissing, language.ini, %LANG%, OnRecipeIsMissing,  The clicked script is somehow missing?
@@ -1536,8 +1544,19 @@ GetLanguage()
     IniRead, Tab2ComBiPEdCo,    language.ini, %LANG%, Tab2ComBiPEdCo,     Component
     IniRead, Tab2ComBiPEdiS,    language.ini, %LANG%, Tab2ComBiPEdiS,     Spell
     IniRead, Tab2ComBiPEdBi,    language.ini, %LANG%, Tab2ComBiPEdBi,     Bi-Product
-    
     IniRead, Tab2NoChanges,     language.ini, %LANG%, Tab2NoChanges,      Nothing has changed.
+    
+    IniRead, OpenErfError,      language.ini, %LANG%, OpenErfError,       The log was not found! There is something gone wrong with the extraction of the erf-file.
+    IniRead, OpenErfClose,      language.ini, %LANG%, OpenErfClose,       Now closing the Assistant, due new erf extracted.
+    
+    IniRead, OptWinName,       language.ini, %LANG%, OptWinName,          Options
+    IniRead, OptWinFavEditTxt, language.ini, %LANG%, OptWinFavEditTxt,    Favorite editor for scripts
+    IniRead, OptWinFavEditBtn, language.ini, %LANG%, OptWinFavEditBtn,    Browse for editor
+    IniRead, OptWinFavEditDef, language.ini, %LANG%, OptWinFavEditDef,    Default
+    IniRead, OptWinLangTxt,    language.ini, %LANG%, OptWinLangTxt,       Languages
+    IniRead, OptWinLangMsg,    language.ini, %LANG%, OptWinLangMsg,       Only visible after restarting the assistant!
+    IniRead, OptWinFavEditCls, language.ini, %LANG%, OptWinFavEditCls,    Close
+    IniRead, OptWinFavEdDefMs, language.ini, %LANG%, OptWinFavEdDefMs,    Setting to default editor (Notepad.exe)
   }
   Else
   {
@@ -1545,6 +1564,8 @@ GetLanguage()
     ; build up english language-file
     IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain1
     IniWrite, Right-click to edit *.nss directly,     language.ini, EN, OnToolTipMain2
+    IniWrite, Please export some scripts to,          language.ini, EN, OnNoRecipeHere
+    IniWrite, Open Erf,                               language.ini, EN, OnButtonOpenErf
     IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
     IniWrite, The clicked script is somehow missing?, language.ini, EN, OnRecipeIsMissing
     
@@ -1581,8 +1602,20 @@ GetLanguage()
     IniWrite, Charisma,                               language.ini, EN, Tab2MiscAbCha
     IniWrite, Sum of abilities (max. 100),            language.ini, EN, Tab2MiscAbSum
     IniWrite, For future comments...,                 language.ini, EN, Tab2MiscCommen
-    
     IniWrite, Nothing has changed.,                   language.ini, EN, Tab2NoChanges
+    
+    IniWrite, The log was not found! There is something gone wrong with the extraction of the erf-file., language.ini, EN, OpenErfError
+    IniWrite, Now closing the Assistant. New erf extracted.,                                             language.ini, EN, OpenErfClose
+    
+    ; options window
+    IniWrite, Options,                                language.ini, EN, OptWinName
+    IniWrite, Favorite editor for scripts,            language.ini, EN, OptWinFavEditTxt
+    IniWrite, Browse for editor,                      language.ini, EN, OptWinFavEditBtn
+    IniWrite, Default,                                language.ini, EN, OptWinFavEditDef
+    IniWrite, Languages,                              language.ini, EN, OptWinLangTxt
+    IniWrite, Only visible after restarting the assistant!, language.ini, EN, OptWinLangMsg
+    IniWrite, Close,                                  language.ini, EN, OptWinFavEditCls
+    IniWrite, Setting to default editor (Notepad.exe),language.ini, EN, OptWinFavEdDefMs
     ; continues...
     }
     
@@ -1590,6 +1623,8 @@ GetLanguage()
     ; add german lang [DE]
     IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain1
     IniWrite, Rechts-Klick um *.nss direkt zu bearbeiten, language.ini, DE, OnToolTipMain2
+    IniWrite, Erf oeffnen,                            language.ini, DE, OnButtonOpenErf
+    IniWrite, Bitte exportiere Skripte nach,          language.ini, DE, OnNoRecipeHere
     
     IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, DE, OnRecipeIsEdited
     IniWrite, Das Rezept ist verschwunden?,           language.ini, DE, OnRecipeIsMissing
@@ -1628,6 +1663,20 @@ GetLanguage()
     IniWrite, Spruch,                                 language.ini, DE, Tab2ComBiPEdiS
     IniWrite, Abfallprodukt,                          language.ini, DE, Tab2ComBiPEdBi
     IniWrite, Es hat sich nichts veraendert.,         language.ini, DE, Tab2NoChanges
+    
+    IniWrite, Log nicht gefunden! Pruef was beim entpacken schief lief., language.ini, DE, OpenErfError
+    IniWrite, Schliesse den Assistenten. Es wurden neue Daten geladen.,  language.ini, DE, OpenErfClose
+    
+    ; options window
+    IniWrite, Optionen,                               language.ini, DE, OptWinName
+    IniWrite, Bevorzuger Editor,                      language.ini, DE, OptWinFavEditTxt
+    IniWrite, Suche Editor,                           language.ini, DE, OptWinFavEditBtn
+    IniWrite, Standart,                               language.ini, DE, OptWinFavEditDef
+    IniWrite, Sprachen,                               language.ini, DE, OptWinLangTxt
+    IniWrite, Wirkt sich erst nach neustarten des Assistenten aus!, language.ini, DE, OptWinLangMsg
+    IniWrite, Schliessen,                             language.ini, DE, OptWinFavEditCls
+    IniWrite, Standart Editor eingestellt (Notepad.exe),language.ini, DE, OptWinFavEdDefMs
+
     }
   }
 }
