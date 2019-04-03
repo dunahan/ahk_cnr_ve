@@ -55,6 +55,7 @@ GetObjectName(RecipientTag)
 {
   Result = ERROR100
   StringLower, RecipientTag, RecipientTag
+  IniRead, ITM_FILE, config.ini, Default, ITM_FILE, %A_WorkingDir%\tools\
   
   Loop, Read, %A_WorkingDir%\tmp\array.tmp                                      ; search in array-file at first
   {
@@ -78,7 +79,7 @@ GetObjectName(RecipientTag)
   If (Result = "ERROR100")
   { 
     Result = ERROR101
-    Loop, Read, %A_WorkingDir%\tools\items.csv                                  ; search from csv-file then
+    Loop, Read, %ITM_FILE%items.csv                                            ; search from csv-file then
     {
       itmarray := StrSplit(A_LoopReadLine, ",")
       resarray := % itmarray[2]
@@ -126,8 +127,9 @@ GetObjectName(RecipientTag)
 GetSpellName(SpellConstant)
 {
   Result = ERROR102
+  IniRead, ITM_FILE, config.ini, Default, ITM_FILE, %A_WorkingDir%\tools\
   
-  Loop, Read, %A_WorkingDir%\tools\spells.csv                                   ; search from csv-file only
+  Loop, Read, %ITM_FILE%spells.csv                                             ; search from csv-file only
   {
     spellarray := StrSplit(A_LoopReadLine, ",")
     spellsearch := % spellarray[1]
@@ -427,7 +429,9 @@ CreateArrayTempFile(FileToParse, FileForArray)
 ;================================================================================
 ReturnWorkbenchFromRecipe(ArrayTmpPath)
 {
-  AllThePlaceables := A_WorkingDir . "\tools\plcs.csv"
+  IniRead, ITM_FILE, config.ini, Default, ITM_FILE, %A_WorkingDir%\tools\
+  AllThePlaceables := ITM_FILE . "plcs.csv"
+  
   Loop, Read, %ArrayTmpPath%                                                     ; read array-file
   {
     RecipeArray := StrSplit(A_LoopReadLine, "|")
@@ -1453,11 +1457,14 @@ GetConfig()
   Global
   IfExist, config.ini
   {
+    IniRead, VERSION,    config.ini, Default, VERSION
+    IniRead, LATENIV,    config.ini, Default, LATENIV
+    
     IniRead, LANG,       config.ini, Default, LANG,       EN
     
     IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\erf\        ; at first, but configurable at latest version
     IniRead, TEMP_DIR,   config.ini, Default, TEMP_DIR,   %A_WorkingDir%\tmp\        ; folder where temporary files are saved
-    IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\tools\items.csv   ; at first, a file with comma-separated values, here items of CNR 3.05
+    IniRead, ITM_FILE,   config.ini, Default, ITM_FILE,   %A_WorkingDir%\tools\      ; at first, a file with comma-separated values, here items of CNR 3.05
     IniRead, MOVE_WIN,   config.ini, Default, MOVE_WIN,   1                          ; should the recipe window moved with the main window
     IniRead, DEBUG,      config.ini, Default, DEBUG,      0                          ; DebugMode 1 / 0
     
@@ -1474,12 +1481,13 @@ GetConfig()
   {
     MsgBox, No config file existing, creating a new one with defaults.`nStart %NAME% again.
     
-    IniWrite, %VERSION%,                config.ini, Default, VERSION
+    IniWrite, 0.8.0.7a,                 config.ini, Default, VERSION
+    IniWrite, 1.2.1,                    config.ini, Default, LATENIV
     IniWrite, EN,                       config.ini, Default, LANG
     
     IniWrite, %A_WorkingDir%\erf\,      config.ini, Default, SCRIPT_DIR
     IniWrite, %A_WorkingDir%\tmp\,      config.ini, Default, TEMP_DIR
-    IniWrite, %A_WorkingDir%\tools\items.csv, config.ini, Default, ITM_FILE
+    IniWrite, %A_WorkingDir%\tools\,    config.ini, Default, ITM_FILE
     IniWrite, 1,                        config.ini, Default, MOVE_WIN
     IniWrite, 0,                        config.ini, Default, DEBUG
     
@@ -1507,6 +1515,11 @@ GetLanguage()
     IniRead, OnToolTipMain2,    language.ini, %LANG%, OnToolTipMain2,     Right-click to edit *.nss directly
     IniRead, OnButtonOpenErf,   language.ini, %LANG%, OnButtonOpenErf,    Open Erf
     IniRead, OnNoRecipeHere,    language.ini, %LANG%, OnNoRecipeHere,     Please export some scripts to
+    IniRead, OnDownloadingT,    language.ini, %LANG%, OnDownloadingT,     Downloading tools...
+    IniRead, OnOldVersionD1,    language.ini, %LANG%, OnOldVersionD1,     Please delete the old ini-files. So this assistant can create a newer version of them.
+    IniRead, OnOldVersionD2,    language.ini, %LANG%, OnOldVersionD2,     Possibly there is a newer version of
+    IniRead, OnOldVersionD3,    language.ini, %LANG%, OnOldVersionD3,     Please check for newer version of neverwinter.nim
+    
     
     IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited
     IniRead, OnRecipeIsMissing, language.ini, %LANG%, OnRecipeIsMissing,  The clicked script is somehow missing?
@@ -1519,6 +1532,7 @@ GetLanguage()
     IniRead, NewRecipeButton,   language.ini, %LANG%, NewRecipeButton,    New Recipe
     IniRead, SaveVariantText,   language.ini, %LANG%, SaveVariantText,    Save||Copy|User
     
+    IniRead, WinEditRecipe,     language.ini, %LANG%, WinEditRecipe,      Edit Recipes
     IniRead, Tab2RecipePure,    language.ini, %LANG%, Tab2RecipePure,     Recipe
     IniRead, Tab2ComBiPEdit,    language.ini, %LANG%, Tab2ComBiPEdit,     Components and Biproducts
     IniRead, Tab2MiscEditor,    language.ini, %LANG%, Tab2MiscEditor,     Miscellaneous
@@ -1565,6 +1579,11 @@ GetLanguage()
     IniWrite, Double-click to start editing,          language.ini, EN, OnToolTipMain1
     IniWrite, Right-click to edit *.nss directly,     language.ini, EN, OnToolTipMain2
     IniWrite, Please export some scripts to,          language.ini, EN, OnNoRecipeHere
+    IniWrite, Downloading tools...,                   language.ini, EN, OnDownloadingT
+    IniWrite, Please delete the old ini-files. So this assistant can create a newer version of them., language.ini, EN, OnOldVersionD1
+    IniWrite, Possibly there is a newer version of, language.ini, EN, OnOldVersionD2
+    IniWrite, Please check for newer version of neverwinter.nim, language.ini, EN, OnOldVersionD3
+    
     IniWrite, Open Erf,                               language.ini, EN, OnButtonOpenErf
     IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
     IniWrite, The clicked script is somehow missing?, language.ini, EN, OnRecipeIsMissing
@@ -1577,6 +1596,7 @@ GetLanguage()
     IniWrite, New Recipe,                             language.ini, EN, NewRecipeButton
     IniWrite, Save||Copy|User,                        language.ini, EN, SaveVariantText
     
+    IniWrite, Edit Recipes,                           language.ini, EN, WinEditRecipe
     IniWrite, Recipe,                                 language.ini, EN, Tab2RecipePure
     IniWrite, Components and Biproducts,              language.ini, EN, Tab2ComBiPEdit
     IniWrite, Miscellaneous,                          language.ini, EN, Tab2MiscEditor
@@ -1623,9 +1643,13 @@ GetLanguage()
     ; add german lang [DE]
     IniWrite, Doppelt klicken zum Bearbeiten,         language.ini, DE, OnToolTipMain1
     IniWrite, Rechts-Klick um *.nss direkt zu bearbeiten, language.ini, DE, OnToolTipMain2
-    IniWrite, Erf oeffnen,                            language.ini, DE, OnButtonOpenErf
     IniWrite, Bitte exportiere Skripte nach,          language.ini, DE, OnNoRecipeHere
+    IniWrite, Lade notwendiges herunter...,           language.ini, DE, OnDownloadingT
+    IniWrite, Bitte entferne alte Ini-Dateien. Der Assistent erstellt neue., language.ini, DE, OnOldVersionD1
+    IniWrite, Evtl. existiert eine neue Version von, language.ini, DE, OnOldVersionD2
+    IniWrite, Bitte schaue nach einer neuen Version von neverwinter.nim, language.ini, DE, OnOldVersionD3
     
+    IniWrite, Erf oeffnen,                            language.ini, DE, OnButtonOpenErf
     IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, DE, OnRecipeIsEdited
     IniWrite, Das Rezept ist verschwunden?,           language.ini, DE, OnRecipeIsMissing
     
@@ -1637,6 +1661,7 @@ GetLanguage()
     IniWrite, Neues Rezept,                           language.ini, DE, NewRecipeButton
     IniWrite, Speichern||Kopieren|Benutzer,           language.ini, DE, SaveVariantText
     
+    IniWrite, Rezept bearbeiten,                      language.ini, DE, WinEditRecipe
     IniWrite, Rezept,                                 language.ini, DE, Tab2RecipePure
     IniWrite, Komponenten und Abfallprodukte,         language.ini, DE, Tab2ComBiPEdit
     IniWrite, Verschiedenes,                          language.ini, DE, Tab2MiscEditor
@@ -1676,8 +1701,69 @@ GetLanguage()
     IniWrite, Wirkt sich erst nach neustarten des Assistenten aus!, language.ini, DE, OptWinLangMsg
     IniWrite, Schliessen,                             language.ini, DE, OptWinFavEditCls
     IniWrite, Standart Editor eingestellt (Notepad.exe),language.ini, DE, OptWinFavEdDefMs
-
     }
+  }
+}
+
+GetTools()
+{
+  IniRead, LANG, config.ini, Default, LANG, EN
+  IniRead, OnNoRecipeHere, language.ini, %LANG%, OnNoRecipeHere, Please export some scripts to
+  IniRead, OnDownloadingT, language.ini, %LANG%, OnDownloadingT, Downloading tools...
+  IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\erf\
+  IniRead, TEMP_DIR, config.ini, Default, TEMP_DIR, %A_WorkingDir%\tmp\
+  IniRead, ITM_FILE, config.ini, Default, ITM_FILE, %A_WorkingDir%\tools\
+  IniRead, OFFLINE, config.ini, Default, OFFLINE, 1
+  
+  If !FileExist(SCRIPT_DIR)
+    FileCreateDir, erf
+  
+  If !FileExist(SCRIPT_DIR "\cnr*.nss")
+    MsgBox, %OnNoRecipeHere% %SCRIPT_DIR%.
+  
+  If !FileExist(TEMP_DIR)
+    FileCreateDir, tmp
+    
+  If !FileExist(ITM_FILE)
+    FileCreateDir, tools
+  
+  If !FileExist(ITM_FILE "*.exe")                                                 ; folder is empty?!
+  {
+    If !FileExist(ITM_FILE "items.csv")
+    {
+      dwn = %dwn%`nitems.csv
+      If !OFFLINE
+        UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/items.csv , %ITM_FILE% items.csv
+    }
+    
+    If !FileExist(ITM_FILE "plcs.csv")
+    {
+      dwn = %dwn%`nplcs.csv
+      If !OFFLINE
+        UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/plcs.csv  , %ITM_FILE% plcs.csv
+    }
+    If !FileExist(ITM_FILE "spells.csv")
+    {
+      dwn = %dwn%`nspells.csv
+      If !OFFLINE
+        UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/spells.csv , %ITM_FILE% spells.csv
+    }
+    
+    If !FileExist(ITM_FILE "nwn_erf.exe")
+    {
+      dwn = %dwn%`nneverwinter.nim
+      
+      If !OFFLINE
+      {
+       UrlToDownload := "https://github.com/niv/neverwinter.nim/releases/download/" LATENIV "/neverwinter.windows.amd64.zip"
+       UrlDownloadToFile, https://github.com/niv/neverwinter.nim/releases/latest , %ITM_FILE% nwn_tools.zip
+       UrlDownloadToFile, %UrlToDownload%, %ITM_FILE% nwn_tools.zip
+       Unz(ITM_FILE . "nwn_tools.zip", ITM_FILE)
+     }
+    }
+    
+    MsgBox, %OnDownloadingT%`n%dwn%
+    dwn = 
   }
 }
 
@@ -1693,5 +1779,65 @@ RemoveUnessesaries(string)
     string := StrReplace(string, "-", "", ALL)
     
   return string
+}
+
+; From: https://github.com/shajul/Autohotkey/blob/master/COM/Zip%20Unzip%20Natively.ahk
+; Zip/Unzip file(s)/folder(s)/wildcard pattern files
+; Requires: Autohotkey_L, Windows > XP
+; URL: http://www.autohotkey.com/forum/viewtopic.php?t=65401
+; Credits: Sean for original idea
+Zip(FilesToZip,sZip)
+{
+  If Not FileExist(sZip)
+    CreateZipFile(sZip)
+  psh := ComObjCreate( "Shell.Application" )
+  pzip := psh.Namespace( sZip )
+  if InStr(FileExist(FilesToZip), "D")
+    FilesToZip .= SubStr(FilesToZip,0)="\" ? "*.*" : "\*.*"
+  loop,%FilesToZip%,1
+  {
+    zipped++
+    ToolTip Zipping %A_LoopFileName% ..
+    pzip.CopyHere( A_LoopFileLongPath, 4|16 )
+    Loop
+    {
+      done := pzip.items().count
+      if done = %zipped%
+        break
+    }
+    done := -1
+  }
+  ToolTip
+}
+
+CreateZipFile(sZip)
+{
+  Header1 := "PK" . Chr(5) . Chr(6)
+  VarSetCapacity(Header2, 18, 0)
+  file := FileOpen(sZip,"w")
+  file.Write(Header1)
+  file.RawWrite(Header2,18)
+  file.close()
+}
+
+; done some corrections here... loop only for zipped items, not until unzipped items where equal.
+Unz(sZip, sUnz)
+{
+  fso := ComObjCreate("Scripting.FileSystemObject")
+  If Not fso.FolderExists(sUnz)  ;http://www.autohotkey.com/forum/viewtopic.php?p=402574
+     fso.CreateFolder(sUnz)
+  psh  := ComObjCreate("Shell.Application")
+  zippedItems := psh.Namespace( sZip ).items().count
+  msgbox, %zippedItems%
+  psh.Namespace( sUnz ).CopyHere( psh.Namespace( sZip ).items, 4|16 )
+  Loop, %zippedItems%
+  {
+    sleep 100
+    unzippedItems := psh.Namespace( sUnz ).items().count
+    ToolTip Unzipping in progress..
+    ;IfEqual,zippedItems,%unzippedItems%
+    ;  break
+  }
+  ToolTip
 }
 

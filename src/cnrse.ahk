@@ -6,7 +6,14 @@
 ; v0.8.0.6  some code corrections and more things to do... trying to add erf-reader without third party tools
 ; v0.8.0.7  adding third party tools for erf extraction/creation by niv at github.com (neverwinter.nim)
 ;================================================================================
-VERSION := "0.8.0.7"
+
+{
+;  UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/version.ini , version.ini
+  IniRead, TVERSION, version.ini, Other, TVERSION
+  IniRead, TLATENIV, version.ini, Other, TLATENIV
+;  FileDelete, version.ini
+}
+
 ;================================================================================
 
 #NoTrayIcon
@@ -27,8 +34,15 @@ NAME := "CNR - Recipe-Script Editor"
 
 Main:                                                                            ; <<<===  Main begins
 {
-  GetConfig()
-  GetLanguage()
+  GetConfig()                                                                    ; create config-file, if nothing exists
+  GetLanguage()                                                                  ; create language-file, if nothing exists
+  GetTools()                                                                     ; look for tools, csv. download if necessary!
+  
+  If VERSION != %TVERSION%
+    MsgBox, %OnOldVersionD1%`n%OnOldVersionD2% %NAME%
+  
+  If LATENIV != %TLATENIV%
+    MsgBox, %OnOldVersionD3%
   
   Menu, MyMenu, Add, %MenuOptions%, Options
   Menu, MyMenu, Add, %MenuShowAbout%, ShowAbout
@@ -39,9 +53,6 @@ Main:                                                                           
   Gui, 1: Add, DDL,    x156 y5   w75 AltSubmit gSaveVariant vSaveVar, %SaveVariantText%
   
   CountedRecipes := 0
-  
-  If !FileExist(SCRIPT_DIR)
-    MsgBox, %OnNoRecipeHere% %SCRIPT_DIR%.
   
   Loop, Files, %SCRIPT_DIR%cnr*.nss                                              ; go through all cnr*.nss scripts in folder. this is for testing yet. later it should extract it from mod
   {
@@ -101,7 +112,7 @@ Main:                                                                           
       {
         WinGui2NewPosX := WinGui1NewX + WinGui1W + 15
         WinGui2NewPosY := WinGui1NewY
-        WinMove, Edit Recipes, , %WinGui2NewPosX%, %WinGui2NewPosY%
+        WinMove, %WinEditRecipe%, , %WinGui2NewPosX%, %WinGui2NewPosY%
       }
     }
   }
@@ -221,9 +232,9 @@ RecipeShow:                                                                     
     WinGui2Y := WinGui1Y
     
     Gui, 2: Show
-    Gui, 2: Show, x%WinGui2X% y%WinGui2Y% autosize, Edit Recipes
+    Gui, 2: Show, x%WinGui2X% y%WinGui2Y% autosize, %WinEditRecipe%
     
-    WinSet, exstyle, -0x80000, Edit Recipes
+    WinSet, exstyle, -0x80000, %WinEditRecipe%
     WinGet, EditWin
     Winset, Redraw
     
@@ -713,7 +724,7 @@ Return
 
 OpenErf:
 {
-  MsgBox, 4, ,
+  MsgBox, 52, ,
   (
 Note: This relays on third party tools (in this case on niv's neverwinter.nim) to extract the nss' from an ERF-file.
 So it is nessesary to check if it's a new version online.
@@ -722,12 +733,28 @@ On this early stage you must check for yourself.
 Is it on the least stable version?
   )
   
-  IfMsgBox No
+  IfMsgBox, No
     Return
   
   FileSelectFile, OpenErfVar, , , , ERF-File (*.erf)
   If !FileExist("\erf")
     FileCreateDir, erf
+  
+  If !FileExist("\erf\*.nss")
+  {
+    MsgBox, 547, , 
+    (
+Beware: There are items in the erf-folder! If you want to empty the folder first, click "Yes"
+On choosing "No" it will overwrite existing scripts.
+You can stop this progress by choosing "Cancel"
+    )
+  
+  IfMsgBox, Yes
+    FileDelete, \erf\*.nss
+  
+  IfMsgBox, Cancel
+    Return
+  }
   
   If OpenErfVar
   {
@@ -784,10 +811,13 @@ Options:
   Gui, 3: Add, DDL,    x6   y74        gLang vLANG, %LANGS%
   
   Gui, 3: Add, Button, x55  y105        gCloseOpts, %OptWinFavEditCls%
+  
   Gui, 1: +Disabled
   Gui, 2: +Disabled
+  
   Gui, 3: Show
   Gui, 3: Show, center w150 h150, %OptWinName%
+  WinSet, exstyle, -0x80000, %OptWinName%
 Return
 
 Lang:
@@ -827,8 +857,10 @@ EditorDefault:
 Return
 
 ShowAbout:
-  If DEBUG
+  If !DEBUG
+  {
     ListVars
+  }
   Else
     MsgBox, %OnNothingToShow%
 Return
@@ -843,12 +875,8 @@ WM_MOUSEMOVE()
     MouseGetPos, , , ActWindow
     WinGet, MainWin, ID, "CNR - Recipe-Script Editor"
     
-;    If (%ActWindow% != %MainWin%)
-;      return
-    
     static CurrControl, PrevControl, _TT                                         ; _TT is kept blank for use by the ToolTip command below.
     CurrControl := A_GuiControl
-    
     CurrControl := RemoveUnessesaries(CurrControl)
     
     If (CurrControl <> PrevControl and not InStr(CurrControl, " "))
@@ -858,13 +886,13 @@ WM_MOUSEMOVE()
       PrevControl := CurrControl
     }
     return
-
+    
     DisplayToolTip:
       SetTimer, DisplayToolTip, Off
       ToolTip % %CurrControl%_TT                                                 ; The leading percent sign tell it to use an expression.
       SetTimer, RemoveToolTip, 3000
     return
-
+    
     RemoveToolTip:
       SetTimer, RemoveToolTip, Off
       ToolTip
