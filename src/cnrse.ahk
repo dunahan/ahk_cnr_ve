@@ -2,16 +2,21 @@
 ;  CNR - Recipe-Script Editor
 ;  Author: Tobias Wirth (dunahan@schwerterkueste.de)
 ;================================================================================
-; v0.8.0.5  save func now builds up full script snippet, added the ability per right mouse to edit the nss directly
 ; v0.8.0.6  some code corrections and more things to do... trying to add erf-reader without third party tools
 ; v0.8.0.7  adding third party tools for erf extraction/creation by niv at github.com (neverwinter.nim)
+; v0.8.0.8  updated some older code for compatibility to newer AHK versions, created numbering of recipes for later updates of recipes
+;           minor bugfixing
 ;================================================================================
+IniRead, OFFLINE, config.ini, Default, OFFLINE, 0
 
 {
-;  UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/version.ini , version.ini
+  If !OFFLINE
+    UrlDownloadToFile, https://github.com/dunahan/ahk_cnr_ve/blob/master/bin/version.ini , version.ini
   IniRead, TVERSION, version.ini, Other, TVERSION
   IniRead, TLATENIV, version.ini, Other, TLATENIV
-;  FileDelete, version.ini
+  
+  If !OFFLINE
+    FileDelete, version.ini
 }
 
 ;================================================================================
@@ -56,12 +61,12 @@ Main:                                                                           
   
   Loop, Files, %SCRIPT_DIR%cnr*.nss                                              ; go through all cnr*.nss scripts in folder. this is for testing yet. later it should extract it from mod
   {
-    IfNotInString, A_LoopFileName, _
+    If !InStr(A_LoopFileName, "_")
     {
       StringTrimRight, VarName, A_LoopFileName, 4
       Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY% w120 h20 v%VarName% cBlue gRecipeShow, %A_LoopFileName%
       
-      IfNotInString, VarName, Chr(34)                                            ; add tooltip only if its possible
+      If !InStr(VarName, Chr(34))                                                ; add tooltip only if its possible
         %VarName%_TT = %OnToolTipMain1%`n%OnToolTipMain2%
       
       CountedRecipes := CountedRecipes + 1
@@ -81,12 +86,7 @@ Main:                                                                           
   
   Gui, 1: Submit, NoHide
   
-  Gui, 1: Font, c000000 9, MS Sans SerIf
-  Gui, 1: +E0x80000000
-  
-  Gui, 1: Show
-  Gui, 1: Show, center autosize, %NAME%
-  WinSet, exstyle, -0x80000, %NAME%
+  Gui, 1: Show, Center Autosize, %NAME%
   
   WinGet, MainWin, ID, %NAME%
   WinGetPos, WinGui1X, WinGui1Y, WinGui1W, WinGui1H, %NAME%                      ; save position of the main window, later interesting for more than one monitor
@@ -210,6 +210,7 @@ RecipeShow:                                                                     
     PrintWorkbenchName          := ReturnWorkbenchFromRecipe(ArrayTmpPath)
     PrintWorkbenchMenu          := ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
     PrintRecipesWithinWorkbench := ReturnRecipeListFromRecipe(ArrayTmpPath)
+    RecipeListForGui4           := PrintRecipesWithinWorkbench
     
     If (PrintWorkbenchName == "")
       PrintWorkbenchName := RecipeScript
@@ -218,25 +219,22 @@ RecipeShow:                                                                     
       Gui, 2: Add, ListView, x6 y350 r20 c50 w550 h220 vListViewElement, ClassNN|HWND|Tab Control|Tab #|Text
     
     Gui, 2: Add, Text, x6   y8 w250 h21, %PrintWorkbenchName%                    ; build up GUI 2
-    Gui, 2: Add, DDL,  x235 y5 w310 Sort vActRecipeProduct Choose1 gRecipesWithinWorkbench, %PrintRecipesWithinWorkbench%
+    Gui, 2: Add, DDL,  x235 y5 w310 Sort vActRecipeProduct Choose1 gRecipesWithinWorkbench HwndActRecipeProductHwnd, %PrintRecipesWithinWorkbench%
       ActRecipeProduct_TT = Changed data will be erased if you change the recipe without using the <Save button>
     
     GoSub, BuildUpCompAndMisc
     
-    Gui, 2: +owner1
+    ;Gui, 2: +owner1
     Gui, 2: +ToolWindow
-    Gui, 2: +LastFound
+    ;Gui, 2: +LastFound
     hGui2 := WinExist()
     
     WinGui2X := WinGui1X + WinGui1W + 15                                         ; show GUI 2
     WinGui2Y := WinGui1Y
     
-    Gui, 2: Show
-    Gui, 2: Show, x%WinGui2X% y%WinGui2Y% autosize, %WinEditRecipe%
+    Gui, 2: Show, x%WinGui2X% y%WinGui2Y% Autosize, %WinEditRecipe%
     
-    WinSet, exstyle, -0x80000, %WinEditRecipe%
-    WinGet, EditWin
-    Winset, Redraw
+    WinGet, EditWin, ID, %WinEditRecipe%
     
     PrintWorkbenchName = 
     PrintWorkbenchMenu = 
@@ -260,15 +258,19 @@ BuildUpCompAndMisc:                                                             
   If (PrintWorkbenchMenu = "None")
     Me := 1
   
-  IfInString, PrintWorkbenchMenu, %PrintActRecipeWorkbenchName%
+  If InStr(PrintWorkbenchMenu, %PrintActRecipeWorkbenchName%)
     Me := GetWorkbenchNumberInList(PrintWorkbenchMenu, PrintActRecipeWorkbenchName)
   
-  Gui, 2: Add, Tab2, x6 y35 w550 h300                           gEditRecipeTab, %Tab2RecipePure%|%Tab2ComBiPEdit%|%Tab2MiscEditor%
+  RecipeNbr := ReturnMatchingRecipeNbrFromScript(PrintActRecipeProductTag)
+  
+  Gui, 2: Add, Tab3, x6 y35 w550 h300                           gEditRecipeTab, %Tab2RecipePure%|%Tab2ComBiPEdit%|%Tab2MiscEditor%
   {
     Gui, 2: Tab, %Tab2RecipePure%, , Exact
     {
       Gui, 2: Add, Text, x15  y65  w100 h21                                   , %Tab2RecipWorkb%:
       Gui, 2: Add, Edit, x105 y61  w250      vShowWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
+      Gui, 2: Add, Text, x405 y65  w125 h21                                   , %Tab2RecipScrNr%:
+      Gui, 2: Add, Text, x510 y65  w42  h21  vRecipeNbrInScript   gNbrDblClick, %RecipeNbr%
       Gui, 2: Add, Text, x15  y90  w100 h21                                   , %Tab2RecipWbMen%:
       Gui, 2: Add, DDL,  x105 y86  w250      vShowWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
       Gui, 2: Add, Text, x15  y115 w100 h21                                   , %Tab2RecipProdN%:
@@ -312,7 +314,7 @@ BuildUpCompAndMisc:                                                             
           ComponentArray := ReturnPlaceComponent(A_LoopField)
           ComponentArray := StrSplit(ComponentArray, "|")
           
-          IfInString, A_LoopField, CNR_RECIPE_SPELL
+          If InStr(A_LoopField, "CNR_RECIPE_SPELL", TRUE)
           {
             PlaceComponent := ComponentArray[3]
             NbrCA := ComponentArray[2]
@@ -504,6 +506,28 @@ BuildUpCompAndMisc:                                                             
 }
 Return                                                                           ; <<<===  Build up contents ends
 
+NbrDblClick:
+{
+  If A_GuiControlEvent = DoubleClick
+  {
+    CoordMode, Mouse, Screen
+    MouseGetPos, ChooseX, ChooseY, , CtrlTxt, 2
+    ControlGetText, CtrlTxt, , ahk_id %CtrlTxt%
+    
+    CtrlTxt := CtrlTxt - ReturnCountedRecipesFromScript()
+    CtrlTxt := CtrlTxt * (-1)
+    CtrlTxt := CtrlTxt + 1
+    
+    ChooseX := ChooseX - 336
+    ChooseY := ChooseY + 10
+    
+    Gui, 4: Add, DDL, w310 vChangeToNewProduct gUpdateRecipes Choose%CtrlTxt%, %RecipeListForGui4%
+    Gui, 4: +ToolWindow
+    Gui, 4: Show, x%ChooseX% y%ChooseY%, Choose Recipe
+  }
+}
+Return
+
 CheckAbs:                                                                        ; <<<===  Check Abilities begins
 {
   Gui, 2: Submit, NoHide
@@ -525,6 +549,7 @@ RecipesWithinWorkbench:                                                         
   PrintActRecipeProductTag  := TrimToGetTag(ActRecipeProduct)
   PrintActRecipeProductNbr  := GetCreatedProductNbr(PrintActRecipeProductTag)
   NewRecipeWorkbench        := GetWorkbenchName(PrintActRecipeProductTag)
+  NewRecipeNbr              := ReturnMatchingRecipeNbrFromScript(PrintActRecipeProductTag)
   SCRIPTVAR                 := ReturnScriptSnippetForRecipe(PrintActRecipeProductTag)
   
   ComponentsToShow := CompToArray(PrintActRecipeProductTag)
@@ -538,6 +563,7 @@ RecipesWithinWorkbench:                                                         
     MsgBox, RecipesWithinWorkbench: %NewRecipeWorkbench%
   
   GuiControl,, ShowRecipeProduct,     %PrintActRecipeProduct%                    ; update necessary fields
+  GuiControl,, RecipeNbrInScript,     %NewRecipeNbr%
   GuiControl,, ShowRecipeProductTag,  %PrintActRecipeProductTag%
   GuiControl,, ShowRecipeProductNbr,  %PrintActRecipeProductNbr%
   GuiControl,, ShowRecipeScript,      %SCRIPTVAR%
@@ -586,7 +612,7 @@ RecipesWithinWorkbench:                                                         
       ComponentArray := ReturnPlaceComponent(A_LoopField)
       ComponentArray := StrSplit(ComponentArray, "|")
       
-      IfInString, A_LoopField, CNR_RECIPE_SPELL
+      If InStr(A_LoopField, "CNR_RECIPE_SPELL", TRUE)
       {
         PlaceComponent := ComponentArray[3]
         NbrCA := ComponentArray[2]
@@ -718,6 +744,37 @@ Save:                                                                           
 }
 Return                                                                           ; <<<===  Save check ends
 
+UpdateRecipes:
+{
+  Gui, 4: Submit, NoHide
+  Gui, 2: Submit, NoHide
+  
+  If DEBUG
+    MsgBox, % "From`n" ActRecipeProduct "`nTo`n" ChangeToNewProduct "`nAt`n" ActRecipeProductHwnd
+  
+  ControlGet, RecipeList, List,,, ahk_id %ActRecipeProductHwnd%
+  Loop, Parse, RecipeList, `n
+  {
+    If DEBUG
+      MsgBox, Nbr %A_Index% is %A_LoopField%.
+    
+    If InStr(A_LoopField, ChangeToNewProduct)
+    {
+      ChooseNew := A_Index
+      
+      If DEBUG
+        MsgBox, Nbr %ChooseNew% is %A_LoopField%.
+      
+      break
+    }
+  }
+  
+  Control, ChooseString, %ChangeToNewProduct%, , ahk_id %ActRecipeProductHwnd%
+  
+  Gui, 4: Destroy
+}
+Return
+
 EditRecipeTab:
   ;MsgBox, %OnNothingToShow%
 Return
@@ -740,26 +797,32 @@ Is it on the least stable version?
   If !FileExist("\erf")
     FileCreateDir, erf
   
-  If !FileExist("\erf\*.nss")
+  SplitPath, OpenErfVar, File
+  If FileExist("erf\" File)
   {
     MsgBox, 547, , 
     (
-Beware: There are items in the erf-folder! If you want to empty the folder first, click "Yes"
-On choosing "No" it will overwrite existing scripts.
-You can stop this progress by choosing "Cancel"
+Beware: There are the same items in the erf-folder! If you want zip those files for security choose <Yes>
+On choosing <No> it will overwrite existing scripts.
+You can stop this progress by choosing <Cancel>.
     )
   
-  IfMsgBox, Yes
-    FileDelete, \erf\*.nss
-  
-  IfMsgBox, Cancel
-    Return
+    IfMsgBox, Yes
+    {
+      tZip := SubStr(File, 1, StrLen(File) - 4) ".zip"
+      Zip(SCRIPT_DIR, tZip)
+      
+      ;FileRemoveDir, erf, 1
+      ;FileCreateDir, erf
+    }
+    
+    IfMsgBox, Cancel
+      Return
   }
   
   If OpenErfVar
   {
     FileCopy, %OpenErfVar%, %A_WorkingDir%, TRUE
-    SplitPath, OpenErfVar, File
     
     If DEBUG
     {
@@ -783,12 +846,12 @@ You can stop this progress by choosing "Cancel"
       FileMove, %A_LoopReadLine%, %A_WorkingDir%\erf\, TRUE
       FileMove, %File%, %A_WorkingDir%\erf\, TRUE
     }
+    
+    FileMove, log.txt, %A_WorkingDir%\erf\, TRUE
   }
   
   Else
     MsgBox, %OpenErfError%
-  
-  FileDelete, log.txt
   
   MsgBox, %OpenErfClose%
   GoSub, GuiClose
@@ -800,6 +863,7 @@ NewRecipe:
 Return
 
 Options:
+{
   Gui, 3: Add, Text,   x6   y6                    , %OptWinFavEditTxt%:
   Gui, 3: Add, Button, x6   y27 w87  gChooseEditor, %OptWinFavEditBtn%
   Gui, 3: Add, Button, x97  y27     gEditorDefault, %OptWinFavEditDef%
@@ -815,9 +879,9 @@ Options:
   Gui, 1: +Disabled
   Gui, 2: +Disabled
   
-  Gui, 3: Show
+  Gui, 3: +ToolWindow
   Gui, 3: Show, center w150 h150, %OptWinName%
-  WinSet, exstyle, -0x80000, %OptWinName%
+}
 Return
 
 Lang:
@@ -908,6 +972,7 @@ WM_MOUSEMOVE()
 2GuiClose:
 2GuiEscape:
   Gui, 2: Destroy
+  Gui, 4: Destroy
   EditWin = 
   RecipeTagTabBuilded = 0
 Return
@@ -920,6 +985,11 @@ Return
   Gui, 1: -Disabled
   Gui, 2: -Disabled
   Gui, 3: Destroy
+Return
+
+4GuiClose:
+4GuiEscape:
+  Gui, 4: Destroy
 Return
 
 

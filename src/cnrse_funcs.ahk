@@ -147,7 +147,7 @@ GetSpellName(SpellConstant)
 CreateArrayTempFile(FileToParse, FileForArray)
 {
   ArrayTmp := FileOpen(FileForArray, "w")
-  
+  CR := 0
   If !IsObject(ArrayTmp)
   {
     MsgBox, Can't open "%FileName%" for writing.
@@ -156,7 +156,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
   
   Loop, Read, %FileToParse%                                                      ; add all SubMenues from "CnrRecipeAddSubMenu"  to   >M|<
   {
-    IfInString, A_LoopReadLine, CnrRecipeAddSubMenu
+    If InStr(A_LoopReadLine, "CnrRecipeAddSubMenu", TRUE)
     {
       StringReplace, SubMenuResult, A_LoopReadLine, %A_SPACE%, , All             ; delete all spaces        >stringsMenuForgeMetal=CnrRecipeAddSubMenu("cnrForgePublic","Metall");
       
@@ -173,7 +173,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         ArrayTmp.Write(SubMenuResult)
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeSetDeviceTradeskillType                 ; add Workbench from "CnrRecipeSetDeviceTradeskillType"  to >N|<
+    If InStr(A_LoopReadLine, "CnrRecipeSetDeviceTradeskillType", TRUE)           ; add Workbench from "CnrRecipeSetDeviceTradeskillType"  to >N|<
     {
       If (RecipeWorkbench = "")                                                  ; stop, if line already exist
       {
@@ -185,13 +185,13 @@ CreateArrayTempFile(FileToParse, FileForArray)
         RecipeWorkbench := StrReplace(RecipeWorkbench, ", ", "|", ALL)           ; replace , & space with | >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING);<
         RecipeWorkbench := StrReplace(RecipeWorkbench, ");" , "", ALL)           ; delete );                >cnrCarpsBench|CNR_TRADESKILL_WOOD_CRAFTING<
         
-        IfInString, RecipeWorkbench, */
+        If InStr(RecipeWorkbench, "*/", TRUE)
           RecipeWorkbench := StrReplace(RecipeWorkbench, "*/", "", ALL)          ; delete ggf. */ 
           
         WorkbenchArray := StrSplit(RecipeWorkbench, "|")
         RecipeWorkbench := WorkbenchArray[1]                                     ; workbench at array nbr 1
         
-        IfInString, RecipeWorkbench, //                                          ; delete comments
+        If InStr(RecipeWorkbench, "//", TRUE)                                    ; delete comments
         {
           StringGetPos, Count, RecipeWorkbench, //
           StringLeft, RecipeWorkbench, RecipeWorkbench, Count
@@ -203,7 +203,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
       }
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeCreateRecipe                            ; add Recipe from "CnrRecipeCreateRecipe"  to  >R|<
+    If InStr(A_LoopReadLine, "CnrRecipeCreateRecipe", TRUE)                      ; add Recipe from "CnrRecipeCreateRecipe"  to  >R|<
     {
       RecipeRef =                                                                ; new recipe beginning, reset references
       ; get the line workable
@@ -225,19 +225,19 @@ CreateArrayTempFile(FileToParse, FileForArray)
       Else                                                                       ; > sKeyToRecipe = CnrRecipeCreateRecipe(sMenuTinkerArrowheads, "Arrowheads, Plain", "cnrArwHeadPlain", 1);
       {
         RecipeResult := StrReplace(RecipeResult, ", ", "|", ALL)                 ; replace , & space with | >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1);<
-        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)                 ; delete );                >cnrWaterTub,Filled Water Bucket,cnrBucketWater,1
+        RecipeResult := StrReplace(RecipeResult, ");" , "", ALL)                 ; delete );                >cnrWaterTub|Filled Water Bucket|cnrBucketWater|1
       }
       
-      IfInString, RecipeResult, */
+      If InStr(RecipeResult, "*/", TRUE)
         RecipeResult := StrReplace(RecipeResult, "*/", "", ALL)                  ; delete ggf. */
       
-      IfInString, RecipeResult, //                                               ; delete comments
+      If InStr(RecipeResult, "//", TRUE)                                         ; delete comments
       {
         StringGetPos, Count, RecipeResult, //
         StringLeft, RecipeResult, RecipeResult, Count
       }
       
-      IfInString, RecipeResult, GetObjectName                                    ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
+      If InStr(RecipeResult, "GetObjectName", TRUE)                              ; sMenuMythArmors|GetObjectName(NW_MAARCL037)|NW_MAARCL037|1
       {
         TempArray := StrSplit(RecipeResult, "|")                                 ; create array
         Replace := TempArray[2]                                                  ; look for "GetObjectName(NW_MAARCL037)"
@@ -249,6 +249,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
         RecipeResult := StrReplace(RecipeResult, Replace, ReplaceText)           ; set it
       }
       
+      TempArray := StrSplit(RecipeResult, "|")                                   ; create array
+      Replace := TempArray[3]
+      CR := CR + 1                                                               ; [1|X1_IT_SPARSCR502]
+      CRTxt = [%CR%|%Replace%]`n
       RecipeResult = R|%RecipeResult%`n                                          ; result =>R|sMenuLevel5Scrolls|Dismissal|X1_IT_SPARSCR502|1
       
       If (RecipeRef = "")
@@ -258,12 +262,13 @@ CreateArrayTempFile(FileToParse, FileForArray)
       }
       
       If (RecipeResult != "")
-        ArrayTmp.Write(RecipeResult)
+        ArrayTmp.Write(CRTxt RecipeResult)
+      
       CountedPs := 0                                                             ; new recipe, so set to zero!
       CountedBs := 0
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeAddComponent                            ; add comPonents from "CnrRecipeAddComponent"  to  >P#|<
+    If InStr(A_LoopReadLine, "CnrRecipeAddComponent", TRUE)                      ; add comPonents from "CnrRecipeAddComponent"  to  >P#|<
     {
       ; get the line workable
       ComponentResult := StrReplace(A_LoopReadLine, Chr(34), "", ALL)            ; delete every "           >  CnrRecipeAddComponent(sKeyToRecipe, cnrBucketEmpty, 1);
@@ -273,10 +278,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
       ComponentResult := StrReplace(ComponentResult, ", ", "|", ALL)             ; replace , & space with | >|cnrBucketEmpty| 1);
       ComponentResult := StrReplace(ComponentResult, ");" , "", ALL)             ; delete );                >|cnrBucketEmpty| 1
       
-      IfInString, ComponentResult, */
+      If InStr(ComponentResult, "*/", TRUE)
         ComponentResult := StrReplace(ComponentResult, "*/", "", ALL)            ; delete ggf. */
       
-      IfInString, ComponentResult, //                                            ; delete ggf. kommentare
+      If InStr(ComponentResult, "//", TRUE)                                      ; delete ggf. kommentare
       {
         StringGetPos, Count, ComponentResult, //
         StringLeft, ComponentResult, ComponentResult, Count
@@ -291,7 +296,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
       StringTrimLeft, ProductResult, ComponentResult, 1                          ; delete first |           >NW_MAARCL078|1|1
       StringTrimRight, ProductResult, ProductResult, Count                       ; delete after last |      >NW_MAARCL078
       
-      IfInString, ComponentResult, CNR_RECIPE_SPELL                              ; P4|ERROR011|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
+      If InStr(ComponentResult, "CNR_RECIPE_SPELL", TRUE)                        ; P4|ERROR011|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST|CNR_RECIPE_SPELL|1|SPELL_RAY_OF_FROST
       {
         TempArray := StrSplit(ComponentResult, "|")                              ; create array
         Replace := TempArray[4]                                                  ; read const int SPELL_RAY_OF_FROST
@@ -307,7 +312,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         ArrayTmp.Write(ComponentResult)
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeSetRecipeBiproduct                      ; add Biproducts from "CnrRecipeSetRecipeBiproduct"  to  >B#|<
+    If InStr(A_LoopReadLine, "CnrRecipeSetRecipeBiproduct", TRUE)                ; add Biproducts from "CnrRecipeSetRecipeBiproduct"  to  >B#|<
     {
       ; get the line workable
       Temp := A_LoopReadLine                                                     ; save in temp             >  CnrRecipeSetRecipeBiproduct(sKeyToRecipe, "cnrGlassVial", 1, 1);
@@ -332,7 +337,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         ArrayTmp.Write(BiProductResult)
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeSetRecipeLevel                          ; add Level from "CnrRecipeSetRecipeLevel"  to  >L|<
+    If InStr(A_LoopReadLine, "CnrRecipeSetRecipeLevel", TRUE)                    ; add Level from "CnrRecipeSetRecipeLevel"  to  >L|<
     {
       ; get the line workable
       LevelResult := A_LoopReadLine
@@ -347,7 +352,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         ArrayTmp.Write(LevelResult)
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeSetRecipeXP                             ; add XP from "CnrRecipeSetRecipeXP"  to  >X|<
+    If InStr(A_LoopReadLine, "CnrRecipeSetRecipeXP", TRUE)                       ; add XP from "CnrRecipeSetRecipeXP"  to  >X|<
     {
       ; get the line workable
       XpResult := A_LoopReadLine
@@ -357,10 +362,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
       XpResult := StrReplace(XpResult, ", ", "|", ALL)                           ; replace , & space mit |  >| 5| 5);
       XpResult := StrReplace(XpResult, ");" , "", ALL)                           ; delete );                >| 5| 5
       
-      IfInString, XpResult, */
+      If InStr(XpResult, "*/", TRUE)
         XpResult := StrReplace(XpResult, "*/", "", ALL)                          ; delete */
       
-      IfInString, XpResult, //
+      If InStr(XpResult, "//", TRUE)
       {
         StringGetPos, Count, XpResult, //
         StringLeft, XpResult, XpResult, Count
@@ -372,7 +377,7 @@ CreateArrayTempFile(FileToParse, FileForArray)
         ArrayTmp.Write(XpResult)
     }
     
-    IfInString, A_LoopReadLine, CnrRecipeSetRecipeAbilityPercentages             ; add Abilities from "CnrRecipeSetRecipeAbilityPercentages"  to  >A|<
+    If InStr(A_LoopReadLine, "CnrRecipeSetRecipeAbilityPercentages", TRUE)       ; add Abilities from "CnrRecipeSetRecipeAbilityPercentages"  to  >A|<
     {
       ; get the line workable
       AbsResult := A_LoopReadLine
@@ -382,10 +387,10 @@ CreateArrayTempFile(FileToParse, FileForArray)
       AbsResult := StrReplace(AbsResult, ", ", "|", ALL)                         ; replace , & space mit |  >| 0| 0|40| 0|60| 0);
       AbsResult := StrReplace(AbsResult, ");" , "", ALL)                         ; delete );                >| 0| 0|40| 0|60| 0
       
-      IfInString, AbsResult, */
+      If InStr(AbsResult, "*/", TRUE)
         AbsResult := StrReplace(AbsResult, "*/", "", ALL)                        ; delete */
       
-      IfInString, AbsResult, //
+      If InStr(AbsResult, "//", TRUE)
       {
         StringGetPos, Count, AbsResult, //
         StringLeft, AbsResult, AbsResult, Count
@@ -422,6 +427,39 @@ CreateArrayTempFile(FileToParse, FileForArray)
   ArrayTmp.Close()                                                               ; array was saved, so close file
 }
 ;================================================================================
+
+ReturnMatchingRecipeNbrFromScript(ProductTag)
+{
+  ArrayTmpPath := A_WorkingDir . "\tmp\array.tmp"
+  
+  Loop, Read, %ArrayTmpPath%
+  {
+    If (InStr(A_LoopReadLine, ProductTag "]", TRUE))
+    {
+      Result := StrSplit(A_LoopReadLine, "|")
+      Result := Result[1]
+      Result := StrReplace(Result, "[", "", ALL)
+    }
+  }
+  
+  return Result
+}
+
+ReturnCountedRecipesFromScript()
+{
+  ArrayTmpPath := A_WorkingDir . "\tmp\array.tmp"
+  Result := 0
+  
+  Loop, Read, %ArrayTmpPath%
+  {
+    If (InStr(A_LoopReadLine, "]", TRUE))
+    {
+      Result := Result + 1
+    }
+  }
+  
+  return Result
+}
 
 ;================================================================================
 ; ReturnWorkbenchFromRecipe(ArrayTmpPath)
@@ -483,11 +521,11 @@ ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "M"
-    If (WhatKindOf = "M")                                                        ; name of workbench
+    If InStr(WhatKindOf, "M", TRUE)                                              ; name of workbench
     {
       Workbench := RecipeArray[2]                                                ; at nbr two from "M"
       
-      IfNotInString, Result, Workbench                                           ; add it, if its not here
+      If !InStr(Result, "Workbench", TRUE)                                       ; add it, if its not here
         Result = %Workbench%|%Result%
     }
   }
@@ -499,7 +537,7 @@ ReturnWorkbenchMenuFromRecipe(ArrayTmpPath)
       RecipeArray := StrSplit(A_LoopReadLine, "|")
       WhatKindOf := RecipeArray[1]
       ; if "R"
-      If (WhatKindOf = "R")                                                      ; name of workbench
+      If InStr(WhatKindOf, "R", TRUE)                                            ; name of workbench
         Result := RecipeArray[2]                                                 ; is at nbr 2 for "N"
     }
   }
@@ -523,12 +561,12 @@ ReturnRecipeListFromRecipe(ArrayTmpPath)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "R"
-    If (WhatKindOf = "R")                                                        ; recipe beginning
+    If InStr(WhatKindOf, "R", TRUE)                                              ; recipe beginning
     {
       RecipeProduct    := RecipeArray[3]                                         ; Name of procuct
       RecipeProductTag := RecipeArray[4]                                         ; ResRef/Tag of product
       
-      IfInString, RecipeProduct, GetObjectName                                   ; is GetObjectName in string? replace it
+      If InStr(RecipeProduct, "GetObjectName", TRUE)                             ; is GetObjectName in string? replace it
         RecipeProduct := GetObjectName(RecipeProductTag)
       
       RecipeProductNbr := RecipeArray[5]                                         ; nbr of products
@@ -576,12 +614,12 @@ ReturnComponentsFromRecipe(ProductToLookFor)
     }
     
     ; if "P"
-    IfInString, WhatKindOf, P                                                    ; build up array for second loop
+    If InStr(WhatKindOf, "P", TRUE)                                                ; build up array for second loop
     {
       If (ProductTag = ProductToLookFor)
         SecLoop = %A_LoopReadLine%$%SecLoop%
       
-      IfInString, SecLoop, ERROR
+      If InStr(SecLoop, "ERROR", TRUE)
         StringTrimRight, SecLoop, SecLoop, 9                                     ; delete Error-Msg, result should not contain false!
     }
   }
@@ -602,7 +640,7 @@ ReturnComponentsFromRecipe(ProductToLookFor)
       }
       Else
       {
-        IfInString, RecipeArray, CNR_RECIPE_SPELL
+        If InStr(RecipeArray, "CNR_RECIPE_SPELL", TRUE)
         {
           Tag := RecipeArray[4]
           NbrA := RecipeArray[5]
@@ -637,10 +675,10 @@ ReturnComponentsFromRecipe(ProductToLookFor)
 ;================================================================================
 
 TurnToArray(string) {
-  IfInString, string, CnrRecipeAddComponent
+  If InStr(string, "CnrRecipeAddComponent", TRUE)
     string := StrReplace(string, "CnrRecipeAddComponent(sKeyToRecipe, ", "", ALL)
   
-  IfInString, string, CnrRecipeSetRecipeBiproduct
+  If InStr(string, "CnrRecipeSetRecipeBiproduct", TRUE)
     string := StrReplace(string, "CnrRecipeSetRecipeBiproduct(sKeyToRecipe, ", "", ALL)
   
   string := StrReplace(string, Chr(34), "", ALL)
@@ -682,12 +720,12 @@ ReturnBiproductsFromRecipe(ProductToLookFor)
       Temp := RecipeArray[6]
     
     ; if "B"
-    IfInString, WhatKindOf, B                                                    ; how many loops?
+    If InStr(WhatKindOf, "B", TRUE)                                              ; how many loops?
     {
       If (ProductTag = ProductToLookFor)
         SecLoop = %A_LoopReadLine%,%SecLoop%
       
-      IfInString, SecLoop, ERROR
+      If InStr(SecLoop, "ERROR", TRUE)
         StringTrimRight, SecLoop, SecLoop, 9                                     ; delete Error-Msg, result not false!
     }
   }
@@ -755,7 +793,7 @@ ReturnLevelFromRecipe(ProductToLookFor)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "L"
-    If (WhatKindOf = "L")                                                        ; Level string?
+    If InStr(WhatKindOf, "L", TRUE)                                              ; Level string?
     {
       WhatKindOf := RecipeArray[3]                                               ; look for tag
       Temp := RecipeArray[2]                                                     ; Level
@@ -794,7 +832,7 @@ ReturnXPFromRecipe(ProductToLookFor)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "X"
-    If (WhatKindOf = "X")                                                        ; XP for creating a product
+    If InStr(WhatKindOf, "X", TRUE)                                              ; XP for creating a product
     {
       WhatKindOf := RecipeArray[4]                                               ; look for tag
       RecipeCP := RecipeArray[2]
@@ -835,7 +873,7 @@ ReturnAbilitysFromRecipe(ProductToLookFor)
     RecipeArray := StrSplit(A_LoopReadLine, "|")
     WhatKindOf := RecipeArray[1]
     ; if "A"
-    If (WhatKindOf = "A")                                                        ; set abilities  >A|0|50|50|0|0|0|ProductToLookFor
+    If InStr(WhatKindOf, "A", TRUE)                                              ; set abilities  >A|0|50|50|0|0|0|ProductToLookFor
     {
       WhatKindOf := RecipeArray[8]                                               ; look for tag
       AbilityStr := RecipeArray[2]
@@ -904,7 +942,7 @@ TrimToGetTag(LookAndTrim)
 ;================================================================================
 TrimToGetProduct(LookAndTrim)
 {
-  IfInString, LookAndTrim, GetObjectName                                         ; is GetObjectName in string
+  If InStr(LookAndTrim, "GetObjectName", TRUE)                                   ; is GetObjectName in string
   {
     LookAndTrim := TrimToGetTag(LookAndTrim)
     LookAndTrim := GetObjectName(LookAndTrim)
@@ -1081,6 +1119,8 @@ ReturnScriptSnippetForRecipe(ProductToShow)
     Result = %Result%CnrRecipeSetRecipeAbilityPercentages(sKeyToRecipe, %AB%);`n
   }
   
+  ;MsgBox, % PX "`n" BX "`n" LV "`n" XP "`n" AB
+  
   return Result
 }
 ;================================================================================
@@ -1178,7 +1218,7 @@ CreateChangedRecipeVersion()
   ; That's 10 long and is SPELL_DAZE
   ; cnrMoldSmall|1|cnrIngotCopp|4|CNR_RECIPE_SPELL|1|SPELL_DAZE|     $cnrMangledCopp|0|1|
   
-  IfInString, result, SPELL_
+  If InStr(result, "SPELL_", TRUE)
   {
     a := InStr(result, "SPELL_")
     b := InStr(result, "|", , a + 1)
@@ -1397,7 +1437,7 @@ ChangedRecipeToScriptSnippet(StringToSplit)
   StringTrimLeft, tmc, tmc, 3
   tmc := % tmc ");"
   
-  IfInString, tmc, CNR_RECIPE_SPELL
+  If InStr(tmc, "CNR_RECIPE_SPELL", TRUE)
     StringReplace, tmc, tmc, $CNR_RECIPE_SPELL$, CNR_RECIPE_SPELL
   
   If (tmb != "")
@@ -1481,7 +1521,7 @@ GetConfig()
   {
     MsgBox, No config file existing, creating a new one with defaults.`nStart %NAME% again.
     
-    IniWrite, 0.8.0.7a,                 config.ini, Default, VERSION
+    IniWrite, 0.8.0.8,                  config.ini, Default, VERSION
     IniWrite, 1.2.1,                    config.ini, Default, LATENIV
     IniWrite, EN,                       config.ini, Default, LANG
     
@@ -1538,6 +1578,7 @@ GetLanguage()
     IniRead, Tab2MiscEditor,    language.ini, %LANG%, Tab2MiscEditor,     Miscellaneous
     
     IniRead, Tab2RecipWorkb,    language.ini, %LANG%, Tab2RecipWorkb,     Workbench
+    IniRead, Tab2RecipScrNr,    language.ini, %LANG%, Tab2RecipScrNr,     Recipe-Nbr. in script
     IniRead, Tab2RecipWbMen,    language.ini, %LANG%, Tab2RecipWbMen,     Menue
     IniRead, Tab2RecipProdN,    language.ini, %LANG%, Tab2RecipProdN,     Product Name
     IniRead, Tab2RecipProdT,    language.ini, %LANG%, Tab2RecipProdT,     Tag/ResRef
@@ -1602,6 +1643,7 @@ GetLanguage()
     IniWrite, Miscellaneous,                          language.ini, EN, Tab2MiscEditor
     
     IniWrite, Workbench,                              language.ini, EN, Tab2RecipWorkb
+    IniWrite, Recipe-Nbr. in script,                  language.ini, EN, Tab2RecipScrNr
     IniWrite, Menue,                                  language.ini, EN, Tab2RecipWbMen
     IniWrite, Product Name,                           language.ini, EN, Tab2RecipProdN
     IniWrite, Tag/ResRef,                             language.ini, EN, Tab2RecipProdT
@@ -1667,6 +1709,7 @@ GetLanguage()
     IniWrite, Verschiedenes,                          language.ini, DE, Tab2MiscEditor
     
     IniWrite, Werkbank,                               language.ini, DE, Tab2RecipWorkb
+    IniWrite, Rezept-Nr. im Skript,                   language.ini, DE, Tab2RecipScrNr
     IniWrite, Menue,                                  language.ini, DE, Tab2RecipWbMen
     IniWrite, Produktname,                            language.ini, DE, Tab2RecipProdN
     IniWrite, Tag/ResRef,                             language.ini, DE, Tab2RecipProdT
@@ -1713,12 +1756,12 @@ GetTools()
   IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\erf\
   IniRead, TEMP_DIR, config.ini, Default, TEMP_DIR, %A_WorkingDir%\tmp\
   IniRead, ITM_FILE, config.ini, Default, ITM_FILE, %A_WorkingDir%\tools\
-  IniRead, OFFLINE, config.ini, Default, OFFLINE, 1
+  IniRead, OFFLINE, config.ini, Default, OFFLINE, 0
   
   If !FileExist(SCRIPT_DIR)
     FileCreateDir, erf
   
-  If !FileExist(SCRIPT_DIR "\cnr*.nss")
+  If !FileExist(SCRIPT_DIR "cnr*.nss")
     MsgBox, %OnNoRecipeHere% %SCRIPT_DIR%.
   
   If !FileExist(TEMP_DIR)
@@ -1790,22 +1833,26 @@ Zip(FilesToZip,sZip)
 {
   If Not FileExist(sZip)
     CreateZipFile(sZip)
+  
   psh := ComObjCreate( "Shell.Application" )
   pzip := psh.Namespace( sZip )
-  if InStr(FileExist(FilesToZip), "D")
-    FilesToZip .= SubStr(FilesToZip,0)="\" ? "*.*" : "\*.*"
-  loop,%FilesToZip%,1
+  
+;  if InStr(FileExist(FilesToZip), "D")
+;    FilesToZip .= SubStr(FilesToZip, 0) = "\" ? "*.*" : "\*.*"
+  
+  Loop, Files, %FilesToZip%, F
   {
-    zipped++
-    ToolTip Zipping %A_LoopFileName% ..
-    pzip.CopyHere( A_LoopFileLongPath, 4|16 )
-    Loop
-    {
-      done := pzip.items().count
-      if done = %zipped%
-        break
-    }
-    done := -1
+;   ToolTip Zipping %A_LoopFileName% ...
+;   FileMove, %A_LoopFileLongPath%, path???, TRUE
+    pzip.CopyHere( A_LoopFileLongPath, 4|16)
+;    Loop
+;    {
+;      done := pzip.items().count
+;      if done = %zipped%
+;        break
+;    }
+;    
+;    done := -1
   }
   ToolTip
 }
@@ -1826,18 +1873,18 @@ Unz(sZip, sUnz)
   fso := ComObjCreate("Scripting.FileSystemObject")
   If Not fso.FolderExists(sUnz)  ;http://www.autohotkey.com/forum/viewtopic.php?p=402574
      fso.CreateFolder(sUnz)
-  psh  := ComObjCreate("Shell.Application")
-  zippedItems := psh.Namespace( sZip ).items().count
-  msgbox, %zippedItems%
+     
+  psh := ComObjCreate("Shell.Application")
+;  zippedItems := psh.Namespace( sZip ).items().count
   psh.Namespace( sUnz ).CopyHere( psh.Namespace( sZip ).items, 4|16 )
-  Loop, %zippedItems%
-  {
-    sleep 100
-    unzippedItems := psh.Namespace( sUnz ).items().count
-    ToolTip Unzipping in progress..
-    ;IfEqual,zippedItems,%unzippedItems%
-    ;  break
-  }
-  ToolTip
+;  loop, %zippedItems%
+;  {
+;    sleep 100
+;    unzippedItems := psh.Namespace( sUnz ).items().count
+;    ToolTip Unzipping in progress..
+;    IfEqual,zippedItems,%unzippedItems%
+;      break
+;  }
+;  ToolTip
 }
 
