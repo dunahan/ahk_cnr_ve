@@ -1501,6 +1501,7 @@ GetConfig()
     IniRead, LATENIV,    config.ini, Default, LATENIV
     
     IniRead, LANG,       config.ini, Default, LANG,       EN
+    IniRead, FSIZ,       config.ini, Default, FSIZ,       8
     
     IniRead, SCRIPT_DIR, config.ini, Default, SCRIPT_DIR, %A_WorkingDir%\erf\        ; at first, but configurable at latest version
     IniRead, TEMP_DIR,   config.ini, Default, TEMP_DIR,   %A_WorkingDir%\tmp\        ; folder where temporary files are saved
@@ -1514,6 +1515,8 @@ GetConfig()
     
     IniRead, RecipeSpacerXAdd, config.ini, Lists, RecipeSpacerXAdd, 120
     IniRead, RecipeSpacerYAdd, config.ini, Lists, RecipeSpacerYAdd, 25
+    IniRead, TextWidth,        config.ini, Lists, TextWidth, 120
+    IniRead, TextHeigth,       config.ini, Lists, TextHeigth, 20
     
     IniRead, FAV, config.ini, Other, FAV, Notepad.exe
   }
@@ -1524,6 +1527,7 @@ GetConfig()
     IniWrite, 0.8.0.8,                  config.ini, Default, VERSION
     IniWrite, 1.2.1,                    config.ini, Default, LATENIV
     IniWrite, EN,                       config.ini, Default, LANG
+    IniWrite, 8,                        config.ini, Default, FSIZ
     
     IniWrite, %A_WorkingDir%\erf\,      config.ini, Default, SCRIPT_DIR
     IniWrite, %A_WorkingDir%\tmp\,      config.ini, Default, TEMP_DIR
@@ -1537,6 +1541,8 @@ GetConfig()
     
     IniWrite, 120,                      config.ini, Lists,   RecipeSpacerXAdd
     IniWrite, 25,                       config.ini, Lists,   RecipeSpacerYAdd
+    IniWrite, 120,                      config.ini, Lists,   TextWidth
+    IniWrite, 20,                       config.ini, Lists,   TextHeigth
     
     IniWrite, Notepad.exe,              config.ini, Other,   FAV
     
@@ -1561,7 +1567,7 @@ GetLanguage()
     IniRead, OnOldVersionD3,    language.ini, %LANG%, OnOldVersionD3,     Please check for newer version of neverwinter.nim
     
     
-    IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited
+    IniRead, OnRecipeIsEdited,  language.ini, %LANG%, OnRecipeIsEdited,   A recipe is already being edited. Close this recipe to open another workbench?
     IniRead, OnRecipeIsMissing, language.ini, %LANG%, OnRecipeIsMissing,  The clicked script is somehow missing?
     
     IniRead, OnNothingToShow,   language.ini, %LANG%, OnNothingToShow,    Nothing to show here yet!
@@ -1604,14 +1610,15 @@ GetLanguage()
     IniRead, OpenErfError,      language.ini, %LANG%, OpenErfError,       The log was not found! There is something gone wrong with the extraction of the erf-file.
     IniRead, OpenErfClose,      language.ini, %LANG%, OpenErfClose,       Now closing the Assistant, due new erf extracted.
     
-    IniRead, OptWinName,       language.ini, %LANG%, OptWinName,          Options
-    IniRead, OptWinFavEditTxt, language.ini, %LANG%, OptWinFavEditTxt,    Favorite editor for scripts
-    IniRead, OptWinFavEditBtn, language.ini, %LANG%, OptWinFavEditBtn,    Browse for editor
-    IniRead, OptWinFavEditDef, language.ini, %LANG%, OptWinFavEditDef,    Default
-    IniRead, OptWinLangTxt,    language.ini, %LANG%, OptWinLangTxt,       Languages
-    IniRead, OptWinLangMsg,    language.ini, %LANG%, OptWinLangMsg,       Only visible after restarting the assistant!
-    IniRead, OptWinFavEditCls, language.ini, %LANG%, OptWinFavEditCls,    Close
-    IniRead, OptWinFavEdDefMs, language.ini, %LANG%, OptWinFavEdDefMs,    Setting to default editor (Notepad.exe)
+    IniRead, OptWinName,        language.ini, %LANG%, OptWinName,          Options
+    IniRead, OptWinFavEditTxt,  language.ini, %LANG%, OptWinFavEditTxt,    Favorite editor for scripts
+    IniRead, OptWinFavEditBtn,  language.ini, %LANG%, OptWinFavEditBtn,    Browse for editor
+    IniRead, OptWinFavEditDef,  language.ini, %LANG%, OptWinFavEditDef,    Default
+    IniRead, OptWinLangTxt,     language.ini, %LANG%, OptWinLangTxt,       Languages
+    IniRead, OptWinFontSizeTxt, language.ini, %LANG%, OptWinFontSizeTxt,   Fontsize
+    IniRead, OptWinLangMsg,     language.ini, %LANG%, OptWinLangMsg,       Only visible after restarting the assistant!
+    IniRead, OptWinFavEditCls,  language.ini, %LANG%, OptWinFavEditCls,    Close
+    IniRead, OptWinFavEdDefMs,  language.ini, %LANG%, OptWinFavEdDefMs,    Setting to default editor (Notepad.exe)
   }
   Else
   {
@@ -1626,7 +1633,7 @@ GetLanguage()
     IniWrite, Please check for newer version of neverwinter.nim, language.ini, EN, OnOldVersionD3
     
     IniWrite, Open Erf,                               language.ini, EN, OnButtonOpenErf
-    IniWrite, A recipe is already being edited,       language.ini, EN, OnRecipeIsEdited
+    IniWrite, A recipe is already being edited. Close this recipe to open another workbench?, language.ini, EN, OnRecipeIsEdited
     IniWrite, The clicked script is somehow missing?, language.ini, EN, OnRecipeIsMissing
     
     IniWrite, Nothing to show here yet!,              language.ini, EN, OnNothingToShow
@@ -1675,7 +1682,8 @@ GetLanguage()
     IniWrite, Browse for editor,                      language.ini, EN, OptWinFavEditBtn
     IniWrite, Default,                                language.ini, EN, OptWinFavEditDef
     IniWrite, Languages,                              language.ini, EN, OptWinLangTxt
-    IniWrite, Only visible after restarting the assistant!, language.ini, EN, OptWinLangMsg
+    IniWrite, Fontsize,                               language.ini, EN, OptWinFontSizeTxt
+    IniWrite, Some changes are only visible after restarting the assistant!, language.ini, EN, OptWinLangMsg
     IniWrite, Close,                                  language.ini, EN, OptWinFavEditCls
     IniWrite, Setting to default editor (Notepad.exe),language.ini, EN, OptWinFavEdDefMs
     ; continues...
@@ -1692,7 +1700,7 @@ GetLanguage()
     IniWrite, Bitte schaue nach einer neuen Version von neverwinter.nim, language.ini, DE, OnOldVersionD3
     
     IniWrite, Erf oeffnen,                            language.ini, DE, OnButtonOpenErf
-    IniWrite, Es wird bereits ein Rezept bearbeitet,  language.ini, DE, OnRecipeIsEdited
+    IniWrite, Es wird bereits ein Rezept bearbeitet. Dieses schließen um eine neue Werkbank zu öffnen?, language.ini, DE, OnRecipeIsEdited
     IniWrite, Das Rezept ist verschwunden?,           language.ini, DE, OnRecipeIsMissing
     
     IniWrite, Hier gibts noch nichts!,                language.ini, DE, OnNothingToShow
@@ -1739,11 +1747,12 @@ GetLanguage()
     IniWrite, Optionen,                               language.ini, DE, OptWinName
     IniWrite, Bevorzuger Editor,                      language.ini, DE, OptWinFavEditTxt
     IniWrite, Suche Editor,                           language.ini, DE, OptWinFavEditBtn
-    IniWrite, Standart,                               language.ini, DE, OptWinFavEditDef
+    IniWrite, Standard,                               language.ini, DE, OptWinFavEditDef
     IniWrite, Sprachen,                               language.ini, DE, OptWinLangTxt
-    IniWrite, Wirkt sich erst nach neustarten des Assistenten aus!, language.ini, DE, OptWinLangMsg
+    IniWrite, Schriftgröße,                           language.ini, DE, OptWinFontSizeTxt
+    IniWrite, Manches wirkt sich erst nach neustarten des Assistenten aus!, language.ini, DE, OptWinLangMsg
     IniWrite, Schliessen,                             language.ini, DE, OptWinFavEditCls
-    IniWrite, Standart Editor eingestellt (Notepad.exe),language.ini, DE, OptWinFavEdDefMs
+    IniWrite, Standard Editor eingestellt (Notepad.exe),language.ini, DE, OptWinFavEdDefMs
     }
   }
 }
