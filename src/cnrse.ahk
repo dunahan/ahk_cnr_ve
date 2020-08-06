@@ -64,7 +64,15 @@ Main:                                                                           
     If !InStr(A_LoopFileName, "_")
     {
       StringTrimRight, VarName, A_LoopFileName, 4
-      Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY% w120 h20 v%VarName% cBlue gRecipeShow, %A_LoopFileName%
+      if (FSIZ != 8)
+      {
+        if (FSIZ > 15)
+          FSIZ := 14
+        
+        Gui, 1: Font, s%FSIZ%
+      }
+      
+      Gui, 1: Add, Text, x%RecipeSpacerX%  y%RecipeSpacerY%  v%VarName%  cBlue  gRecipeShow, %A_LoopFileName%
       
       If !InStr(VarName, Chr(34))                                                ; add tooltip only if its possible
         %VarName%_TT = %OnToolTipMain1%`n%OnToolTipMain2%
@@ -74,14 +82,24 @@ Main:                                                                           
       
       If (CountedRecipes > MaxRecipesPerRow)
       {
+        if (FSIZ != 8)
+        {
+          if (FSIZ > 15)
+            FSIZ := 14
+          
+          SPACER := (((FSIZ/0.5)*FSIZ)/10) + FSIZ * 2
+          RecipeSpacerXAdd := RecipeSpacerXAdd + SPACER
+        }
         RecipeSpacerX := RecipeSpacerX + RecipeSpacerXAdd
-        IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 30             ; reload this value again...
+        IniRead, RecipeSpacerY, config.ini, Lists, RecipeSpacerY, 25             ; reload this value again...
         CountedRecipes := 0
       }
       
       If (DEBUG = 1)
         MsgBox, %A_LoopFileName%
     }
+    if (%FSIZ% != 8)
+      Gui, 1: Font
   }
   
   Gui, 1: Submit, NoHide
@@ -175,8 +193,11 @@ RecipeShow:                                                                     
   {
     If (EditWin != "")                                                           ; bäh, you are editing one recipe already. don't open another one!
     {
-      MsgBox, %OnRecipeIsEdited%
-      Return
+      MsgBox, 1, %OnRecipeIsEdited%
+        IfMsgBox Yes
+          GoSub, 2GuiEscape
+        Else
+          Return
     }
     
     IfNotExist, %TEMP_DIR%
@@ -224,9 +245,8 @@ RecipeShow:                                                                     
     
     GoSub, BuildUpCompAndMisc
     
-    ;Gui, 2: +owner1
+    Gui, 2: +AlwaysOnTop
     Gui, 2: +ToolWindow
-    ;Gui, 2: +LastFound
     hGui2 := WinExist()
     
     WinGui2X := WinGui1X + WinGui1W + 15                                         ; show GUI 2
@@ -271,6 +291,7 @@ BuildUpCompAndMisc:                                                             
       Gui, 2: Add, Edit, x105 y61  w250      vShowWorkbenchName -Wrap ReadOnly, %PrintWorkbenchName%
       Gui, 2: Add, Text, x405 y65  w125 h21                                   , %Tab2RecipScrNr%:
       Gui, 2: Add, Text, x510 y65  w42  h21  vRecipeNbrInScript   gNbrDblClick, %RecipeNbr%
+        RecipeNbrInScript_TT = DoubleClick this, to get a list by number in the script.
       Gui, 2: Add, Text, x15  y90  w100 h21                                   , %Tab2RecipWbMen%:
       Gui, 2: Add, DDL,  x105 y86  w250      vShowWorkbenchMenu     Choose%Me%, %PrintWorkbenchMenu%
       Gui, 2: Add, Text, x15  y115 w100 h21                                   , %Tab2RecipProdN%:
@@ -506,7 +527,7 @@ BuildUpCompAndMisc:                                                             
 }
 Return                                                                           ; <<<===  Build up contents ends
 
-NbrDblClick:
+NbrDblClick:                                                                     ; <<<===  If counted recipies is doubleclicked begins
 {
   If A_GuiControlEvent = DoubleClick
   {
@@ -526,7 +547,7 @@ NbrDblClick:
     Gui, 4: Show, x%ChooseX% y%ChooseY%, Choose Recipe
   }
 }
-Return
+Return                                                                           ; <<<===  If counted recipies is doubleclicked ends
 
 CheckAbs:                                                                        ; <<<===  Check Abilities begins
 {
@@ -744,7 +765,7 @@ Save:                                                                           
 }
 Return                                                                           ; <<<===  Save check ends
 
-UpdateRecipes:
+UpdateRecipes:                                                                   ; <<<===  Update the recipes begins
 {
   Gui, 4: Submit, NoHide
   Gui, 2: Submit, NoHide
@@ -773,7 +794,7 @@ UpdateRecipes:
   
   Gui, 4: Destroy
 }
-Return
+Return                                                                           ; <<<===  Update the recipes ends
 
 EditRecipeTab:
   ;MsgBox, %OnNothingToShow%
@@ -872,29 +893,24 @@ Options:
   LANGS := StrReplace(LANGS, "`n", "|") "|"
   LANGS := StrReplace(LANGS, LANG, LANG "|")
   Gui, 3: Add, Text,   x6   y54                   , %OptWinLangTxt%:
-  Gui, 3: Add, DDL,    x6   y74        gLang vLANG, %LANGS%
+  Gui, 3: Add, DDL,    x6   y74              vLANG, %LANGS%
   
-  Gui, 3: Add, Button, x55  y105        gCloseOpts, %OptWinFavEditCls%
+  Gui, 3: Add, Text,   x6   y105                  , %OptWinFontSizeTxt%:
+  Gui, 3: Add, Edit,   x76  y101 w20 h20     vFntS, %FSIZ%
   
-  Gui, 1: +Disabled
-  Gui, 2: +Disabled
+  Gui, 3: Add, Button, x6  y129         gCloseOpts, %OptWinFavEditCls%
   
-  Gui, 3: +ToolWindow
-  Gui, 3: Show, center w150 h150, %OptWinName%
+  Gui, 3: Show, Center Autosize, %OptWinName%
 }
-Return
-
-Lang:
-  MsgBox, %OptWinLangMsg%
 Return
 
 CloseOpts:
   Gui, 3: Submit, NoHide
   IniWrite, %FAV%,  config.ini, Other,   FAV
   IniWrite, %LANG%, config.ini, Default, LANG
+  IniWrite, %FntS%,  config.ini, Default,FSIZ
   
-  Gui, 1: -Disabled
-  Gui, 2: -Disabled
+  MsgBox, %OptWinLangMsg%
   Gui, 3: Destroy
 Return
 
@@ -971,6 +987,9 @@ WM_MOUSEMOVE()
 
 2GuiClose:
 2GuiEscape:
+  if (SaveVar == 1)
+    
+    
   Gui, 2: Destroy
   Gui, 4: Destroy
   EditWin = 
